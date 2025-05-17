@@ -137,24 +137,7 @@ const AboutSection: React.FC = () => {
         </div>
       </div>
       
-      <style jsx>{`
-        .custom-carousel-button {
-          opacity: 0.7;
-          transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        
-        .custom-carousel-button:hover {
-          opacity: 1;
-          transform: scale(1.05);
-        }
-        
-        @media (max-width: 768px) {
-          .carousel-prev, .carousel-next {
-            position: static;
-            transform: none;
-          }
-        }
-      `}</style>
+      {/* CSS for carousel and animations moved to index.css */}
     </section>
   );
 };
