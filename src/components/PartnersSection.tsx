@@ -10,6 +10,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+interface PartnersSectionProps {
+  className?: string;
+}
+
 const partners = [
   { name: "АТБ", id: 1 },
   { name: "Ярмолино", id: 2 },
@@ -19,15 +23,15 @@ const partners = [
   { name: "Skin & Skin", id: 6 },
 ];
 
-const PartnersSection: React.FC = () => {
+const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => {
   return (
-    <section id="partners" className="py-20 overflow-hidden animated-bg-light">
+    <section id="partners" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 reveal-on-scroll">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             + 100 ВЕНДОРОВ
           </h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             С КОТОРЫМИ
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold">
@@ -49,17 +53,17 @@ const PartnersSection: React.FC = () => {
             <CarouselContent className="py-4">
               {partners.map((partner) => (
                 <CarouselItem key={partner.id} className="md:basis-1/3 lg:basis-1/4 pl-4">
-                  <div className="h-36 p-6 flex items-center justify-center rounded-lg bg-white shadow-sm border border-gray-100 hover:shadow-md transition-all">
-                    <div className="text-xl font-bold text-gray-800">{partner.name}</div>
+                  <div className={`h-36 p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
+                    <div className="text-xl font-bold">{partner.name}</div>
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
             <div className="flex justify-center gap-4 mt-8">
-              <CarouselPrevious className="static translate-y-0 custom-carousel-button">
+              <CarouselPrevious className={`static translate-y-0 custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}>
                 <ArrowLeft className="h-5 w-5" />
               </CarouselPrevious>
-              <CarouselNext className="static translate-y-0 custom-carousel-button">
+              <CarouselNext className={`static translate-y-0 custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}>
                 <ArrowRight className="h-5 w-5" />
               </CarouselNext>
             </div>

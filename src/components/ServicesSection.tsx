@@ -5,7 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const ServicesSection: React.FC = () => {
+interface ServicesSectionProps {
+  className?: string;
+}
+
+const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => {
   const [activeTab, setActiveTab] = useState("0");
 
   const services = [
@@ -46,13 +50,13 @@ const ServicesSection: React.FC = () => {
   }, [activeTab, services.length]);
 
   return (
-    <section id="services" className="min-h-screen relative bg-gray-50 py-20 animated-bg-light">
+    <section id="services" className={`min-h-screen relative py-20 ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">НАШИ УСЛУГИ</div>
         
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-gray-800">КОМПЛЕКСНО </span>
+            <span className={`${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>КОМПЛЕКСНО </span>
             <span className="connexi-gradient-text">РЕШАЕМ<br />ЗАДАЧИ</span>
           </h2>
 
@@ -66,7 +70,7 @@ const ServicesSection: React.FC = () => {
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="h-12 w-12 rounded-full custom-carousel-button"
+                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}
                   onClick={handlePrevious}
                   aria-label="Предыдущая услуга"
                 >
@@ -75,7 +79,7 @@ const ServicesSection: React.FC = () => {
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="h-12 w-12 rounded-full custom-carousel-button"
+                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}
                   onClick={handleNext}
                   aria-label="Следующая услуга"
                 >
@@ -90,13 +94,13 @@ const ServicesSection: React.FC = () => {
                 value={service.id}
                 className="mt-0 services-tab-content fade-transition"
               >
-                <Card className="bg-white border border-gray-200 shadow-sm rounded-lg p-4 reveal-on-scroll card-hover">
+                <Card className={`border shadow-sm rounded-lg p-4 reveal-on-scroll card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="text-4xl">{service.icon}</div>
-                      <h3 className="text-2xl text-gray-800"># {service.title}</h3>
+                      <h3 className={`text-2xl ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># {service.title}</h3>
                     </div>
-                    <p className="text-gray-700">{service.description}</p>
+                    <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>{service.description}</p>
                     
                     <div className="mt-8">
                       <Button 

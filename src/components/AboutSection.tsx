@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const AboutSection: React.FC = () => {
+interface AboutSectionProps {
+  className?: string;
+}
+
+const AboutSection: React.FC<AboutSectionProps> = ({ className = "" }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,19 +54,19 @@ const AboutSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="min-h-screen relative bg-white py-20 animated-bg-light">
+    <section id="about" className={`min-h-screen relative py-20 ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">О КОМПАНИИ</div>
         
         <div className="max-w-5xl mx-auto mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-gray-800">РЕАЛИЗУЕМ <br />ПРОЕКТЫ </span>
+            <span className={`${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>РЕАЛИЗУЕМ <br />ПРОЕКТЫ </span>
             <span className="connexi-gradient-text">ЛЮБОЙ<br />СЛОЖНОСТИ</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
             <div className="reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <p className="text-gray-800 text-lg">
+              <p className={`text-lg ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
                 <span className="font-bold connexi-gradient-text">CONNEXI</span> — ЭТО КАСТОМНЫЙ ПОДХОД И ПЕРЕДОВЫЕ 
                 ИТ ПРАКТИКИ К РЕШЕНИЮ ЗАДАЧ ЛЮБОЙ 
                 СЛОЖНОСТИ
@@ -70,7 +74,7 @@ const AboutSection: React.FC = () => {
             </div>
             
             <div className="reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
-              <p className="text-gray-700 mb-8">
+              <p className={`mb-8 ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}`}>
                 Многолетняя практика технической экспертизы, аккумулированная
                 в крупных ИТ-компаниях и работа с крупнейшими мировыми
                 производителями позволяет находить оптимальные решения для
@@ -89,7 +93,7 @@ const AboutSection: React.FC = () => {
 
         <div className="max-w-5xl mx-auto mt-20 relative">
           <div className="mb-6 flex justify-between items-center reveal-on-scroll">
-            <h3 className="text-2xl text-gray-800 connexi-gradient-text">Наши преимущества</h3>
+            <h3 className="text-2xl connexi-gradient-text">Наши преимущества</h3>
             <div className="flex gap-2 md:hidden">
               <Button 
                 variant="outline" 
@@ -118,10 +122,10 @@ const AboutSection: React.FC = () => {
           }} ref={carouselRef}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.3s" }}>
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.3s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-800 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
-                    <div className="text-gray-700">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># БЫСТРО И КАЧЕСТВЕННО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
                       <p className="mb-4">
                         Обеспечиваем <span className="connexi-gradient-text">большую на 30% скорость</span> разработки и 
                         внедрения решений за счет оптимизации ресурсов команды.
@@ -136,10 +140,10 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.4s" }}>
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.4s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-800 mb-8"># ЭФФЕКТИВНО</h3>
-                    <div className="text-gray-700">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># ЭФФЕКТИВНО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
                       <p>
                         Повышаем эффективность бизнес-процессов 
                         на разных уровнях за счет применения новейших 
@@ -152,10 +156,10 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.5s" }}>
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.5s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-800 mb-8"># НАДЕЖНО</h3>
-                    <div className="text-gray-700">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># НАДЕЖНО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
                       <p>
                         Гарантируем высокое качество и стабильность 
                         всех внедряемых решений благодаря использованию 

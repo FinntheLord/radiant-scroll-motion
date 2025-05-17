@@ -9,7 +9,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-const ContactsSection: React.FC = () => {
+interface ContactsSectionProps {
+  className?: string;
+}
+
+const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
   
@@ -39,7 +43,7 @@ const ContactsSection: React.FC = () => {
   };
 
   return (
-    <section id="contacts" className="py-20 overflow-hidden bg-gray-900 text-white">
+    <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-4 reveal-on-scroll flex items-center">
           <span className="text-connexi-orange font-bold mr-2">04</span>
@@ -47,10 +51,10 @@ const ContactsSection: React.FC = () => {
         </div>
         
         <div className="text-center mb-16 reveal-on-scroll">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             ПРОКОНСУЛЬТИРУЕМ
           </h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             И ПРОСЧИТАЕМ
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-connexi-orange">
@@ -65,36 +69,36 @@ const ContactsSection: React.FC = () => {
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">ООО "АСК ТЕХНОЛОДЖИ"</h3>
-              <p className="text-gray-400 mb-2">
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>ООО "АСК ТЕХНОЛОДЖИ"</h3>
+              <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600 mb-2'}>
                 Юридический адрес: 117393, г. Москва, ул. Архитектора Власова д.55 помещение 219
               </p>
-              <p className="text-gray-400">
+              <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600'}>
                 ИНН 9728076178 ОГРН 1227700657920
               </p>
             </div>
             
             <div>
-              <h3 className="text-xl font-bold mb-4">Контакты:</h3>
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Контакты:</h3>
               <div className="flex items-center space-x-2 mb-2">
                 <Mail className="text-connexi-orange" size={20} />
-                <a href="mailto:info@ask-t.ru" className="text-gray-300 hover:text-connexi-orange transition-colors">
+                <a href="mailto:info@ask-t.ru" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
                   info@ask-t.ru
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+74951571000" className="text-gray-300 hover:text-connexi-orange transition-colors">
+                <a href="tel:+74951571000" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
                   8 (495) 157 10 00
                 </a>
               </div>
             </div>
             
             <div>
-              <h3 className="text-xl font-bold mb-4">Адрес:</h3>
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Адрес:</h3>
               <div className="flex items-start space-x-2">
                 <MapPin className="text-connexi-orange mt-1" size={20} />
-                <p className="text-gray-300">
+                <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
                   Москва, улица Архитектора Власова, д.55
                 </p>
               </div>
@@ -102,28 +106,28 @@ const ContactsSection: React.FC = () => {
           </div>
           
           {/* Contact Form */}
-          <div className="bg-gray-800 bg-opacity-40 p-6 rounded-lg">
-            <p className="text-gray-300 mb-6">
+          <div className={`p-6 rounded-lg ${className?.includes('bg-gray-900') ? 'bg-gray-800 bg-opacity-40' : 'bg-gray-50'}`}>
+            <p className={className?.includes('text-white') ? 'text-gray-300 mb-6' : 'text-gray-600 mb-6'}>
               Мы свяжемся с вами в течение рабочего дня для обсуждения деталей. Стоимостная оценка производится по индивидуальным условиям.
             </p>
             
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
               <Input 
                 placeholder="Ваше имя" 
-                className="bg-transparent border-gray-700 focus:border-connexi-orange" 
+                className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("name", { required: true })}
               />
               
               <Input 
                 placeholder="Компания" 
-                className="bg-transparent border-gray-700 focus:border-connexi-orange" 
+                className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("company")}
               />
               
               <Input 
                 type="email" 
                 placeholder="Почта" 
-                className="bg-transparent border-gray-700 focus:border-connexi-orange" 
+                className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("email", { required: true })}
               />
               
@@ -134,7 +138,7 @@ const ContactsSection: React.FC = () => {
                 <Input
                   type="tel"
                   placeholder="(999) 999-99-99"
-                  className="bg-transparent border-gray-700 focus:border-connexi-orange ml-2"
+                  className={`focus:border-connexi-orange ml-2 ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`}
                   {...form.register("phone", { required: true })}
                 />
               </div>
@@ -143,11 +147,11 @@ const ContactsSection: React.FC = () => {
                 <input 
                   type="checkbox" 
                   id="privacy-policy" 
-                  className="rounded border-gray-700 text-connexi-orange focus:ring-connexi-orange"
+                  className={`rounded focus:ring-connexi-orange ${className?.includes('bg-gray-900') ? 'border-gray-700 text-connexi-orange' : 'border-gray-300'}`}
                   checked={isAgreed}
                   onChange={(e) => setIsAgreed(e.target.checked)}
                 />
-                <label htmlFor="privacy-policy" className="text-sm text-gray-300">
+                <label htmlFor="privacy-policy" className={`text-sm ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
                   Согласен с <a href="#" className="text-connexi-orange underline">политикой конфиденциальности</a>
                 </label>
               </div>
