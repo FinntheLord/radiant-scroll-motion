@@ -5,6 +5,7 @@ import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import ServicesSection from "../components/ServicesSection";
 import PartnersSection from "../components/PartnersSection";
+import CasesSection from "../components/CasesSection";
 import ScrollAnimation from "../components/ScrollAnimation";
 
 const Index = () => {
@@ -21,6 +22,7 @@ const Index = () => {
       <AboutSection />
       <ServicesSection />
       <PartnersSection />
+      <CasesSection />
       
       {/* More sections will be added here */}
     </div>
