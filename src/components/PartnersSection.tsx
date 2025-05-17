@@ -59,28 +59,31 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
             <span className="orange-highlight">РАБОТАЕМ</span>
           </h2>
         </div>
-        
-        <div className="mb-16 reveal-on-scroll">
-          <Carousel
-            ref={carouselRef}
-            className="w-full"
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-          >
-            <CarouselContent className="py-4 auto-scrolling-content">
-              {partners.map((partner) => (
-                <CarouselItem key={partner.id} className="md:basis-1/3 lg:basis-1/4 pl-4">
-                  <div className={`h-36 p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
-                    <div className="text-xl font-bold">{partner.name}</div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
-        
+      </div>
+      
+      {/* Full-width carousel container */}
+      <div className="w-full overflow-hidden mb-16 reveal-on-scroll">
+        <Carousel
+          ref={carouselRef}
+          className="w-full"
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+        >
+          <CarouselContent className="py-4 auto-scrolling-content">
+            {partners.map((partner) => (
+              <CarouselItem key={partner.id} className="md:basis-1/3 lg:basis-1/4 pl-4">
+                <div className={`h-36 p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
+                  <div className="text-xl font-bold">{partner.name}</div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex justify-center reveal-on-scroll">
           <Button 
             className="contact-button flex items-center gap-2 text-white px-8 py-6 text-lg rounded-full"
