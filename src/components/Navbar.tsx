@@ -40,6 +40,9 @@ const Navbar: React.FC = () => {
           <a href="#services" className="text-gray-700 hover:text-black transition-colors">
             УСЛУГИ
           </a>
+          <a href="#partners" className="text-gray-700 hover:text-black transition-colors">
+            ПАРТНЕРЫ
+          </a>
           <a href="#cases" className="text-gray-700 hover:text-black transition-colors">
             КЕЙСЫ
           </a>
