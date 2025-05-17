@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { MovingBorder } from "@/components/ui/moving-border";
 
 interface ServicesSectionProps {
   className?: string;
@@ -119,15 +120,21 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
-                <Card className={`border shadow-sm rounded-lg p-4 reveal-on-scroll card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`}>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="text-4xl">{service.icon}</div>
-                      <h3 className={`text-2xl ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># {service.title}</h3>
-                    </div>
-                    <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>{service.description}</p>
-                  </CardContent>
-                </Card>
+                <div className="relative p-[1px] rounded-lg overflow-hidden reveal-on-scroll">
+                  <MovingBorder duration={3000} rx="1rem" ry="1rem">
+                    <div className="h-20 w-20 opacity-[0.8] bg-[radial-gradient(var(--connexi-purple)_40%,var(--connexi-pink)_60%,transparent_85%)]" />
+                  </MovingBorder>
+                
+                  <Card className="relative border-none bg-white/80 backdrop-blur-sm rounded-lg p-4 z-10">
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="text-4xl">{service.icon}</div>
+                        <h3 className={`text-2xl ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># {service.title}</h3>
+                      </div>
+                      <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>{service.description}</p>
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
             ))}
           </Tabs>
