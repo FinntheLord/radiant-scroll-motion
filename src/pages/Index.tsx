@@ -1,8 +1,8 @@
-
 import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
+import ServicesSection from "../components/ServicesSection";
 import ScrollAnimation from "../components/ScrollAnimation";
 
 const Index = () => {
@@ -17,13 +17,9 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <AboutSection />
+      <ServicesSection />
       
       {/* More sections will be added here */}
-      <div id="services" className="min-h-screen flex items-center justify-center">
-        <h2 className="text-4xl text-white reveal-on-scroll">
-          Услуги <span className="orange-highlight">(Будет добавлено позже)</span>
-        </h2>
-      </div>
     </div>
   );
 };

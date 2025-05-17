@@ -48,9 +48,18 @@ const ScrollAnimation: React.FC = () => {
       });
     };
 
+    // Service item stagger animation
+    const animateServiceItems = () => {
+      const serviceItems = document.querySelectorAll('#services .card-hover');
+      serviceItems.forEach((item, index) => {
+        (item as HTMLElement).style.transitionDelay = `${index * 0.2}s`;
+      });
+    };
+
     window.addEventListener('scroll', handleReveal);
     handleReveal(); // Trigger on initial load
     animateFloatingElements(); // Start floating animations
+    animateServiceItems(); // Stagger service items animation
     
     return () => {
       window.removeEventListener('scroll', handleReveal);
