@@ -8,6 +8,7 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
+import { BackgroundGradientAnimation } from "../components/ui/background-gradient-animation";
 
 const Index = () => {
   useEffect(() => {
@@ -16,18 +17,21 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
-      <ScrollAnimation />
-      <Navbar />
-      <HeroSection />
-      <AboutSection className="bg-gray-900 text-white" />
-      <ServicesSection className="bg-white text-gray-900" />
-      <PartnersSection className="bg-gray-900 text-white" />
-      <CasesSection className="bg-white text-gray-900" />
-      <ContactsSection className="bg-gray-900 text-white" />
-      
-      {/* More sections will be added here */}
-    </div>
+    <BackgroundGradientAnimation
+      containerClassName="min-h-screen w-full"
+      gradientClassName="opacity-30"
+    >
+      <div className="min-h-screen bg-transparent text-gray-900 overflow-x-hidden">
+        <ScrollAnimation />
+        <Navbar />
+        <HeroSection />
+        <AboutSection className="bg-gray-900 text-white" />
+        <ServicesSection className="bg-white text-gray-900" />
+        <PartnersSection className="bg-gray-900 text-white" />
+        <CasesSection className="bg-white text-gray-900" />
+        <ContactsSection className="bg-gray-900 text-white" />
+      </div>
+    </BackgroundGradientAnimation>
   );
 };
 
