@@ -55,11 +55,20 @@ const ScrollAnimation: React.FC = () => {
         (item as HTMLElement).style.transitionDelay = `${index * 0.2}s`;
       });
     };
+    
+    // Service tab indicators animation
+    const animateServiceIndicators = () => {
+      const indicators = document.querySelectorAll('#services .service-indicator');
+      indicators.forEach((indicator, index) => {
+        (indicator as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+      });
+    };
 
     window.addEventListener('scroll', handleReveal);
     handleReveal(); // Trigger on initial load
     animateFloatingElements(); // Start floating animations
     animateServiceItems(); // Stagger service items animation
+    animateServiceIndicators(); // Animate service indicators
     
     return () => {
       window.removeEventListener('scroll', handleReveal);
