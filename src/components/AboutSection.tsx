@@ -1,0 +1,81 @@
+
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const AboutSection: React.FC = () => {
+  return (
+    <section id="about" className="min-h-screen relative bg-dark-darker py-20 animated-bg">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-orange text-xl mb-6 reveal-on-scroll">О КОМПАНИИ</div>
+        
+        <div className="max-w-5xl mx-auto mb-20">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
+            <span className="text-gray-200">РЕАЛИЗУЕМ <br />ПРОЕКТЫ </span>
+            <span className="orange-highlight">ЛЮБОЙ<br />СЛОЖНОСТИ</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+            <div className="reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
+              <p className="text-gray-300 text-lg">
+                <span className="font-bold">ASK IT</span> — ЭТО КАСТОМНЫЙ ПОДХОД И ПЕРЕДОВЫЕ 
+                ИТ ПРАКТИКИ К РЕШЕНИЮ ЗАДАЧ ЛЮБОЙ 
+                СЛОЖНОСТИ
+              </p>
+            </div>
+            
+            <div className="reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
+              <p className="text-gray-300 mb-8">
+                Многолетняя практика технической экспертизы, аккумулированная
+                в крупных ИТ-компаниях и работа с крупнейшими мировыми
+                производителями позволяет находить оптимальные решения для
+                задач любой сложности, сохраняя качество, надёжность и
+                высокий уровень сервиса.
+              </p>
+              
+              <Button 
+                className="bg-transparent border-2 border-orange text-orange px-6 py-2 rounded-full hover:bg-orange/10 transition-all contact-button"
+              >
+                СВЯЗАТЬСЯ
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-20">
+          <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll" style={{ animationDelay: "0.3s" }}>
+            <CardContent className="p-6">
+              <h3 className="text-2xl text-gray-200 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
+              <div className="text-gray-300">
+                <p className="mb-4">
+                  Обеспечиваем <span className="text-orange">большую на 30% скорость</span> разработки и 
+                  внедрения решений за счет оптимизации ресурсов команды.
+                </p>
+                <p>
+                  Все наши сотрудники-специалисты с высокопрофессиональным 
+                  подходом к решению ИТ задач
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll" style={{ animationDelay: "0.4s" }}>
+            <CardContent className="p-6">
+              <h3 className="text-2xl text-gray-200 mb-8"># ЭФФЕКТИВНО</h3>
+              <div className="text-gray-300">
+                <p>
+                  Повышаем эффективность бизнес-процессов 
+                  на разных уровнях за счет применения новейших 
+                  технологий и тесного сотрудничества с 
+                  поставщиками решений
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AboutSection;
