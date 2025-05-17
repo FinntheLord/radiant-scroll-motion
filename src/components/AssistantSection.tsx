@@ -1,6 +1,6 @@
 
-import React, { useState, FormEvent, useRef, useEffect } from "react";
-import { Paperclip, Mic, CornerDownLeft } from "lucide-react";
+import React, { useState, FormEvent } from "react";
+import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ChatBubble,
@@ -73,16 +73,6 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
     }
   };
 
-  const handleAttachFile = () => {
-    // Functionality would be implemented here
-    console.log("Attach file clicked");
-  };
-
-  const handleMicrophoneClick = () => {
-    // Functionality would be implemented here
-    console.log("Microphone clicked");
-  };
-
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
@@ -132,12 +122,11 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                     >
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src={message.sender === "user" ? undefined : "/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png"}
+                        src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"}
                         fallback={message.sender === "user" ? "Ви" : "AI"}
                       />
                       <ChatBubbleMessage
                         variant={message.sender === "user" ? "sent" : "received"}
-                        className={message.sender === "received" ? "bg-gray-800" : ""}
                       >
                         {message.content}
                       </ChatBubbleMessage>
@@ -148,7 +137,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                     <ChatBubble variant="received">
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src="/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png"
+                        src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"
                         fallback="AI"
                       />
                       <ChatBubbleMessage isLoading />
@@ -169,27 +158,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                     className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white"
                   />
                   <div className="flex items-center p-3 pt-0 justify-between">
-                    <div className="flex">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        type="button"
-                        onClick={handleAttachFile}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <Paperclip className="size-4" />
-                      </Button>
-
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        type="button"
-                        onClick={handleMicrophoneClick}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        <Mic className="size-4" />
-                      </Button>
-                    </div>
+                    <div className="flex"></div>
                     <Button 
                       type="submit" 
                       size="sm" 

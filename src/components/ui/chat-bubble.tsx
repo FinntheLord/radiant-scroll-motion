@@ -50,7 +50,7 @@ export function ChatBubbleMessage({
     <div
       className={cn(
         "rounded-lg p-3",
-        variant === "sent" ? "bg-connexi-gradient text-white" : "bg-muted",
+        variant === "sent" ? "bg-connexi-gradient text-white" : "bg-white text-black",
         className
       )}
     >
