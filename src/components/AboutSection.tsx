@@ -64,7 +64,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ className = "" }) => {
             <span className="connexi-gradient-text">ЛЮБОЙ<br />СЛОЖНОСТИ</span>
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+          <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 p-6 rounded-2xl ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`}>
             <div className="reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
               <p className={`text-lg ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
                 <span className="font-bold connexi-gradient-text">CONNEXI</span> — ЭТО КАСТОМНЫЙ ПОДХОД И ПЕРЕДОВЫЕ 
@@ -122,7 +122,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ className = "" }) => {
           }} ref={carouselRef}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.3s" }}>
+                <Card className={`reveal-on-scroll h-full card-hover ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`} style={{ animationDelay: "0.3s" }}>
                   <CardContent className="p-6">
                     <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># БЫСТРО И КАЧЕСТВЕННО</h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
@@ -140,7 +140,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ className = "" }) => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.4s" }}>
+                <Card className={`reveal-on-scroll h-full card-hover ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`} style={{ animationDelay: "0.4s" }}>
                   <CardContent className="p-6">
                     <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># ЭФФЕКТИВНО</h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
@@ -156,7 +156,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ className = "" }) => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.5s" }}>
+                <Card className={`reveal-on-scroll h-full card-hover ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`} style={{ animationDelay: "0.5s" }}>
                   <CardContent className="p-6">
                     <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># НАДЕЖНО</h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>

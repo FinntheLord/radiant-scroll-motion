@@ -70,7 +70,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}
+                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`}
                   onClick={handlePrevious}
                   aria-label="Предыдущая услуга"
                 >
@@ -79,7 +79,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}
+                  className={`h-12 w-12 rounded-full custom-carousel-button ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`}
                   onClick={handleNext}
                   aria-label="Следующая услуга"
                 >
@@ -94,7 +94,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                 value={service.id}
                 className="mt-0 services-tab-content fade-transition"
               >
-                <Card className={`border shadow-sm rounded-lg p-4 reveal-on-scroll card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`}>
+                <Card className={`reveal-on-scroll card-hover ${className?.includes('text-white') ? 'dark-glass-effect' : 'glass-effect'}`}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="text-4xl">{service.icon}</div>

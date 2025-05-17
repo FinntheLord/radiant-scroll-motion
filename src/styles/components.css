@@ -29,6 +29,25 @@
   animation: pulse 6s ease-in-out infinite;
 }
 
+/* Glass Effect Styles */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid;
+  border-image: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2)) 1;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.dark-glass-effect {
+  background: rgba(10, 10, 30, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid;
+  border-image: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)) 1;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
 /* Button Styles */
 .contact-button {
   position: relative;
@@ -104,4 +123,3 @@
 .indicator-dot.active {
   background: linear-gradient(90deg, #FF7A00, #FF36A3);
 }
-
