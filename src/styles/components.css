@@ -206,6 +206,41 @@
   z-index: -1;
 }
 
+/* New white card style with thicker gradient border */
+.case-card-white {
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.case-card-white::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(90deg, #FF7A00, #FF36A3, #9747FF, #0832A2, #FF7A00);
+  background-size: 400% 400%;
+  animation: border-animation 8s ease infinite;
+  border-radius: 16px;
+  z-index: -1;
+}
+
+.case-card-white::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: white;
+  opacity: 1;
+  border-radius: 10px;
+  z-index: -1;
+}
+
 /* Services section styles */
 .services-item {
   border-left: 4px solid var(--connexi-orange);

@@ -84,7 +84,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
           {caseStudies.map((caseStudy) => (
             <Card 
               key={caseStudy.id}
-              className={`case-card overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
+              className={`case-card-white overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
                 className?.includes('text-white') 
                   ? 'text-white bg-transparent' 
                   : 'text-gray-900 bg-transparent'
@@ -102,10 +102,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                         {caseStudy.tags.map((tag, index) => (
                           <span 
                             key={index} 
-                            className={`text-xs px-3 py-1 rounded-full whitespace-nowrap case-transparent-block ${
+                            className={`text-xs px-3 py-1 rounded-full whitespace-nowrap bg-white ${
                               className?.includes('text-white') 
-                                ? 'bg-gray-700/80' 
-                                : 'bg-gray-100/80'
+                                ? 'text-gray-800' 
+                                : 'text-gray-800'
                             }`}
                           >
                             {tag}
