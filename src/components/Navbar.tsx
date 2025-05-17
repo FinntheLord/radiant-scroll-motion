@@ -30,34 +30,34 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <a href="/" className="font-bold text-2xl connexi-gradient-text">
-          connexi
+          connexi.ai
         </a>
         
         <nav className="hidden md:flex items-center space-x-8">
           <a href="#about" className="text-gray-700 hover:text-black transition-colors">
-            О КОМПАНИИ
+            ПРО НАС
           </a>
           <a href="#services" className="text-gray-700 hover:text-black transition-colors">
-            УСЛУГИ
+            ПОСЛУГИ
           </a>
           <a href="#partners" className="text-gray-700 hover:text-black transition-colors">
-            ПАРТНЕРЫ
+            ПАРТНЕРИ
           </a>
           <a href="#cases" className="text-gray-700 hover:text-black transition-colors">
-            КЕЙСЫ
+            КЕЙСИ
           </a>
           <a href="#contacts" className="text-gray-700 hover:text-black transition-colors">
-            КОНТАКТЫ
+            КОНТАКТИ
           </a>
           <div className="flex items-center">
             <span className="connexi-gradient-text inline-flex items-center mr-4">
-              8 (800) 000-00-00
+              +38 (067) 123-45-67
             </span>
             <Button 
               className="contact-button"
               size="sm"
             >
-              Связаться
+              Зв'язатися
               <Phone className="ml-2 h-4 w-4" />
             </Button>
           </div>

@@ -13,7 +13,7 @@ import { BackgroundGradientAnimationDemo } from "@/components/ui/demo";
 const Index = () => {
   useEffect(() => {
     // Set page title
-    document.title = "Ask IT | Системные ИТ-Решения";
+    document.title = "Connexi.ai | AI-рішення для бізнесу";
   }, []);
 
   return (
@@ -26,8 +26,6 @@ const Index = () => {
       <PartnersSection className="bg-gray-900 text-white" />
       <CasesSection className="bg-white text-gray-900" />
       <ContactsSection className="bg-gray-900 text-white" />
-      
-      {/* More sections will be added here */}
     </div>
   );
 };

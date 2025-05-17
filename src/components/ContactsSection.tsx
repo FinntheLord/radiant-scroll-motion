@@ -29,7 +29,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
 
   const handleSubmit = async (data: any) => {
     if (!isAgreed) {
-      toast.error("Пожалуйста, примите политику конфиденциальности");
+      toast.error("Будь ласка, прийміть політику конфіденційності");
       return;
     }
     
@@ -37,7 +37,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsSubmitting(false);
-    toast.success("Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.");
+    toast.success("Дякуємо за ваше повідомлення! Ми зв'яжемося з вами найближчим часом.");
     form.reset();
     setIsAgreed(false);
   };
@@ -47,21 +47,21 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-4 reveal-on-scroll flex items-center">
           <span className="text-connexi-orange font-bold mr-2">04</span>
-          <h2 className="text-2xl font-bold text-connexi-orange">КОНТАКТЫ</h2>
+          <h2 className="text-2xl font-bold text-connexi-orange">КОНТАКТИ</h2>
         </div>
         
         <div className="text-center mb-16 reveal-on-scroll">
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            ПРОКОНСУЛЬТИРУЕМ
+            ПРОКОНСУЛЬТУЄМО
           </h2>
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            И ПРОСЧИТАЕМ
+            ТА РОЗРАХУЄМО
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-connexi-orange">
-            ОТ ЗАДАЧИ ДО
+            ВІД ЗАВДАННЯ ДО
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold text-connexi-orange">
-            РЕШЕНИЯ ОДИН ШАГ — JUST ASK IT
+            РІШЕННЯ ОДИН КРОК — JUST ASK AI
           </h2>
         </div>
 
@@ -69,37 +69,37 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>ООО "АСК ТЕХНОЛОДЖИ"</h3>
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>ТОВ "КОННЕКСІ АІ"</h3>
               <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600 mb-2'}>
-                Юридический адрес: 117393, г. Москва, ул. Архитектора Власова д.55 помещение 219
+                Юридична адреса: 01001, м. Київ, вул. Хрещатик, 1, офіс 205
               </p>
               <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600'}>
-                ИНН 9728076178 ОГРН 1227700657920
+                ЄДРПОУ 12345678
               </p>
             </div>
             
             <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Контакты:</h3>
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Контакти:</h3>
               <div className="flex items-center space-x-2 mb-2">
                 <Mail className="text-connexi-orange" size={20} />
-                <a href="mailto:info@ask-t.ru" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  info@ask-t.ru
+                <a href="mailto:info@connexi.ai" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
+                  info@connexi.ai
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+74951571000" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  8 (495) 157 10 00
+                <a href="tel:+380671234567" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
+                  +38 (067) 123-45-67
                 </a>
               </div>
             </div>
             
             <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Адрес:</h3>
+              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>Адреса:</h3>
               <div className="flex items-start space-x-2">
                 <MapPin className="text-connexi-orange mt-1" size={20} />
                 <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                  Москва, улица Архитектора Власова, д.55
+                  Київ, Хрещатик, 1, офіс 205
                 </p>
               </div>
             </div>
@@ -108,36 +108,36 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
           {/* Contact Form */}
           <div className={`p-6 rounded-lg ${className?.includes('bg-gray-900') ? 'bg-gray-800 bg-opacity-40' : 'bg-gray-50'}`}>
             <p className={className?.includes('text-white') ? 'text-gray-300 mb-6' : 'text-gray-600 mb-6'}>
-              Мы свяжемся с вами в течение рабочего дня для обсуждения деталей. Стоимостная оценка производится по индивидуальным условиям.
+              Ми зв'яжемося з вами протягом робочого дня для обговорення деталей. Вартісна оцінка здійснюється за індивідуальними умовами.
             </p>
             
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
               <Input 
-                placeholder="Ваше имя" 
+                placeholder="Ваше ім'я" 
                 className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("name", { required: true })}
               />
               
               <Input 
-                placeholder="Компания" 
+                placeholder="Компанія" 
                 className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("company")}
               />
               
               <Input 
                 type="email" 
-                placeholder="Почта" 
+                placeholder="Пошта" 
                 className={`focus:border-connexi-orange ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`} 
                 {...form.register("email", { required: true })}
               />
               
               <div className="flex items-center">
                 <div className="flex-shrink-0 w-8 text-gray-500">
-                  <span className="flex items-center justify-center h-10">+7</span>
+                  <span className="flex items-center justify-center h-10">+38</span>
                 </div>
                 <Input
                   type="tel"
-                  placeholder="(999) 999-99-99"
+                  placeholder="(067) 123-45-67"
                   className={`focus:border-connexi-orange ml-2 ${className?.includes('bg-gray-900') ? 'bg-transparent border-gray-700' : 'bg-white border-gray-300'}`}
                   {...form.register("phone", { required: true })}
                 />
@@ -152,7 +152,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
                   onChange={(e) => setIsAgreed(e.target.checked)}
                 />
                 <label htmlFor="privacy-policy" className={`text-sm ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Согласен с <a href="#" className="text-connexi-orange underline">политикой конфиденциальности</a>
+                  Погоджуюсь з <a href="#" className="text-connexi-orange underline">політикою конфіденційності</a>
                 </label>
               </div>
               
@@ -161,7 +161,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
                 className="contact-button w-full flex items-center justify-center"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "ОТПРАВКА..." : "ОТПРАВИТЬ"}
+                {isSubmitting ? "ВІДПРАВКА..." : "НАДІСЛАТИ"}
               </Button>
             </form>
           </div>

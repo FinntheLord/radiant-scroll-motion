@@ -14,12 +14,12 @@ interface PartnersSectionProps {
 }
 
 const partners = [
-  { name: "АТБ", id: 1 },
-  { name: "Ярмолино", id: 2 },
-  { name: "Новис", id: 3 },
-  { name: "EDS Power", id: 4 },
-  { name: "PDR Auto", id: 5 },
-  { name: "Skin & Skin", id: 6 },
+  { name: "OpenAI", id: 1 },
+  { name: "Google Cloud", id: 2 },
+  { name: "Microsoft Azure", id: 3 },
+  { name: "Hugging Face", id: 4 },
+  { name: "Amazon AWS", id: 5 },
+  { name: "Anthropic", id: 6 },
 ];
 
 const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => {
@@ -47,16 +47,16 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 reveal-on-scroll">
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            + 100 ВЕНДОРОВ
+            + 50 ТЕХНОЛОГІЙ
           </h2>
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            С КОТОРЫМИ
+            З ЯКИМИ
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="orange-highlight">МЫ</span>
+            <span className="orange-highlight">МИ</span>
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="orange-highlight">РАБОТАЕМ</span>
+            <span className="orange-highlight">ПРАЦЮЄМО</span>
           </h2>
         </div>
       </div>
@@ -88,7 +88,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
           <Button 
             className="contact-button flex items-center gap-2 text-white px-8 py-6 text-lg rounded-full"
           >
-            НАШИ КЕЙСЫ
+            НАШІ КЕЙСИ
             <ArrowRight className="h-5 w-5" />
           </Button>
         </div>

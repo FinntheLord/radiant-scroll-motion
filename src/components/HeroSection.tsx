@@ -55,29 +55,29 @@ const HeroSection: React.FC = () => {
                 duration={1.5}
                 spread={3}
               >
-                ПРОЕКТИРУЕМ
+                ВПРОВАДЖУЄМО
               </TextShimmer>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <span className="text-gray-800"># СИСТЕМНЫЕ </span>
+              <span className="text-gray-800"># ШТУЧНИЙ </span>
               <br />
-              <span className="connexi-gradient-text parallax" data-speed="0.02">ИТ</span>
-              <span className="text-gray-800"> — РЕШЕНИЯ</span>
+              <span className="connexi-gradient-text parallax" data-speed="0.02">ІНТЕЛЕКТ</span>
+              <span className="text-gray-800"> ДЛЯ БІЗНЕСУ</span>
             </h1>
 
             <div className="max-w-2xl reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
               <p className="text-gray-700 mb-8">
-                Обеспечиваем бесперебойную работу
-                <span className="connexi-gradient-text"> ИТ</span> - инфраструктуру с учетом лучших
-                практик и подходов
+                Забезпечуємо трансформацію бізнесу за допомогою
+                <span className="connexi-gradient-text"> AI</span> - рішень з урахуванням
+                кращих практик та підходів
               </p>
 
               <a href="#services" className="inline-block">
                 <Button 
-                  className="mt-4 contact-button px-10 py-6 rounded-full transition-all"
+                  className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover"
                 >
-                  НАШИ УСЛУГИ
+                  НАШІ ПОСЛУГИ
                 </Button>
               </a>
             </div>
@@ -85,11 +85,11 @@ const HeroSection: React.FC = () => {
 
           <div className="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="reveal-on-scroll parallax" data-speed="0.03" style={{ animationDelay: "0.3s" }}>
-              <div className="connexi-gradient-text mb-3">Аккредитованы в Минцифры</div>
+              <div className="connexi-gradient-text mb-3">Сертифіковані спеціалісти з AI</div>
             </div>
             <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
-              <div className="text-gray-700 mb-3">Поставляем оборудование и ПО</div>
-              <div className="text-gray-700">Строим частные облака под ключ</div>
+              <div className="text-gray-700 mb-3">Розробляємо і впроваджуємо AI-рішення</div>
+              <div className="text-gray-700">Створюємо індивідуальні AI-моделі</div>
             </div>
           </div>
         </div>

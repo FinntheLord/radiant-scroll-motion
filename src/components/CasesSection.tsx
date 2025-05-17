@@ -11,26 +11,26 @@ interface CasesSectionProps {
 const caseStudies = [
   {
     id: "001",
-    title: "Построение и сопровождение частного облака для крупнейшей российской юридической фирмы",
-    tags: ["ЧАСТНОЕ ОБЛАКО", "IAAS", "СОПРОВОЖДЕНИЕ", "DISASTER-READY", "МОНИТОРИНГ"]
+    title: "Впровадження інтелектуальної системи аналізу клієнтських даних для ритейл-мережі",
+    tags: ["AI АНАЛІТИКА", "ОБРОБКА ДАНИХ", "ПРОГНОЗУВАННЯ", "КЛІЄНТСЬКИЙ ДОСВІД", "АВТОМАТИЗАЦІЯ"]
   },
   {
     id: "002",
-    title: "Разработка системы автоматизации бизнес-процессов для логистической компании",
-    tags: ["АВТОМАТИЗАЦИЯ", "ЛОГИСТИКА", "ИНТЕГРАЦИЯ", "BIGDATA", "АНАЛИТИКА"]
+    title: "Розробка системи автоматизації процесів на основі AI для логістичної компанії",
+    tags: ["АВТОМАТИЗАЦІЯ", "ЛОГІСТИКА", "ІНТЕГРАЦІЯ", "BIGDATA", "АНАЛІТИКА"]
   },
   {
     id: "003",
-    title: "Внедрение комплексной системы кибербезопасности для финансовой организации",
-    tags: ["БЕЗОПАСНОСТЬ", "FINTECH", "АУДИТ", "ЗАЩИТА ДАННЫХ", "СООТВЕТСТВИЕ"]
+    title: "Впровадження AI-системи для аналізу ризиків та прийняття рішень у фінансовій організації",
+    tags: ["БЕЗПЕКА", "FINTECH", "АНАЛІЗ РИЗИКІВ", "ЗАХИСТ ДАНИХ", "АНАЛІТИКА"]
   }
 ];
 
 const industries = [
   { name: "FINTECH СЕКТОР", id: 1 },
-  { name: "TELECOM", id: 2 },
-  { name: "LEGAL СЕКТОР", id: 3 },
-  { name: "TRANSPORT & LOGISTICS", id: 4 },
+  { name: "РОЗДРІБНА ТОРГІВЛЯ", id: 2 },
+  { name: "ЛОГІСТИКА", id: 3 },
+  { name: "АПК", id: 4 },
   { name: "IT & TECH", id: 5 },
 ];
 
@@ -40,28 +40,28 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-4 reveal-on-scroll flex items-center">
           <span className="text-connexi-orange font-bold mr-2">02</span>
-          <h2 className="text-2xl font-bold text-connexi-orange">КЕЙСЫ</h2>
+          <h2 className="text-2xl font-bold text-connexi-orange">КЕЙСИ</h2>
         </div>
         
         <div className="text-center mb-16 reveal-on-scroll">
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            МЫ ДЕЙСТВИТЕЛЬНО
+            МИ ДІЙСНО
           </h2>
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            ДЕЛАЕМ,
+            РОБИМО,
           </h2>
           <h2 className="text-4xl md:text-5xl font-bold text-connexi-orange">
-            А НЕ ГОВОРИМ
+            А НЕ ГОВОРИМО
           </h2>
 
           <div className="mt-12 text-3xl md:text-4xl font-bold">
             <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}>{'{'} + </span>
-            <span className="text-connexi-orange">200</span>
-            <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}> кейсов в сфере {'}'}</span>
+            <span className="text-connexi-orange">50</span>
+            <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}> кейсів у сфері AI {'}'}</span>
           </div>
 
           <div className="mt-10">
-            <p className={`uppercase mb-6 ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>ПОДТВЕРЖДЕННЫЙ ОПЫТ В СЛЕДУЮЩИХ СФЕРАХ</p>
+            <p className={`uppercase mb-6 ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>ПІДТВЕРДЖЕНИЙ ДОСВІД У НАСТУПНИХ СФЕРАХ</p>
             
             <div className="flex flex-wrap justify-center gap-4 mt-4">
               {industries.map((industry) => (
@@ -126,7 +126,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                       <Button 
                         className="bg-transparent hover:bg-transparent text-connexi-orange border-none shadow-none p-0 hover:text-white transition-colors"
                       >
-                        ЧИТАТЬ ПОДРОБНЕЕ
+                        ЧИТАТИ ДЕТАЛЬНІШЕ
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </div>
@@ -141,7 +141,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
           <Button 
             className="contact-button flex items-center gap-2 text-white px-8 py-6 text-lg rounded-full"
           >
-            ВСЕ КЕЙСЫ
+            УСІ КЕЙСИ
             <ArrowRight className="h-5 w-5" />
           </Button>
         </div>
