@@ -1,0 +1,24 @@
+
+@import './variables.css';
+@import './animations.css';
+@import './components.css';
+@import './utilities.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.orange-highlight {
+  color: #F86E1E;
+}
