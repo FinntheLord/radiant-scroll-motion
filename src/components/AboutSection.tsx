@@ -2,6 +2,14 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from "@/components/ui/carousel";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const AboutSection: React.FC = () => {
   return (
@@ -42,38 +50,111 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-20">
-          <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll" style={{ animationDelay: "0.3s" }}>
-            <CardContent className="p-6">
-              <h3 className="text-2xl text-gray-200 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
-              <div className="text-gray-300">
-                <p className="mb-4">
-                  Обеспечиваем <span className="text-orange">большую на 30% скорость</span> разработки и 
-                  внедрения решений за счет оптимизации ресурсов команды.
-                </p>
-                <p>
-                  Все наши сотрудники-специалисты с высокопрофессиональным 
-                  подходом к решению ИТ задач
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="max-w-5xl mx-auto mt-20">
+          <div className="mb-6 flex justify-between items-center reveal-on-scroll">
+            <h3 className="text-2xl text-gray-200">Наши преимущества</h3>
+            <div className="flex gap-2 md:hidden">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button carousel-prev"
+                aria-label="Предыдущий слайд"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button carousel-next"
+                aria-label="Следующий слайд"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
           
-          <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll" style={{ animationDelay: "0.4s" }}>
-            <CardContent className="p-6">
-              <h3 className="text-2xl text-gray-200 mb-8"># ЭФФЕКТИВНО</h3>
-              <div className="text-gray-300">
-                <p>
-                  Повышаем эффективность бизнес-процессов 
-                  на разных уровнях за счет применения новейших 
-                  технологий и тесного сотрудничества с 
-                  поставщиками решений
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <Carousel className="w-full" opts={{
+            align: "start",
+            loop: true,
+          }}>
+            <CarouselContent>
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.3s" }}>
+                  <CardContent className="p-6">
+                    <h3 className="text-2xl text-gray-200 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
+                    <div className="text-gray-300">
+                      <p className="mb-4">
+                        Обеспечиваем <span className="text-orange">большую на 30% скорость</span> разработки и 
+                        внедрения решений за счет оптимизации ресурсов команды.
+                      </p>
+                      <p>
+                        Все наши сотрудники-специалисты с высокопрофессиональным 
+                        подходом к решению ИТ задач
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.4s" }}>
+                  <CardContent className="p-6">
+                    <h3 className="text-2xl text-gray-200 mb-8"># ЭФФЕКТИВНО</h3>
+                    <div className="text-gray-300">
+                      <p>
+                        Повышаем эффективность бизнес-процессов 
+                        на разных уровнях за счет применения новейших 
+                        технологий и тесного сотрудничества с 
+                        поставщиками решений
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.5s" }}>
+                  <CardContent className="p-6">
+                    <h3 className="text-2xl text-gray-200 mb-8"># НАДЕЖНО</h3>
+                    <div className="text-gray-300">
+                      <p>
+                        Гарантируем высокое качество и стабильность 
+                        всех внедряемых решений благодаря использованию 
+                        проверенных технологий и многоуровневому 
+                        тестированию
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            </CarouselContent>
+            
+            <div className="hidden md:block">
+              <CarouselPrevious className="border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button" />
+              <CarouselNext className="border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button" />
+            </div>
+          </Carousel>
         </div>
       </div>
+      
+      <style jsx>{`
+        .custom-carousel-button {
+          opacity: 0.7;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .custom-carousel-button:hover {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+          .carousel-prev, .carousel-next {
+            position: static;
+            transform: none;
+          }
+        }
+      `}</style>
     </section>
   );
 };

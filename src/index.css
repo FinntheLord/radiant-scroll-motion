@@ -205,3 +205,15 @@
   transform: scaleX(1);
   transform-origin: left;
 }
+
+/* Carousel Custom Styles */
+.custom-carousel-button {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.custom-carousel-button:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
