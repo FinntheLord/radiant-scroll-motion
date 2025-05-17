@@ -26,12 +26,12 @@ const Index = () => {
       thirdColor="139, 92, 246"  // purple
       fourthColor="249, 115, 22"  // orange
       fifthColor="180, 180, 180"  // light gray
-      interactive={true}
+      interactive={false}
       blendingValue="soft-light"
-      size="100%"
-      className="z-0"
+      size="120%"
+      className="z-20"
     >
-      <div className="min-h-screen bg-transparent text-gray-900 overflow-x-hidden relative z-10">
+      <div className="min-h-screen text-gray-900 overflow-x-hidden relative z-20">
         <ScrollAnimation />
         <Navbar />
         <HeroSection />

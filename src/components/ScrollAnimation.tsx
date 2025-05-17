@@ -4,30 +4,33 @@ import React, { useEffect } from "react";
 const ScrollAnimation: React.FC = () => {
   useEffect(() => {
     let isScrolling = false;
+    let scrollFrameRequest: number;
     
-    // Optimized reveal animation with debouncing
+    // Optimized reveal animation with throttling
     const handleReveal = () => {
       if (!isScrolling) {
         isScrolling = true;
         
         // Use requestAnimationFrame for better performance
-        requestAnimationFrame(() => {
+        scrollFrameRequest = requestAnimationFrame(() => {
           const elements = document.querySelectorAll('.reveal-on-scroll');
           
           elements.forEach((element) => {
             const elementTop = element.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
             
-            if (elementTop < windowHeight - 100) {
+            if (elementTop < windowHeight - 50) {
               element.classList.add('revealed');
               
               // Find all children with delay-* classes and animate them sequentially
               const delayedElements = element.querySelectorAll('[class*="delay-"]');
-              delayedElements.forEach((delayedEl, index) => {
-                setTimeout(() => {
-                  delayedEl.classList.add('revealed');
-                }, 150 * (index + 1));
-              });
+              if (delayedElements.length > 0) {
+                delayedElements.forEach((delayedEl, index) => {
+                  setTimeout(() => {
+                    delayedEl.classList.add('revealed');
+                  }, 100 * (index + 1));
+                });
+              }
             }
           });
           
@@ -36,54 +39,48 @@ const ScrollAnimation: React.FC = () => {
       }
     };
 
-    // Simplified and optimized floating animation
+    // Optimized floating animation with fewer elements
     const animateFloatingElements = () => {
       const floatingElements = document.querySelectorAll('.floating');
       
-      floatingElements.forEach((element) => {
-        const randomX = Math.random() * 10 - 5;
-        const randomY = Math.random() * 10 - 5;
-        
-        element.animate(
-          [
-            { transform: 'translate(0px, 0px)' },
-            { transform: `translate(${randomX}px, ${randomY}px)` },
-            { transform: 'translate(0px, 0px)' }
-          ],
-          {
-            duration: 5000 + Math.random() * 3000,
-            iterations: Infinity,
-            easing: 'ease-in-out'
-          }
-        );
-      });
+      if (floatingElements.length > 0) {
+        floatingElements.forEach((element) => {
+          const randomX = Math.random() * 6 - 3; // Reduced movement range
+          const randomY = Math.random() * 6 - 3; // Reduced movement range
+          
+          element.animate(
+            [
+              { transform: 'translate(0px, 0px)' },
+              { transform: `translate(${randomX}px, ${randomY}px)` },
+              { transform: 'translate(0px, 0px)' }
+            ],
+            {
+              duration: 6000 + Math.random() * 2000, // Reduced animation duration
+              iterations: Infinity,
+              easing: 'ease-in-out'
+            }
+          );
+        });
+      }
     };
 
-    // Optimized tab content visibility for better performance
+    // Optimized tab content visibility
     const setupTabContentVisibility = () => {
-      // Simplified tab visibility logic
       const tabContents = document.querySelectorAll('.services-tab-content');
+      
+      if (tabContents.length === 0) return;
       
       // Set up a single observer for all tabs
       const tabsObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.attributeName === 'data-state') {
-            // Cast target to Element to access getAttribute and classList
             const target = mutation.target as Element;
             const isActive = target.getAttribute('data-state') === 'active';
             
-            // Apply the visibility class immediately when active
             if (isActive) {
               target.classList.add('tab-visible');
             } else {
-              // Short delay for smooth transition out
-              setTimeout(() => {
-                // We need to re-check the attribute since it may have changed
-                // Cast to Element again for type safety
-                if ((target as Element).getAttribute('data-state') !== 'active') {
-                  target.classList.remove('tab-visible');
-                }
-              }, 200); // Reduced timeout for faster transitions
+              target.classList.remove('tab-visible');
             }
           }
         });
@@ -100,23 +97,22 @@ const ScrollAnimation: React.FC = () => {
       });
     };
     
-    // Preload any needed assets for better performance
-    const preloadAssets = () => {
-      // Preload any images or other assets needed for the services section
-      // Empty for now, can be expanded if specific assets need preloading
-    };
-    
     // Add scroll event with passive option for better performance
     window.addEventListener('scroll', handleReveal, { passive: true });
     
-    // Call the initialization functions once
+    // Execute these functions only once with a delay
     handleReveal();
-    animateFloatingElements();
-    setupTabContentVisibility();
-    preloadAssets();
+    
+    // Use a small timeout to prioritize initial rendering
+    const initTimeout = setTimeout(() => {
+      animateFloatingElements();
+      setupTabContentVisibility();
+    }, 100);
     
     return () => {
       window.removeEventListener('scroll', handleReveal);
+      cancelAnimationFrame(scrollFrameRequest);
+      clearTimeout(initTimeout);
     };
   }, []);
 
