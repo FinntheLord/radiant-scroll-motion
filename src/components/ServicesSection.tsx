@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Blocks } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const ServicesSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("0");
@@ -94,7 +94,7 @@ const ServicesSection: React.FC = () => {
               <TabsContent 
                 key={service.id} 
                 value={service.id}
-                className="mt-0 data-[state=active]:animate-fade-in"
+                className="mt-0 services-tab-content"
               >
                 <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll card-hover transition-all duration-500">
                   <CardContent className="p-6">

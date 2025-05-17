@@ -56,6 +56,42 @@ const ScrollAnimation: React.FC = () => {
       });
     };
     
+    // Fix for tabs content disappearing
+    const setupTabContentVisibility = () => {
+      // Make sure all tabs content is properly visible initially
+      document.querySelectorAll('.services-tab-content').forEach(content => {
+        if (content.getAttribute('data-state') === 'active') {
+          content.classList.add('tab-visible');
+        } else {
+          content.classList.remove('tab-visible');
+        }
+      });
+      
+      // Add mutation observer to watch for tab state changes
+      const tabsObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'data-state') {
+            const target = mutation.target as HTMLElement;
+            if (target.getAttribute('data-state') === 'active') {
+              target.classList.add('tab-visible');
+            } else {
+              // Use setTimeout to delay removal of visibility class
+              // This helps with the fade-out transition
+              setTimeout(() => {
+                if (target.getAttribute('data-state') !== 'active') {
+                  target.classList.remove('tab-visible');
+                }
+              }, 300);
+            }
+          }
+        });
+      });
+      
+      document.querySelectorAll('.services-tab-content').forEach(tab => {
+        tabsObserver.observe(tab, { attributes: true });
+      });
+    };
+    
     // Service tab indicators animation
     const animateServiceIndicators = () => {
       const indicators = document.querySelectorAll('#services .service-indicator');
@@ -69,6 +105,7 @@ const ScrollAnimation: React.FC = () => {
     animateFloatingElements(); // Start floating animations
     animateServiceItems(); // Stagger service items animation
     animateServiceIndicators(); // Animate service indicators
+    setupTabContentVisibility(); // Fix tabs content visibility
     
     return () => {
       window.removeEventListener('scroll', handleReveal);
