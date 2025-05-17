@@ -29,8 +29,12 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <a href="/" className="font-bold text-2xl connexi-gradient-text">
-          connexi.ai
+        <a href="/" className="flex items-center">
+          <img 
+            src="/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png" 
+            alt="connexi.ai logo" 
+            className="h-10 md:h-12"
+          />
         </a>
         
         <nav className="hidden md:flex items-center space-x-8">
