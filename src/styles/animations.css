@@ -27,39 +27,6 @@
   }
 }
 
-@keyframes floatingGlow {
-  0% {
-    background-position: 0% 0%;
-    transform: translate(-5%, -5%);
-  }
-  50% {
-    background-position: 100% 50%;
-    transform: translate(5%, 5%);
-  }
-  100% {
-    background-position: 0% 100%;
-    transform: translate(-5%, 5%);
-  }
-}
-
-@keyframes colorShift {
-  0% {
-    filter: hue-rotate(0deg);
-  }
-  25% {
-    filter: hue-rotate(90deg);
-  }
-  50% {
-    filter: hue-rotate(180deg);
-  }
-  75% {
-    filter: hue-rotate(270deg);
-  }
-  100% {
-    filter: hue-rotate(360deg);
-  }
-}
-
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -154,29 +121,4 @@
   opacity: 0;
   transform: translateY(-5px); /* Reduced for better performance */
   transition: opacity 300ms, transform 300ms; /* Faster transitions */
-}
-
-/* Multi-colored glow effects */
-.blue-glow {
-  filter: blur(80px);
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(14, 165, 233, 0) 70%);
-  animation: floatingGlow 15s infinite alternate ease-in-out;
-}
-
-.pink-glow {
-  filter: blur(70px);
-  background: radial-gradient(circle, rgba(217, 70, 239, 0.5) 0%, rgba(217, 70, 239, 0) 70%);
-  animation: floatingGlow 18s infinite alternate-reverse ease-in-out;
-}
-
-.purple-glow {
-  filter: blur(90px);
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, rgba(139, 92, 246, 0) 70%);
-  animation: floatingGlow 20s infinite alternate ease-in-out;
-}
-
-.orange-glow {
-  filter: blur(75px);
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.5) 0%, rgba(249, 115, 22, 0) 70%);
-  animation: floatingGlow 16s infinite alternate-reverse ease-in-out;
 }
