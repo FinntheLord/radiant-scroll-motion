@@ -163,3 +163,45 @@
 .indicator-dot.active {
   background: linear-gradient(90deg, #FF7A00, #FF36A3);
 }
+
+/* Transparent blocks with gradient border */
+.case-transparent-block {
+  opacity: 0.8;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Gradient border animation */
+.gradient-border {
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #FF7A00, #FF36A3, #9747FF, #0832A2, #FF7A00);
+  background-size: 400% 400%;
+  animation: border-gradient-animation 8s ease infinite;
+  border-radius: 14px;
+  z-index: -1;
+  opacity: 0.7;
+}
+
+@keyframes border-gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

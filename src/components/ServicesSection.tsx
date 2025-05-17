@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface ServicesSectionProps {
@@ -33,10 +33,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
     }
   ];
 
-  const handleTabChange = useCallback((value: string) => {
-    setActiveTab(value);
-  }, []);
-
   const handlePrevious = useCallback(() => {
     const currentIndex = parseInt(activeTab);
     const newIndex = currentIndex === 0 ? services.length - 1 : currentIndex - 1;
@@ -48,6 +44,35 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
     const newIndex = currentIndex === services.length - 1 ? 0 : currentIndex + 1;
     setActiveTab(newIndex.toString());
   }, [activeTab, services.length]);
+  
+  // Track touch events for swiping
+  const touchStartX = React.useRef(0);
+  const touchEndX = React.useRef(0);
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+    handleSwipe();
+  };
+  
+  const handleSwipe = () => {
+    // Minimum distance required for swipe
+    const minSwipeDistance = 50;
+    const distance = touchEndX.current - touchStartX.current;
+    
+    if (Math.abs(distance) < minSwipeDistance) return;
+    
+    if (distance > 0) {
+      // Swiped right
+      handlePrevious();
+    } else {
+      // Swiped left
+      handleNext();
+    }
+  };
 
   return (
     <section id="services" className={`min-h-screen relative py-20 ${className}`}>
@@ -62,11 +87,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
 
           <div className="card-glow absolute inset-0 -z-10 bg-connexi-purple/5 rounded-xl blur-3xl"></div>
           
-          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <div className="flex justify-between items-center mb-8 reveal-on-scroll">
-              <div className="flex-grow"></div>
-              
-              <div className="flex gap-2">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex justify-center mb-8 reveal-on-scroll">
+              <div className="flex gap-4">
                 <Button 
                   variant="outline" 
                   size="icon" 
@@ -93,6 +116,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                 key={service.id} 
                 value={service.id}
                 className="mt-0 services-tab-content fade-transition"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 <Card className={`border shadow-sm rounded-lg p-4 reveal-on-scroll card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`}>
                   <CardContent className="p-6">
@@ -101,20 +126,13 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                       <h3 className={`text-2xl ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># {service.title}</h3>
                     </div>
                     <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>{service.description}</p>
-                    
-                    <div className="mt-8">
-                      <Button 
-                        className="bg-transparent contact-button px-6 py-2 rounded-full transition-all pulse-on-hover"
-                      >
-                        ПОДРОБНЕЕ
-                      </Button>
-                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
             ))}
           </Tabs>
           
+          {/* Simplified indicator dots - only essential UI element kept */}
           <div className="flex justify-center mt-8">
             <div className="flex gap-3 reveal-on-scroll">
               {services.map((service, index) => (

@@ -1,14 +1,13 @@
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
 
 interface PartnersSectionProps {
   className?: string;
@@ -24,6 +23,25 @@ const partners = [
 ];
 
 const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => {
+  const [carouselRef, carouselApi] = useEmblaCarousel({ 
+    loop: true,
+    align: "start",
+    dragFree: true 
+  });
+  
+  // Set up auto scroll
+  useEffect(() => {
+    if (carouselApi) {
+      const autoScrollInterval = setInterval(() => {
+        carouselApi.scrollNext();
+      }, 3000); // Scroll every 3 seconds
+      
+      return () => {
+        clearInterval(autoScrollInterval);
+      };
+    }
+  }, [carouselApi]);
+
   return (
     <section id="partners" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
@@ -44,11 +62,12 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
         
         <div className="mb-16 reveal-on-scroll">
           <Carousel
+            ref={carouselRef}
+            className="w-full"
             opts={{
               align: "start",
               loop: true,
             }}
-            className="w-full"
           >
             <CarouselContent className="py-4">
               {partners.map((partner) => (
@@ -59,14 +78,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="flex justify-center gap-4 mt-8">
-              <CarouselPrevious className={`static translate-y-0 custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}>
-                <ArrowLeft className="h-5 w-5" />
-              </CarouselPrevious>
-              <CarouselNext className={`static translate-y-0 custom-carousel-button ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : ''}`}>
-                <ArrowRight className="h-5 w-5" />
-              </CarouselNext>
-            </div>
+            {/* Navigation arrows removed as requested */}
           </Carousel>
         </div>
         

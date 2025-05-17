@@ -67,7 +67,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
               {industries.map((industry) => (
                 <span 
                   key={industry.id} 
-                  className={`px-4 py-2 rounded-full border hover:bg-opacity-80 transition-colors cursor-pointer ${
+                  className={`px-4 py-2 rounded-full border hover:bg-opacity-80 transition-colors cursor-pointer case-transparent-block ${
                     className?.includes('text-white') 
                       ? 'border-gray-600 text-white hover:bg-gray-800' 
                       : 'border-gray-300 text-gray-800 hover:bg-gray-100'
@@ -84,10 +84,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
           {caseStudies.map((caseStudy) => (
             <Card 
               key={caseStudy.id}
-              className={`overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
+              className={`overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 case-transparent-block gradient-border ${
                 className?.includes('text-white') 
-                  ? 'bg-gray-800' 
-                  : 'bg-white shadow-md'
+                  ? 'bg-gray-800/80 backdrop-blur-sm' 
+                  : 'bg-white/80 shadow-md backdrop-blur-sm'
               }`}
             >
               <CardContent className="p-0">
@@ -102,10 +102,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                         {caseStudy.tags.map((tag, index) => (
                           <span 
                             key={index} 
-                            className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${
+                            className={`text-xs px-3 py-1 rounded-full whitespace-nowrap case-transparent-block ${
                               className?.includes('text-white') 
-                                ? 'bg-gray-700 text-white' 
-                                : 'bg-gray-100 text-gray-800'
+                                ? 'bg-gray-700/80' 
+                                : 'bg-gray-100/80'
                             }`}
                           >
                             {tag}

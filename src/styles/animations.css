@@ -45,6 +45,16 @@
   }
 }
 
+/* Border gradient animation */
+@keyframes border-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Optimized tab animation */
 @keyframes tab-fade-in {
   0% {
