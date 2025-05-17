@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -19,7 +18,48 @@ export function BackgroundGradientAnimation({
 }) {
   const gradientRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const animationFrameRef = useRef<number>();
+  const [time, setTime] = useState(0);
 
+  // Autonomous animation effect
+  useEffect(() => {
+    let lastTime = performance.now();
+    
+    const animateGradient = (currentTime: number) => {
+      // Calculate time delta
+      const deltaTime = currentTime - lastTime;
+      lastTime = currentTime;
+      
+      // Update animation time
+      setTime(prevTime => prevTime + deltaTime * 0.001); // convert to seconds
+      
+      // Continue animation loop
+      animationFrameRef.current = requestAnimationFrame(animateGradient);
+    };
+    
+    if (animate) {
+      animationFrameRef.current = requestAnimationFrame(animateGradient);
+    }
+    
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [animate]);
+  
+  // Calculate gradient position based on time
+  useEffect(() => {
+    if (animate && gradientRef.current) {
+      // Use sine and cosine for smooth circular motion
+      const moveX = Math.sin(time * 0.2) * 30; 
+      const moveY = Math.cos(time * 0.3) * 20;
+      
+      gradientRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    }
+  }, [time, animate]);
+
+  // Keep mouse tracking for additional interactivity if needed
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       // Get mouse position relative to viewport
@@ -39,24 +79,6 @@ export function BackgroundGradientAnimation({
     };
   }, [animate]);
 
-  useEffect(() => {
-    if (animate && gradientRef.current) {
-      // Calculate the center of the gradient based on mouse position
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      // Calculate position percentage (0 to 1)
-      const xPercent = mousePosition.x / width;
-      const yPercent = mousePosition.y / height;
-      
-      // Move the gradient slightly based on mouse position
-      const moveX = (xPercent - 0.5) * 20; 
-      const moveY = (yPercent - 0.5) * 20;
-      
-      gradientRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    }
-  }, [mousePosition, animate]);
-
   return (
     <div className={cn("relative overflow-hidden w-full", containerClassName)}>
       <div 
@@ -70,6 +92,18 @@ export function BackgroundGradientAnimation({
             "radial-gradient(circle at center, rgba(255, 122, 0, 0.8) 0, rgba(255, 54, 163, 0.5) 25%, rgba(151, 71, 255, 0.3) 50%, rgba(8, 50, 162, 0.2) 75%, transparent 100%)",
           backgroundSize: "100% 100%",
           filter: "blur(100px)",
+        }}
+      />
+      <div 
+        className={cn(
+          "absolute inset-0 opacity-40 transition-transform duration-500 ease-out",
+        )}
+        style={{
+          backgroundImage: 
+            "radial-gradient(circle at 70% 60%, rgba(151, 71, 255, 0.7) 0, rgba(255, 54, 163, 0.4) 30%, rgba(255, 122, 0, 0.3) 60%, transparent 100%)",
+          backgroundSize: "120% 120%",
+          filter: "blur(80px)",
+          animation: "floatingGlow 15s infinite alternate ease-in-out",
         }}
       />
       <div className={cn("relative z-10", className)}>

@@ -27,6 +27,21 @@
   }
 }
 
+@keyframes floatingGlow {
+  0% {
+    background-position: 0% 0%;
+    transform: translate(-5%, -5%);
+  }
+  50% {
+    background-position: 100% 50%;
+    transform: translate(5%, 5%);
+  }
+  100% {
+    background-position: 0% 100%;
+    transform: translate(-5%, 5%);
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
