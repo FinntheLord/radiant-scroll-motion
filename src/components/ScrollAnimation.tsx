@@ -92,12 +92,18 @@ const ScrollAnimation: React.FC = () => {
       // Observe all tabs at once
       tabContents.forEach(tab => {
         // Set initial visibility
-        if (tab.getAttribute('data-state') === 'active') {
-          tab.classList.add('tab-visible');
+        if ((tab as Element).getAttribute('data-state') === 'active') {
+          (tab as Element).classList.add('tab-visible');
         }
         
         tabsObserver.observe(tab, { attributes: true });
       });
+    };
+    
+    // Preload any needed assets for better performance
+    const preloadAssets = () => {
+      // Preload any images or other assets needed for the services section
+      // Empty for now, can be expanded if specific assets need preloading
     };
     
     // Add scroll event with passive option for better performance
@@ -107,6 +113,7 @@ const ScrollAnimation: React.FC = () => {
     handleReveal();
     animateFloatingElements();
     setupTabContentVisibility();
+    preloadAssets();
     
     return () => {
       window.removeEventListener('scroll', handleReveal);

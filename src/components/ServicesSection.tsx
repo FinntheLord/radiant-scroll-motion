@@ -60,23 +60,13 @@ const ServicesSection: React.FC = () => {
           
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <div className="flex justify-between items-center mb-8 reveal-on-scroll">
-              <TabsList className="bg-dark-lighter/50 p-1 rounded-lg">
-                {services.map(service => (
-                  <TabsTrigger 
-                    key={service.id} 
-                    value={service.id}
-                    className="data-[state=active]:bg-orange data-[state=active]:text-white rounded-md px-4 py-2 transition-all"
-                  >
-                    {parseInt(service.id) + 1}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              <div className="flex-grow"></div>
               
               <div className="flex gap-2">
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="h-10 w-10 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button"
+                  className="h-12 w-12 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button"
                   onClick={handlePrevious}
                   aria-label="Предыдущая услуга"
                 >
@@ -85,7 +75,7 @@ const ServicesSection: React.FC = () => {
                 <Button 
                   variant="outline" 
                   size="icon" 
-                  className="h-10 w-10 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button"
+                  className="h-12 w-12 rounded-full border-orange text-orange hover:bg-orange/10 hover:text-orange custom-carousel-button"
                   onClick={handleNext}
                   aria-label="Следующая услуга"
                 >

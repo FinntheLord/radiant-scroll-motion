@@ -60,3 +60,21 @@
     transform: none;
   }
 }
+
+/* Arrow navigation styles */
+.custom-carousel-button {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(0);
+  transition: all 0.25s ease;
+  opacity: 0.85;
+}
+
+.custom-carousel-button:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+.custom-carousel-button:active {
+  transform: translateY(-1px);
+}
