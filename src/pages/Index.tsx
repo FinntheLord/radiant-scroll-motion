@@ -1,11 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useEffect } from "react";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import ScrollAnimation from "../components/ScrollAnimation";
 
 const Index = () => {
+  useEffect(() => {
+    // Set page title
+    document.title = "Ask IT | Системные ИТ-Решения";
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-dark text-white overflow-x-hidden">
+      <ScrollAnimation />
+      <Navbar />
+      <HeroSection />
+      
+      {/* More sections will be added here */}
+      <div id="about" className="min-h-screen flex items-center justify-center">
+        <h2 className="text-4xl text-white reveal-on-scroll">
+          О компании <span className="orange-highlight">(Будет добавлено позже)</span>
+        </h2>
+      </div>
+      
+      <div id="services" className="min-h-screen flex items-center justify-center">
+        <h2 className="text-4xl text-white reveal-on-scroll">
+          Услуги <span className="orange-highlight">(Будет добавлено позже)</span>
+        </h2>
       </div>
     </div>
   );

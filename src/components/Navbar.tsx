@@ -1,0 +1,71 @@
+
+import React, { useEffect, useState } from "react";
+import { Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const Navbar: React.FC = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrolled]);
+
+  return (
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-dark/95 backdrop-blur-sm shadow-md py-3"
+          : "bg-transparent py-5"
+      }`}
+    >
+      <div className="container mx-auto px-4 flex justify-between items-center">
+        <a href="/" className="text-white font-bold text-2xl">
+          ask<span className="orange-highlight">it</span>
+        </a>
+        
+        <nav className="hidden md:flex items-center space-x-8">
+          <a href="#about" className="text-gray-300 hover:text-white transition-colors">
+            О КОМПАНИИ
+          </a>
+          <a href="#services" className="text-gray-300 hover:text-white transition-colors">
+            УСЛУГИ
+          </a>
+          <a href="#cases" className="text-gray-300 hover:text-white transition-colors">
+            КЕЙСЫ
+          </a>
+          <a href="#contacts" className="text-gray-300 hover:text-white transition-colors">
+            КОНТАКТЫ
+          </a>
+          <div className="flex items-center">
+            <span className="text-orange inline-flex items-center mr-4">
+              8 (800) 000-00-00
+            </span>
+            <Button 
+              className="contact-button bg-orange hover:bg-orange-hover text-white"
+              size="sm"
+            >
+              Связаться
+              <Phone className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </nav>
+        
+        <Button className="md:hidden bg-orange hover:bg-orange-hover text-white">
+          <Phone className="h-4 w-4" />
+        </Button>
+      </div>
+    </header>
+  );
+};
+
+export default Navbar;
