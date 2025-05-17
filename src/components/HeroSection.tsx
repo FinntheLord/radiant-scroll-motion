@@ -1,6 +1,7 @@
 
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { TextShimmer } from "@/components/ui/text-shimmer";
 
 const HeroSection: React.FC = () => {
   useEffect(() => {
@@ -48,8 +49,14 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
           <div className="max-w-5xl mx-auto">
-            <div className="connexi-gradient-text mb-6 reveal-on-scroll">
-              ПРОЕКТИРУЕМ
+            <div className="mb-6 reveal-on-scroll">
+              <TextShimmer 
+                className="font-semibold [--base-color:theme(colors.connexi.orange)] [--base-gradient-color:theme(colors.connexi.pink)]" 
+                duration={1.5}
+                spread={3}
+              >
+                ПРОЕКТИРУЕМ
+              </TextShimmer>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
