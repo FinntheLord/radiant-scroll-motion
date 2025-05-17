@@ -84,10 +84,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
           {caseStudies.map((caseStudy) => (
             <Card 
               key={caseStudy.id}
-              className={`overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 gradient-border-card ${
+              className={`case-card overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
                 className?.includes('text-white') 
-                  ? 'text-white' 
-                  : 'text-gray-900'
+                  ? 'text-white bg-transparent' 
+                  : 'text-gray-900 bg-transparent'
               }`}
             >
               <CardContent className="p-0">
