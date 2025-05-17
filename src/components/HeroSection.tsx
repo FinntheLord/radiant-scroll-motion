@@ -1,6 +1,7 @@
 
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { TypewriterEffectSmoothDemo } from "@/components/TypewriterEffectSmoothDemo";
 
 const HeroSection: React.FC = () => {
   useEffect(() => {
@@ -48,16 +49,8 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
           <div className="max-w-5xl mx-auto">
-            <div className="connexi-gradient-text mb-6 reveal-on-scroll">
-              ПРОЕКТИРУЕМ
-            </div>
-
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <span className="text-gray-800"># СИСТЕМНЫЕ </span>
-              <br />
-              <span className="connexi-gradient-text parallax" data-speed="0.02">ИТ</span>
-              <span className="text-gray-800"> — РЕШЕНИЯ</span>
-            </h1>
+            {/* Replace the static heading with TypewriterEffectSmoothDemo */}
+            <TypewriterEffectSmoothDemo />
 
             <div className="max-w-2xl reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
               <p className="text-gray-700 mb-8">
@@ -65,14 +58,6 @@ const HeroSection: React.FC = () => {
                 <span className="connexi-gradient-text"> ИТ</span> - инфраструктуру с учетом лучших
                 практик и подходов
               </p>
-
-              <a href="#services" className="inline-block">
-                <Button 
-                  className="mt-4 contact-button px-10 py-6 rounded-full transition-all"
-                >
-                  НАШИ УСЛУГИ
-                </Button>
-              </a>
             </div>
           </div>
 
