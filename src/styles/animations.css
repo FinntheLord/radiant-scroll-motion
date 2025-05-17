@@ -1,3 +1,4 @@
+
 /* Animation Keyframes - Optimized for performance */
 @keyframes rotate {
   100% {
@@ -197,24 +198,32 @@
   filter: blur(80px);
   background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0) 70%);
   animation: floatingGlow 15s infinite alternate ease-in-out;
+  opacity: 0.2; /* Reduced opacity to 20% */
+  pointer-events: none; /* Ensure it doesn't block interaction */
 }
 
 .pink-glow {
   filter: blur(70px);
   background: radial-gradient(circle, rgba(217, 70, 239, 0.2) 0%, rgba(217, 70, 239, 0) 70%);
   animation: floatingGlow 18s infinite alternate-reverse ease-in-out;
+  opacity: 0.2; /* Reduced opacity to 20% */
+  pointer-events: none; /* Ensure it doesn't block interaction */
 }
 
 .purple-glow {
   filter: blur(90px);
   background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0) 70%);
   animation: floatingGlow 20s infinite alternate ease-in-out;
+  opacity: 0.2; /* Reduced opacity to 20% */
+  pointer-events: none; /* Ensure it doesn't block interaction */
 }
 
 .orange-glow {
   filter: blur(75px);
   background: radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(249, 115, 22, 0) 70%);
   animation: floatingGlow 16s infinite alternate-reverse ease-in-out;
+  opacity: 0.2; /* Reduced opacity to 20% */
+  pointer-events: none; /* Ensure it doesn't block interaction */
 }
 
 /* Safari-specific styles */
