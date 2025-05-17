@@ -30,15 +30,15 @@
 @keyframes floatingGlow {
   0% {
     background-position: 0% 0%;
-    transform: translate(-2%, -2%);
+    transform: translate(-5%, -5%);
   }
   50% {
     background-position: 100% 50%;
-    transform: translate(2%, 2%);
+    transform: translate(5%, 5%);
   }
   100% {
     background-position: 0% 100%;
-    transform: translate(-2%, 2%);
+    transform: translate(-5%, 5%);
   }
 }
 
@@ -46,8 +46,14 @@
   0% {
     filter: hue-rotate(0deg);
   }
+  25% {
+    filter: hue-rotate(90deg);
+  }
   50% {
     filter: hue-rotate(180deg);
+  }
+  75% {
+    filter: hue-rotate(270deg);
   }
   100% {
     filter: hue-rotate(360deg);
@@ -59,7 +65,7 @@
     transform: scale(1);
   }
   50% {
-    transform: scale(1.03);
+    transform: scale(1.05);
   }
 }
 
@@ -72,45 +78,11 @@
   }
 }
 
-/* Animation for new gradient elements - simplified for performance */
-@keyframes moveVertical {
-  0% {
-    transform: translateY(-10%);
-  }
-  50% {
-    transform: translateY(10%);
-  }
-  100% {
-    transform: translateY(-10%);
-  }
-}
-
-@keyframes moveInCircle {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes moveHorizontal {
-  0% {
-    transform: translateX(-10%) translateY(-5%);
-  }
-  50% {
-    transform: translateX(10%) translateY(5%);
-  }
-  100% {
-    transform: translateX(-10%) translateY(-5%);
-  }
-}
-
 /* Optimized tab animation */
 @keyframes tab-fade-in {
   0% {
     opacity: 0;
-    transform: translateY(3px);
+    transform: translateY(5px); /* Reduced movement for faster rendering */
   }
   100% {
     opacity: 1;
@@ -121,8 +93,8 @@
 /* Scroll Reveal Animations - Performance optimized */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transform: translateY(20px); /* Reduced for better performance */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   will-change: opacity, transform;
 }
 
@@ -162,14 +134,14 @@
 /* Fade transition animations - Performance optimized */
 .fade-enter {
   opacity: 0;
-  transform: translateY(5px);
+  transform: translateY(5px); /* Reduced for better performance */
   will-change: opacity, transform;
 }
 
 .fade-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 250ms, transform 250ms;
+  transition: opacity 300ms, transform 300ms; /* Faster transitions */
 }
 
 .fade-exit {
@@ -180,46 +152,31 @@
 
 .fade-exit-active {
   opacity: 0;
-  transform: translateY(-5px);
-  transition: opacity 250ms, transform 250ms;
+  transform: translateY(-5px); /* Reduced for better performance */
+  transition: opacity 300ms, transform 300ms; /* Faster transitions */
 }
 
 /* Multi-colored glow effects */
 .blue-glow {
-  filter: blur(40px);
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0) 70%);
-  animation: floatingGlow 20s infinite alternate ease-in-out;
-  opacity: 0.2;
-  pointer-events: none;
+  filter: blur(80px);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(14, 165, 233, 0) 70%);
+  animation: floatingGlow 15s infinite alternate ease-in-out;
 }
 
 .pink-glow {
-  filter: blur(35px);
-  background: radial-gradient(circle, rgba(217, 70, 239, 0.2) 0%, rgba(217, 70, 239, 0) 70%);
-  animation: floatingGlow 24s infinite alternate-reverse ease-in-out;
-  opacity: 0.2;
-  pointer-events: none;
+  filter: blur(70px);
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.5) 0%, rgba(217, 70, 239, 0) 70%);
+  animation: floatingGlow 18s infinite alternate-reverse ease-in-out;
 }
 
 .purple-glow {
-  filter: blur(45px);
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0) 70%);
-  animation: floatingGlow 28s infinite alternate ease-in-out;
-  opacity: 0.2;
-  pointer-events: none;
+  filter: blur(90px);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, rgba(139, 92, 246, 0) 70%);
+  animation: floatingGlow 20s infinite alternate ease-in-out;
 }
 
 .orange-glow {
-  filter: blur(38px);
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.2) 0%, rgba(249, 115, 22, 0) 70%);
-  animation: floatingGlow 22s infinite alternate-reverse ease-in-out;
-  opacity: 0.2;
-  pointer-events: none;
-}
-
-/* Safari-specific styles */
-@supports (-webkit-touch-callout: none) {
-  .gradients-container {
-    filter: blur(20px) !important;
-  }
+  filter: blur(75px);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.5) 0%, rgba(249, 115, 22, 0) 70%);
+  animation: floatingGlow 16s infinite alternate-reverse ease-in-out;
 }

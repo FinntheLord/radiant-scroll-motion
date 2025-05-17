@@ -19,19 +19,9 @@ const Index = () => {
   return (
     <BackgroundGradientAnimation
       containerClassName="min-h-screen w-full"
-      gradientBackgroundStart="rgb(255, 255, 255)"
-      gradientBackgroundEnd="rgb(248, 248, 248)"
-      firstColor="14, 165, 233"  // blue
-      secondColor="217, 70, 239"  // pink 
-      thirdColor="139, 92, 246"  // purple
-      fourthColor="249, 115, 22"  // orange
-      fifthColor="180, 180, 180"  // light gray
-      interactive={false}
-      blendingValue="soft-light"
-      size="120%"
-      className="z-20"
+      gradientClassName="opacity-30"
     >
-      <div className="min-h-screen text-gray-900 overflow-x-hidden relative z-20">
+      <div className="min-h-screen bg-transparent text-gray-900 overflow-x-hidden">
         <ScrollAnimation />
         <Navbar />
         <HeroSection />
