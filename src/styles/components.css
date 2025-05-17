@@ -171,15 +171,18 @@
   -webkit-backdrop-filter: blur(4px);
 }
 
-/* Gradient border animation */
-.gradient-border {
+/* Gradient border card */
+.gradient-border-card {
   position: relative;
   border-radius: 12px;
   transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1;
 }
 
-.gradient-border::before {
+.gradient-border-card::before {
   content: '';
   position: absolute;
   top: -2px;
@@ -188,13 +191,13 @@
   bottom: -2px;
   background: linear-gradient(90deg, #FF7A00, #FF36A3, #9747FF, #0832A2, #FF7A00);
   background-size: 400% 400%;
-  animation: border-gradient-animation 8s ease infinite;
+  animation: border-animation 8s ease infinite;
   border-radius: 14px;
   z-index: -1;
-  opacity: 0.7;
 }
 
-@keyframes border-gradient-animation {
+/* Gradient border animation */
+@keyframes border-animation {
   0% {
     background-position: 0% 50%;
   }
