@@ -1,7 +1,23 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+const partners = [
+  { name: "АТБ", id: 1 },
+  { name: "Ярмолино", id: 2 },
+  { name: "Новис", id: 3 },
+  { name: "EDS Power", id: 4 },
+  { name: "PDR Auto", id: 5 },
+  { name: "Skin & Skin", id: 6 },
+];
 
 const PartnersSection: React.FC = () => {
   return (
@@ -22,16 +38,32 @@ const PartnersSection: React.FC = () => {
           </h2>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-16 mb-16 reveal-on-scroll">
-          {/* Partner logos - placeholders */}
-          {Array.from({ length: 8 }).map((_, index) => (
-            <div 
-              key={index} 
-              className="flex items-center justify-center h-16 md:h-20 opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <div className="bg-gray-300 h-6 w-24 md:w-32 rounded-md animate-pulse"></div>
+        <div className="mb-16 reveal-on-scroll">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="py-4">
+              {partners.map((partner) => (
+                <CarouselItem key={partner.id} className="md:basis-1/3 lg:basis-1/4 pl-4">
+                  <div className="h-36 p-6 flex items-center justify-center rounded-lg bg-white shadow-sm border border-gray-100 hover:shadow-md transition-all">
+                    <div className="text-xl font-bold text-gray-800">{partner.name}</div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-4 mt-8">
+              <CarouselPrevious className="static translate-y-0 custom-carousel-button">
+                <ArrowLeft className="h-5 w-5" />
+              </CarouselPrevious>
+              <CarouselNext className="static translate-y-0 custom-carousel-button">
+                <ArrowRight className="h-5 w-5" />
+              </CarouselNext>
             </div>
-          ))}
+          </Carousel>
         </div>
         
         <div className="flex justify-center reveal-on-scroll">
