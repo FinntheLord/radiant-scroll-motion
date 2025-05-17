@@ -161,6 +161,33 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .orange-highlight {
   color: #F86E1E;
 }
@@ -174,6 +201,49 @@
 .reveal-on-scroll.revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Floating elements */
+.floating-element {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 110, 30, 0.1) 0%, rgba(248, 110, 30, 0) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Card hover animation */
+.card-hover {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Text shine effect */
+.animate-shine {
+  background: linear-gradient(
+    to right,
+    #F86E1E 20%,
+    #ffffff 40%,
+    #ffffff 60%,
+    #F86E1E 80%
+  );
+  background-size: 200% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+/* Card glow effect */
+.card-glow {
+  animation: pulse 6s ease-in-out infinite;
 }
 
 /* Button hover effect */
@@ -206,14 +276,27 @@
   transform-origin: left;
 }
 
+.pulse-on-hover:hover {
+  animation: pulse 1s infinite;
+}
+
 /* Carousel Custom Styles */
 .custom-carousel-button {
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   transform: translateY(0);
   transition: all 0.3s ease;
+  opacity: 0.7;
 }
 
 .custom-carousel-button:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   transform: translateY(-2px);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .carousel-prev, .carousel-next {
+    position: static;
+    transform: none;
+  }
 }

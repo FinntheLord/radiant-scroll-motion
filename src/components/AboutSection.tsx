@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -12,6 +12,43 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const AboutSection: React.FC = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Add animated background elements
+    const section = document.getElementById('about');
+    if (section) {
+      for (let i = 0; i < 5; i++) {
+        const element = document.createElement('div');
+        element.className = 'floating-element floating';
+        element.style.left = `${Math.random() * 100}%`;
+        element.style.top = `${Math.random() * 100}%`;
+        element.style.width = `${Math.random() * 100 + 50}px`;
+        element.style.height = `${Math.random() * 100 + 50}px`;
+        element.style.opacity = `${Math.random() * 0.15 + 0.02}`;
+        section.appendChild(element);
+      }
+    }
+    
+    // Add click functionality to mobile carousel buttons
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    
+    if (prevBtn && carouselRef.current) {
+      prevBtn.addEventListener('click', () => {
+        const prevButton = carouselRef.current?.querySelector('.embla__button--prev') as HTMLButtonElement | null;
+        prevButton?.click();
+      });
+    }
+    
+    if (nextBtn && carouselRef.current) {
+      nextBtn.addEventListener('click', () => {
+        const nextButton = carouselRef.current?.querySelector('.embla__button--next') as HTMLButtonElement | null;
+        nextButton?.click();
+      });
+    }
+  }, []);
+
   return (
     <section id="about" className="min-h-screen relative bg-dark-darker py-20 animated-bg">
       <div className="container mx-auto px-4 relative z-10">
@@ -42,7 +79,7 @@ const AboutSection: React.FC = () => {
               </p>
               
               <Button 
-                className="bg-transparent border-2 border-orange text-orange px-6 py-2 rounded-full hover:bg-orange/10 transition-all contact-button"
+                className="bg-transparent border-2 border-orange text-orange px-6 py-2 rounded-full hover:bg-orange/10 transition-all contact-button pulse-on-hover"
               >
                 СВЯЗАТЬСЯ
               </Button>
@@ -50,9 +87,9 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto mt-20">
+        <div className="max-w-5xl mx-auto mt-20 relative">
           <div className="mb-6 flex justify-between items-center reveal-on-scroll">
-            <h3 className="text-2xl text-gray-200">Наши преимущества</h3>
+            <h3 className="text-2xl text-gray-200 animate-shine">Наши преимущества</h3>
             <div className="flex gap-2 md:hidden">
               <Button 
                 variant="outline" 
@@ -73,13 +110,15 @@ const AboutSection: React.FC = () => {
             </div>
           </div>
           
+          <div className="card-glow absolute inset-0 -z-10 bg-orange/5 rounded-xl blur-3xl"></div>
+          
           <Carousel className="w-full" opts={{
             align: "start",
             loop: true,
-          }}>
+          }} ref={carouselRef}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.3s" }}>
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.3s" }}>
                   <CardContent className="p-6">
                     <h3 className="text-2xl text-gray-200 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
                     <div className="text-gray-300">
@@ -97,7 +136,7 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.4s" }}>
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.4s" }}>
                   <CardContent className="p-6">
                     <h3 className="text-2xl text-gray-200 mb-8"># ЭФФЕКТИВНО</h3>
                     <div className="text-gray-300">
@@ -113,7 +152,7 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full" style={{ animationDelay: "0.5s" }}>
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.5s" }}>
                   <CardContent className="p-6">
                     <h3 className="text-2xl text-gray-200 mb-8"># НАДЕЖНО</h3>
                     <div className="text-gray-300">
@@ -136,8 +175,6 @@ const AboutSection: React.FC = () => {
           </Carousel>
         </div>
       </div>
-      
-      {/* CSS for carousel and animations moved to index.css */}
     </section>
   );
 };
