@@ -44,7 +44,7 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 animated-bg flex items-center bg-dark hero-section">
+    <section className="relative min-h-screen pt-20 animated-bg-light flex items-center bg-white hero-section">
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
           <div className="max-w-5xl mx-auto">
@@ -52,15 +52,15 @@ const HeroSection: React.FC = () => {
               ПРОЕКТИРУЕМ
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <span className="text-gray-200"># СИСТЕМНЫЕ </span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
+              <span className="text-gray-800"># СИСТЕМНЫЕ </span>
               <br />
               <span className="connexi-gradient-text parallax" data-speed="0.02">ИТ</span>
-              <span className="text-gray-200"> — РЕШЕНИЯ</span>
+              <span className="text-gray-800"> — РЕШЕНИЯ</span>
             </h1>
 
             <div className="max-w-2xl reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
-              <p className="text-gray-300 mb-8">
+              <p className="text-gray-700 mb-8">
                 Обеспечиваем бесперебойную работу
                 <span className="connexi-gradient-text"> ИТ</span> - инфраструктуру с учетом лучших
                 практик и подходов
@@ -81,15 +81,15 @@ const HeroSection: React.FC = () => {
               <div className="connexi-gradient-text mb-3">Аккредитованы в Минцифры</div>
             </div>
             <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
-              <div className="text-gray-300 mb-3">Поставляем оборудование и ПО</div>
-              <div className="text-gray-300">Строим частные облака под ключ</div>
+              <div className="text-gray-700 mb-3">Поставляем оборудование и ПО</div>
+              <div className="text-gray-700">Строим частные облака под ключ</div>
             </div>
           </div>
         </div>
       </div>
       
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <a href="#about" className="text-white opacity-60 hover:opacity-100 transition-opacity">
+        <a href="#about" className="text-gray-600 opacity-60 hover:opacity-100 transition-opacity">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
           </svg>

@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
@@ -12,7 +13,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-dark text-white overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       <ScrollAnimation />
       <Navbar />
       <HeroSection />

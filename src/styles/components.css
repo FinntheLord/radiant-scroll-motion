@@ -7,9 +7,41 @@
 }
 
 .animated-gradient {
-  background: linear-gradient(90deg, rgba(30,30,30,1) 0%, rgba(50,50,50,0.8) 50%, rgba(30,30,30,1) 100%);
+  background: linear-gradient(90deg, rgba(250,250,250,1) 0%, rgba(245,245,245,0.8) 50%, rgba(250,250,250,1) 100%);
   background-size: 200% 200%;
   animation: gradient-animation 15s ease infinite;
+}
+
+.animated-bg-light {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at bottom left, rgba(8,50,162,0.05) 0%, transparent 70%),
+              radial-gradient(ellipse at top right, rgba(151,71,255,0.05) 0%, transparent 70%),
+              #ffffff;
+}
+
+.animated-bg-light::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,54,163,0.03) 0%, rgba(250,250,250,0) 50%);
+  animation: rotate 30s linear infinite;
+  z-index: 0;
+}
+
+.animated-bg-light::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,122,0,0.03) 0%, rgba(250,250,250,0) 70%);
+  animation: rotate 20s linear infinite reverse;
+  z-index: 0;
 }
 
 .animated-bg {
@@ -47,12 +79,12 @@
 /* Card Styles */
 .card-hover {
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .card-hover:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .card-glow {
@@ -103,14 +135,14 @@
 
 /* Carousel Styles */
 .custom-carousel-button {
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   transform: translateY(0);
   transition: all 0.3s ease;
   opacity: 0.7;
 }
 
 .custom-carousel-button:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   transform: translateY(-2px);
   opacity: 1;
 }
@@ -119,7 +151,7 @@
 .floating-element {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(45deg, rgba(255,122,0,0.1), rgba(255,54,163,0.1), rgba(151,71,255,0.1), rgba(8,50,162,0.1));
+  background: linear-gradient(45deg, rgba(255,122,0,0.05), rgba(255,54,163,0.05), rgba(151,71,255,0.05), rgba(8,50,162,0.05));
   z-index: 1;
 }
 

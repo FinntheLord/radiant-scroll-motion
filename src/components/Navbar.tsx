@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-dark/95 backdrop-blur-sm shadow-md py-3"
+          ? "bg-white/95 backdrop-blur-sm shadow-md py-3"
           : "bg-transparent py-5"
       }`}
     >
@@ -34,16 +34,16 @@ const Navbar: React.FC = () => {
         </a>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#about" className="text-gray-300 hover:text-white transition-colors">
+          <a href="#about" className="text-gray-700 hover:text-black transition-colors">
             О КОМПАНИИ
           </a>
-          <a href="#services" className="text-gray-300 hover:text-white transition-colors">
+          <a href="#services" className="text-gray-700 hover:text-black transition-colors">
             УСЛУГИ
           </a>
-          <a href="#cases" className="text-gray-300 hover:text-white transition-colors">
+          <a href="#cases" className="text-gray-700 hover:text-black transition-colors">
             КЕЙСЫ
           </a>
-          <a href="#contacts" className="text-gray-300 hover:text-white transition-colors">
+          <a href="#contacts" className="text-gray-700 hover:text-black transition-colors">
             КОНТАКТЫ
           </a>
           <div className="flex items-center">

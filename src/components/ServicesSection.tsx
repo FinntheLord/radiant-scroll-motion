@@ -46,13 +46,13 @@ const ServicesSection: React.FC = () => {
   }, [activeTab, services.length]);
 
   return (
-    <section id="services" className="min-h-screen relative bg-dark-darker py-20 animated-bg">
+    <section id="services" className="min-h-screen relative bg-gray-50 py-20 animated-bg-light">
       <div className="container mx-auto px-4 relative z-10">
         <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">НАШИ УСЛУГИ</div>
         
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-gray-200">КОМПЛЕКСНО </span>
+            <span className="text-gray-800">КОМПЛЕКСНО </span>
             <span className="connexi-gradient-text">РЕШАЕМ<br />ЗАДАЧИ</span>
           </h2>
 
@@ -90,13 +90,13 @@ const ServicesSection: React.FC = () => {
                 value={service.id}
                 className="mt-0 services-tab-content fade-transition"
               >
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll card-hover">
+                <Card className="bg-white border border-gray-200 shadow-sm rounded-lg p-4 reveal-on-scroll card-hover">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="text-4xl">{service.icon}</div>
-                      <h3 className="text-2xl text-gray-200"># {service.title}</h3>
+                      <h3 className="text-2xl text-gray-800"># {service.title}</h3>
                     </div>
-                    <p className="text-gray-300">{service.description}</p>
+                    <p className="text-gray-700">{service.description}</p>
                     
                     <div className="mt-8">
                       <Button 
@@ -118,7 +118,7 @@ const ServicesSection: React.FC = () => {
                   key={service.id}
                   onClick={() => setActiveTab(index.toString())}
                   className={`w-3 h-3 rounded-full cursor-pointer transition-all indicator-dot ${
-                    activeTab === index.toString() ? "active scale-125" : "bg-gray-500 hover:bg-connexi-purple/50"
+                    activeTab === index.toString() ? "active scale-125" : "bg-gray-400 hover:bg-connexi-purple/50"
                   }`}
                 />
               ))}

@@ -50,19 +50,19 @@ const AboutSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="min-h-screen relative bg-dark-darker py-20 animated-bg">
+    <section id="about" className="min-h-screen relative bg-white py-20 animated-bg-light">
       <div className="container mx-auto px-4 relative z-10">
         <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">О КОМПАНИИ</div>
         
         <div className="max-w-5xl mx-auto mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-gray-200">РЕАЛИЗУЕМ <br />ПРОЕКТЫ </span>
+            <span className="text-gray-800">РЕАЛИЗУЕМ <br />ПРОЕКТЫ </span>
             <span className="connexi-gradient-text">ЛЮБОЙ<br />СЛОЖНОСТИ</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
             <div className="reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <p className="text-gray-300 text-lg">
+              <p className="text-gray-800 text-lg">
                 <span className="font-bold connexi-gradient-text">CONNEXI</span> — ЭТО КАСТОМНЫЙ ПОДХОД И ПЕРЕДОВЫЕ 
                 ИТ ПРАКТИКИ К РЕШЕНИЮ ЗАДАЧ ЛЮБОЙ 
                 СЛОЖНОСТИ
@@ -70,7 +70,7 @@ const AboutSection: React.FC = () => {
             </div>
             
             <div className="reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
-              <p className="text-gray-300 mb-8">
+              <p className="text-gray-700 mb-8">
                 Многолетняя практика технической экспертизы, аккумулированная
                 в крупных ИТ-компаниях и работа с крупнейшими мировыми
                 производителями позволяет находить оптимальные решения для
@@ -89,7 +89,7 @@ const AboutSection: React.FC = () => {
 
         <div className="max-w-5xl mx-auto mt-20 relative">
           <div className="mb-6 flex justify-between items-center reveal-on-scroll">
-            <h3 className="text-2xl text-gray-200 connexi-gradient-text">Наши преимущества</h3>
+            <h3 className="text-2xl text-gray-800 connexi-gradient-text">Наши преимущества</h3>
             <div className="flex gap-2 md:hidden">
               <Button 
                 variant="outline" 
@@ -118,10 +118,10 @@ const AboutSection: React.FC = () => {
           }} ref={carouselRef}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.3s" }}>
+                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.3s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-200 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
-                    <div className="text-gray-300">
+                    <h3 className="text-2xl text-gray-800 mb-8"># БЫСТРО И КАЧЕСТВЕННО</h3>
+                    <div className="text-gray-700">
                       <p className="mb-4">
                         Обеспечиваем <span className="connexi-gradient-text">большую на 30% скорость</span> разработки и 
                         внедрения решений за счет оптимизации ресурсов команды.
@@ -136,10 +136,10 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.4s" }}>
+                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.4s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-200 mb-8"># ЭФФЕКТИВНО</h3>
-                    <div className="text-gray-300">
+                    <h3 className="text-2xl text-gray-800 mb-8"># ЭФФЕКТИВНО</h3>
+                    <div className="text-gray-700">
                       <p>
                         Повышаем эффективность бизнес-процессов 
                         на разных уровнях за счет применения новейших 
@@ -152,10 +152,10 @@ const AboutSection: React.FC = () => {
               </CarouselItem>
               
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.5s" }}>
+                <Card className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 reveal-on-scroll h-full card-hover" style={{ animationDelay: "0.5s" }}>
                   <CardContent className="p-6">
-                    <h3 className="text-2xl text-gray-200 mb-8"># НАДЕЖНО</h3>
-                    <div className="text-gray-300">
+                    <h3 className="text-2xl text-gray-800 mb-8"># НАДЕЖНО</h3>
+                    <div className="text-gray-700">
                       <p>
                         Гарантируем высокое качество и стабильность 
                         всех внедряемых решений благодаря использованию 
