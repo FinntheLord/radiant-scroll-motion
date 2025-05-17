@@ -226,6 +226,7 @@
   animation: border-animation 8s ease infinite;
   border-radius: 16px;
   z-index: -1;
+  opacity: 0.5; /* Make border 50% transparent */
 }
 
 .case-card-white::after {
