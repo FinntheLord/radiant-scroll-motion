@@ -1,5 +1,5 @@
 
-/* Animation Keyframes */
+/* Animation Keyframes - Optimized for performance */
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
@@ -45,10 +45,11 @@
   }
 }
 
+/* Optimized tab animation */
 @keyframes tab-fade-in {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(5px); /* Reduced movement for faster rendering */
   }
   100% {
     opacity: 1;
@@ -56,11 +57,12 @@
   }
 }
 
-/* Scroll Reveal Animations */
+/* Scroll Reveal Animations - Performance optimized */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transform: translateY(20px); /* Reduced for better performance */
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
 }
 
 .reveal-on-scroll.revealed {
@@ -68,16 +70,17 @@
   transform: translateY(0);
 }
 
-/* Float Animation */
+/* Float Animation - Performance optimized */
 .floating-element {
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(248, 110, 30, 0.1) 0%, rgba(248, 110, 30, 0) 70%);
   z-index: 0;
   pointer-events: none;
+  will-change: transform;
 }
 
-/* Text shine effect */
+/* Text shine effect - Performance optimized */
 .animate-shine {
   background: linear-gradient(
     to right,
@@ -95,25 +98,27 @@
   animation: shine 4s linear infinite;
 }
 
-/* Fade transition animations */
+/* Fade transition animations - Performance optimized */
 .fade-enter {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(5px); /* Reduced for better performance */
+  will-change: opacity, transform;
 }
 
 .fade-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 500ms, transform 500ms;
+  transition: opacity 300ms, transform 300ms; /* Faster transitions */
 }
 
 .fade-exit {
   opacity: 1;
   transform: translateY(0);
+  will-change: opacity, transform;
 }
 
 .fade-exit-active {
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 500ms, transform 500ms;
+  transform: translateY(-5px); /* Reduced for better performance */
+  transition: opacity 300ms, transform 300ms; /* Faster transitions */
 }

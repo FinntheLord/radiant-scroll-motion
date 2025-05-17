@@ -3,29 +3,40 @@ import React, { useEffect } from "react";
 
 const ScrollAnimation: React.FC = () => {
   useEffect(() => {
-    // Enhanced reveal animation with different timing for elements
+    let isScrolling = false;
+    
+    // Optimized reveal animation with debouncing
     const handleReveal = () => {
-      const elements = document.querySelectorAll('.reveal-on-scroll');
-      
-      elements.forEach((element) => {
-        const elementTop = element.getBoundingClientRect().top;
-        const windowHeight = window.innerHeight;
+      if (!isScrolling) {
+        isScrolling = true;
         
-        if (elementTop < windowHeight - 100) {
-          element.classList.add('revealed');
+        // Use requestAnimationFrame for better performance
+        requestAnimationFrame(() => {
+          const elements = document.querySelectorAll('.reveal-on-scroll');
           
-          // Find all children with delay-* classes and animate them sequentially
-          const delayedElements = element.querySelectorAll('[class*="delay-"]');
-          delayedElements.forEach((delayedEl: Element, index: number) => {
-            setTimeout(() => {
-              delayedEl.classList.add('revealed');
-            }, 150 * (index + 1));
+          elements.forEach((element) => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (elementTop < windowHeight - 100) {
+              element.classList.add('revealed');
+              
+              // Find all children with delay-* classes and animate them sequentially
+              const delayedElements = element.querySelectorAll('[class*="delay-"]');
+              delayedElements.forEach((delayedEl, index) => {
+                setTimeout(() => {
+                  delayedEl.classList.add('revealed');
+                }, 150 * (index + 1));
+              });
+            }
           });
-        }
-      });
+          
+          isScrolling = false;
+        });
+      }
     };
 
-    // Floating animation for background elements
+    // Simplified and optimized floating animation
     const animateFloatingElements = () => {
       const floatingElements = document.querySelectorAll('.floating');
       
@@ -48,71 +59,58 @@ const ScrollAnimation: React.FC = () => {
       });
     };
 
-    // Service item stagger animation
-    const animateServiceItems = () => {
-      const serviceItems = document.querySelectorAll('#services .card-hover');
-      serviceItems.forEach((item, index) => {
-        (item as HTMLElement).style.transitionDelay = `${index * 0.2}s`;
-      });
-    };
-    
-    // Fix for tabs content disappearing
+    // Optimized tab content visibility for better performance
     const setupTabContentVisibility = () => {
-      // Make sure all tabs content is properly visible initially
-      document.querySelectorAll('.services-tab-content').forEach(content => {
-        if (content.getAttribute('data-state') === 'active') {
-          content.classList.add('tab-visible');
-        } else {
-          content.classList.remove('tab-visible');
-        }
-      });
+      // Simplified tab visibility logic
+      const tabContents = document.querySelectorAll('.services-tab-content');
       
-      // Add mutation observer to watch for tab state changes
+      // Set up a single observer for all tabs
       const tabsObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.attributeName === 'data-state') {
-            const target = mutation.target as HTMLElement;
-            if (target.getAttribute('data-state') === 'active') {
+            const target = mutation.target;
+            const isActive = target.getAttribute('data-state') === 'active';
+            
+            // Apply the visibility class immediately when active
+            if (isActive) {
               target.classList.add('tab-visible');
             } else {
-              // Use setTimeout to delay removal of visibility class
-              // This helps with the fade-out transition
+              // Short delay for smooth transition out
               setTimeout(() => {
                 if (target.getAttribute('data-state') !== 'active') {
                   target.classList.remove('tab-visible');
                 }
-              }, 300);
+              }, 200); // Reduced timeout for faster transitions
             }
           }
         });
       });
       
-      document.querySelectorAll('.services-tab-content').forEach(tab => {
+      // Observe all tabs at once
+      tabContents.forEach(tab => {
+        // Set initial visibility
+        if (tab.getAttribute('data-state') === 'active') {
+          tab.classList.add('tab-visible');
+        }
+        
         tabsObserver.observe(tab, { attributes: true });
       });
     };
     
-    // Service tab indicators animation
-    const animateServiceIndicators = () => {
-      const indicators = document.querySelectorAll('#services .service-indicator');
-      indicators.forEach((indicator, index) => {
-        (indicator as HTMLElement).style.animationDelay = `${index * 0.1}s`;
-      });
-    };
-
-    window.addEventListener('scroll', handleReveal);
-    handleReveal(); // Trigger on initial load
-    animateFloatingElements(); // Start floating animations
-    animateServiceItems(); // Stagger service items animation
-    animateServiceIndicators(); // Animate service indicators
-    setupTabContentVisibility(); // Fix tabs content visibility
+    // Add scroll event with passive option for better performance
+    window.addEventListener('scroll', handleReveal, { passive: true });
+    
+    // Call the initialization functions once
+    handleReveal();
+    animateFloatingElements();
+    setupTabContentVisibility();
     
     return () => {
       window.removeEventListener('scroll', handleReveal);
     };
   }, []);
 
-  return null; // This component doesn't render anything
+  return null;
 };
 
 export default ScrollAnimation;

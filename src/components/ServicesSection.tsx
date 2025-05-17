@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -29,17 +29,21 @@ const ServicesSection: React.FC = () => {
     }
   ];
 
-  const handlePrevious = () => {
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value);
+  }, []);
+
+  const handlePrevious = useCallback(() => {
     const currentIndex = parseInt(activeTab);
     const newIndex = currentIndex === 0 ? services.length - 1 : currentIndex - 1;
     setActiveTab(newIndex.toString());
-  };
+  }, [activeTab, services.length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const currentIndex = parseInt(activeTab);
     const newIndex = currentIndex === services.length - 1 ? 0 : currentIndex + 1;
     setActiveTab(newIndex.toString());
-  };
+  }, [activeTab, services.length]);
 
   return (
     <section id="services" className="min-h-screen relative bg-dark-darker py-20 animated-bg">
@@ -54,7 +58,7 @@ const ServicesSection: React.FC = () => {
 
           <div className="card-glow absolute inset-0 -z-10 bg-orange/5 rounded-xl blur-3xl"></div>
           
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <div className="flex justify-between items-center mb-8 reveal-on-scroll">
               <TabsList className="bg-dark-lighter/50 p-1 rounded-lg">
                 {services.map(service => (
@@ -94,9 +98,9 @@ const ServicesSection: React.FC = () => {
               <TabsContent 
                 key={service.id} 
                 value={service.id}
-                className="mt-0 services-tab-content"
+                className="mt-0 services-tab-content fade-transition"
               >
-                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll card-hover transition-all duration-500">
+                <Card className="bg-dark-lighter border-none rounded-lg p-4 reveal-on-scroll card-hover">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4 mb-6">
                       <div className="text-4xl">{service.icon}</div>
