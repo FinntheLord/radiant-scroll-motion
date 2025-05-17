@@ -68,7 +68,8 @@ const ScrollAnimation: React.FC = () => {
       const tabsObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.attributeName === 'data-state') {
-            const target = mutation.target;
+            // Cast target to Element to access getAttribute and classList
+            const target = mutation.target as Element;
             const isActive = target.getAttribute('data-state') === 'active';
             
             // Apply the visibility class immediately when active
@@ -77,7 +78,9 @@ const ScrollAnimation: React.FC = () => {
             } else {
               // Short delay for smooth transition out
               setTimeout(() => {
-                if (target.getAttribute('data-state') !== 'active') {
+                // We need to re-check the attribute since it may have changed
+                // Cast to Element again for type safety
+                if ((target as Element).getAttribute('data-state') !== 'active') {
                   target.classList.remove('tab-visible');
                 }
               }, 200); // Reduced timeout for faster transitions
