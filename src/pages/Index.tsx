@@ -20,11 +20,13 @@ const Index = () => {
       <ScrollAnimation />
       <Navbar />
       <HeroSection />
-      <AboutSection className="animated-bg text-white" />
-      <ServicesSection className="animated-bg-light text-gray-900" />
-      <PartnersSection className="animated-bg text-white" />
-      <CasesSection className="animated-bg-light text-gray-900" />
-      <ContactsSection className="animated-bg text-white" />
+      <AboutSection className="bg-gray-900 text-white" />
+      <ServicesSection className="bg-white text-gray-900" />
+      <PartnersSection className="bg-gray-900 text-white" />
+      <CasesSection className="bg-white text-gray-900" />
+      <ContactsSection className="bg-gray-900 text-white" />
+      
+      {/* More sections will be added here */}
     </div>
   );
 };
