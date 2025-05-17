@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -81,6 +82,7 @@ export function BackgroundGradientAnimation({
 
   return (
     <div className={cn("relative overflow-hidden w-full", containerClassName)}>
+      {/* Main gradient */}
       <div 
         ref={gradientRef}
         className={cn(
@@ -94,6 +96,8 @@ export function BackgroundGradientAnimation({
           filter: "blur(100px)",
         }}
       />
+      
+      {/* Secondary gradient */}
       <div 
         className={cn(
           "absolute inset-0 opacity-40 transition-transform duration-500 ease-out",
@@ -106,6 +110,55 @@ export function BackgroundGradientAnimation({
           animation: "floatingGlow 15s infinite alternate ease-in-out",
         }}
       />
+      
+      {/* Blue glow */}
+      <div 
+        className="absolute inset-0 opacity-30 blue-glow"
+        style={{
+          top: '10%',
+          left: '5%',
+          width: '50%',
+          height: '50%',
+          animationDelay: "-2s"
+        }}
+      />
+      
+      {/* Pink glow */}
+      <div 
+        className="absolute inset-0 opacity-30 pink-glow"
+        style={{
+          top: '50%',
+          left: '70%',
+          width: '60%',
+          height: '40%',
+          animationDelay: "-5s"
+        }}
+      />
+      
+      {/* Purple glow */}
+      <div 
+        className="absolute inset-0 opacity-30 purple-glow"
+        style={{
+          top: '70%',
+          left: '20%',
+          width: '45%',
+          height: '45%',
+          animationDelay: "-8s"
+        }}
+      />
+      
+      {/* Orange glow */}
+      <div 
+        className="absolute inset-0 opacity-30 orange-glow"
+        style={{
+          top: '30%',
+          left: '60%',
+          width: '55%',
+          height: '40%',
+          animationDelay: "-12s"
+        }}
+      />
+      
       <div className={cn("relative z-10", className)}>
         {children}
       </div>
