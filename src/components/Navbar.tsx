@@ -41,6 +41,9 @@ const Navbar: React.FC = () => {
           <a href="#about" className="text-gray-700 hover:text-black transition-colors">
             ПРО НАС
           </a>
+          <a href="#assistant" className="text-gray-700 hover:text-black transition-colors">
+            ПОМІЧНИК
+          </a>
           <a href="#services" className="text-gray-700 hover:text-black transition-colors">
             ПОСЛУГИ
           </a>
