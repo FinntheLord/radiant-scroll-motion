@@ -29,6 +29,7 @@ const Index = () => {
       interactive={true}
       blendingValue="soft-light"
       size="100%"
+      className="z-0"  // Добавлен z-индекс для контейнера градиента
     >
       <div className="min-h-screen bg-transparent text-gray-900 overflow-x-hidden relative z-10">
         <ScrollAnimation />
