@@ -147,6 +147,21 @@
   opacity: 1;
 }
 
+/* Auto-scrolling carousel */
+.auto-scrolling-content {
+  animation: scroll-smooth 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll-smooth {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-250px * 3));
+  }
+}
+
 /* Floating elements - connexi brand colors */
 .floating-element {
   position: absolute;

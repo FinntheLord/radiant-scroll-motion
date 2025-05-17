@@ -69,7 +69,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
               loop: true,
             }}
           >
-            <CarouselContent className="py-4">
+            <CarouselContent className="py-4 auto-scrolling-content">
               {partners.map((partner) => (
                 <CarouselItem key={partner.id} className="md:basis-1/3 lg:basis-1/4 pl-4">
                   <div className={`h-36 p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
@@ -78,7 +78,6 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
                 </CarouselItem>
               ))}
             </CarouselContent>
-            {/* Navigation arrows removed as requested */}
           </Carousel>
         </div>
         
