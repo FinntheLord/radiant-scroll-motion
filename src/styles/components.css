@@ -1,7 +1,7 @@
 
 /* Hero Section Styles */
 .hero-gradient {
-  background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+  background: linear-gradient(135deg, #0832A2 0%, #9747FF 50%, #FF36A3 100%);
   background-size: 200% 200%;
   animation: gradient-animation 15s ease infinite;
 }
@@ -15,6 +15,9 @@
 .animated-bg {
   position: relative;
   overflow: hidden;
+  background: radial-gradient(ellipse at bottom left, rgba(8,50,162,0.2) 0%, transparent 70%),
+              radial-gradient(ellipse at top right, rgba(151,71,255,0.2) 0%, transparent 70%),
+              #1a1a1a;
 }
 
 .animated-bg::before {
@@ -24,7 +27,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(60,60,60,0.2) 0%, rgba(30,30,30,0) 50%);
+  background: radial-gradient(circle, rgba(255,54,163,0.1) 0%, rgba(30,30,30,0) 50%);
   animation: rotate 30s linear infinite;
   z-index: 0;
 }
@@ -36,7 +39,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(80,80,80,0.1) 0%, rgba(30,30,30,0) 70%);
+  background: radial-gradient(circle, rgba(255,122,0,0.1) 0%, rgba(30,30,30,0) 70%);
   animation: rotate 20s linear infinite reverse;
   z-index: 0;
 }
@@ -61,11 +64,19 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  background: linear-gradient(45deg, #FF7A00, #FF36A3) !important;
+  border: none !important;
+  color: white !important;
 }
 
 .contact-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(45deg, #FF36A3, #9747FF) !important;
+}
+
+.contact-button:active {
+  background: linear-gradient(45deg, #9747FF, #0832A2) !important;
 }
 
 .contact-button::after {
@@ -102,4 +113,21 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   transform: translateY(-2px);
   opacity: 1;
+}
+
+/* Floating elements - connexi brand colors */
+.floating-element {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(45deg, rgba(255,122,0,0.1), rgba(255,54,163,0.1), rgba(151,71,255,0.1), rgba(8,50,162,0.1));
+  z-index: 1;
+}
+
+/* Indicator dots */
+.indicator-dot {
+  transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: linear-gradient(90deg, #FF7A00, #FF36A3);
 }

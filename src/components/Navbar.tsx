@@ -29,8 +29,8 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <a href="/" className="text-white font-bold text-2xl">
-          ask<span className="orange-highlight">it</span>
+        <a href="/" className="font-bold text-2xl connexi-gradient-text">
+          connexi
         </a>
         
         <nav className="hidden md:flex items-center space-x-8">
@@ -47,11 +47,11 @@ const Navbar: React.FC = () => {
             КОНТАКТЫ
           </a>
           <div className="flex items-center">
-            <span className="text-orange inline-flex items-center mr-4">
+            <span className="connexi-gradient-text inline-flex items-center mr-4">
               8 (800) 000-00-00
             </span>
             <Button 
-              className="contact-button bg-orange hover:bg-orange-hover text-white"
+              className="contact-button"
               size="sm"
             >
               Связаться
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
           </div>
         </nav>
         
-        <Button className="md:hidden bg-orange hover:bg-orange-hover text-white">
+        <Button className="md:hidden contact-button">
           <Phone className="h-4 w-4" />
         </Button>
       </div>

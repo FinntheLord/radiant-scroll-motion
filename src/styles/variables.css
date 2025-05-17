@@ -38,6 +38,12 @@
   --sidebar-accent-foreground: 240 5.9% 10%;
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
+  
+  /* Connexi Brand Colors */
+  --connexi-blue: 225 71% 24%;
+  --connexi-purple: 265 83% 57%;
+  --connexi-pink: 330 100% 71%;
+  --connexi-orange: 20 100% 60%;
 }
 
 .dark {

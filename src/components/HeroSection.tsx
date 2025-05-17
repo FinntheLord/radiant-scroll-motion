@@ -48,27 +48,27 @@ const HeroSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
           <div className="max-w-5xl mx-auto">
-            <div className="text-gray-400 mb-6 reveal-on-scroll">
+            <div className="connexi-gradient-text mb-6 reveal-on-scroll">
               ПРОЕКТИРУЕМ
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
               <span className="text-gray-200"># СИСТЕМНЫЕ </span>
               <br />
-              <span className="orange-highlight parallax" data-speed="0.02">ИТ</span>
+              <span className="connexi-gradient-text parallax" data-speed="0.02">ИТ</span>
               <span className="text-gray-200"> — РЕШЕНИЯ</span>
             </h1>
 
             <div className="max-w-2xl reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
               <p className="text-gray-300 mb-8">
                 Обеспечиваем бесперебойную работу
-                <span className="orange-highlight"> ИТ</span> - инфраструктуру с учетом лучших
+                <span className="connexi-gradient-text"> ИТ</span> - инфраструктуру с учетом лучших
                 практик и подходов
               </p>
 
               <a href="#services" className="inline-block">
                 <Button 
-                  className="mt-4 bg-transparent border-2 border-orange text-white px-10 py-6 rounded-full hover:bg-orange/10 transition-all contact-button"
+                  className="mt-4 contact-button px-10 py-6 rounded-full transition-all"
                 >
                   НАШИ УСЛУГИ
                 </Button>
@@ -78,7 +78,7 @@ const HeroSection: React.FC = () => {
 
           <div className="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="reveal-on-scroll parallax" data-speed="0.03" style={{ animationDelay: "0.3s" }}>
-              <div className="text-orange mb-3">Аккредитованы в Минцифры</div>
+              <div className="connexi-gradient-text mb-3">Аккредитованы в Минцифры</div>
             </div>
             <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
               <div className="text-gray-300 mb-3">Поставляем оборудование и ПО</div>

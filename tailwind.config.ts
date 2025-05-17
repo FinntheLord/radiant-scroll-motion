@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,9 +53,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        orange: {
-          DEFAULT: "#F86E1E",
-          hover: "#ff8034",
+        connexi: {
+          blue: "hsl(var(--connexi-blue))",
+          purple: "hsl(var(--connexi-purple))",
+          pink: "hsl(var(--connexi-pink))",
+          orange: "hsl(var(--connexi-orange))",
         },
         dark: {
           DEFAULT: "#262626",
@@ -112,6 +115,9 @@ export default {
         "gradient-shift": "gradient-animation 15s ease infinite",
         "fade-in-up": "fade-in-up 0.7s ease-out forwards",
         "fade-in": "fade-in 0.5s ease-out forwards",
+      },
+      backgroundImage: {
+        'connexi-gradient': 'linear-gradient(90deg, hsl(var(--connexi-orange)) 0%, hsl(var(--connexi-pink)) 50%, hsl(var(--connexi-purple)) 75%, hsl(var(--connexi-blue)) 100%)',
       },
     },
   },
