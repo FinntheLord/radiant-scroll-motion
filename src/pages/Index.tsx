@@ -8,6 +8,7 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
+import { BackgroundGradientAnimationDemo } from "@/components/ui/demo";
 
 const Index = () => {
   useEffect(() => {
