@@ -99,7 +99,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
               <div className="flex items-start space-x-2">
                 <MapPin className="text-connexi-orange mt-1" size={20} />
                 <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                  Київ, Хрещатик, 1, офіс 205
+                  Дніпро, Рабочая, 23К
                 </p>
               </div>
             </div>
