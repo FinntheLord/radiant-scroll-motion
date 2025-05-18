@@ -12,6 +12,9 @@
   * {
     @apply border-border;
     scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
@@ -22,13 +25,15 @@
 .orange-highlight {
   background: linear-gradient(90deg, #FF7A00, #FF36A3);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
   background-clip: text;
+  text-fill-color: transparent;
 }
 
 .connexi-gradient-text {
   background: linear-gradient(90deg, #FF7A00, #FF36A3, #9747FF, #0832A2);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
   background-clip: text;
+  text-fill-color: transparent;
 }
