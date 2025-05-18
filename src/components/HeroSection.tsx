@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
+import DisplayCards from "@/components/ui/display-cards";
 
 const HeroSection: React.FC = () => {
   useEffect(() => {
@@ -48,38 +49,44 @@ const HeroSection: React.FC = () => {
     <section className="relative min-h-screen pt-20 animated-bg-light flex items-center bg-white hero-section">
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-6 reveal-on-scroll">
-              <TextShimmer 
-                className="font-semibold [--base-color:theme(colors.connexi.orange)] [--base-gradient-color:theme(colors.connexi.pink)]" 
-                duration={1.5}
-                spread={3}
-              >
-                ВПРОВАДЖУЄМО
-              </TextShimmer>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+            <div className="reveal-on-scroll">
+              <div className="mb-6">
+                <TextShimmer 
+                  className="font-semibold [--base-color:theme(colors.connexi.orange)] [--base-gradient-color:theme(colors.connexi.pink)]" 
+                  duration={1.5}
+                  spread={3}
+                >
+                  ВПРОВАДЖУЄМО
+                </TextShimmer>
+              </div>
+
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900" style={{ animationDelay: "0.1s" }}>
+                <span className="text-gray-800"># ШТУЧНИЙ </span>
+                <br />
+                <span className="connexi-gradient-text parallax" data-speed="0.02">ІНТЕЛЕКТ</span>
+                <span className="text-gray-800"> ДЛЯ БІЗНЕСУ</span>
+              </h1>
+
+              <div className="max-w-2xl" style={{ animationDelay: "0.2s" }}>
+                <p className="text-gray-700 mb-8">
+                  Забезпечуємо трансформацію бізнесу за допомогою
+                  <span className="connexi-gradient-text"> AI</span> - рішень з урахуванням
+                  кращих практик та підходів
+                </p>
+
+                <a href="#services" className="inline-block">
+                  <Button 
+                    className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover"
+                  >
+                    НАШІ ПОСЛУГИ
+                  </Button>
+                </a>
+              </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
-              <span className="text-gray-800"># ШТУЧНИЙ </span>
-              <br />
-              <span className="connexi-gradient-text parallax" data-speed="0.02">ІНТЕЛЕКТ</span>
-              <span className="text-gray-800"> ДЛЯ БІЗНЕСУ</span>
-            </h1>
-
-            <div className="max-w-2xl reveal-on-scroll" style={{ animationDelay: "0.2s" }}>
-              <p className="text-gray-700 mb-8">
-                Забезпечуємо трансформацію бізнесу за допомогою
-                <span className="connexi-gradient-text"> AI</span> - рішень з урахуванням
-                кращих практик та підходів
-              </p>
-
-              <a href="#services" className="inline-block">
-                <Button 
-                  className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover"
-                >
-                  НАШІ ПОСЛУГИ
-                </Button>
-              </a>
+            <div className="hidden lg:block reveal-on-scroll">
+              <DisplayCards />
             </div>
           </div>
 
