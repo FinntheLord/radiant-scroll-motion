@@ -68,14 +68,14 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 reveal-on-scroll">
           {/* Contact Information */}
           <div className="space-y-8">
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>ТОВ "КОННЕКСІ АІ"</h3>
-              <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600 mb-2'}>
-                Юридична адреса: 01001, м. Київ, вул. Хрещатик, 1, офіс 205
-              </p>
-              <p className={className?.includes('text-white') ? 'text-gray-400' : 'text-gray-600'}>
-                ЄДРПОУ 12345678
-              </p>
+            <div className="flex items-center">
+              <a href="/" className="flex items-center mb-4">
+                <img 
+                  src="/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png" 
+                  alt="connexi.ai logo" 
+                  className="h-10 md:h-12"
+                />
+              </a>
             </div>
             
             <div>
