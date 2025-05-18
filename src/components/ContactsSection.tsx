@@ -88,8 +88,8 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+380671234567" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  +38 (067) 123-45-67
+                <a href="tel:+380999191191" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
+                  +380999191191
                 </a>
               </div>
             </div>

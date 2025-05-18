@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
           </a>
           <div className="flex items-center">
             <span className="connexi-gradient-text inline-flex items-center mr-4">
-              +38 (067) 123-45-67
+              +380999191191
             </span>
             <Button 
               className="contact-button"
