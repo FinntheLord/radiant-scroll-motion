@@ -1,5 +1,5 @@
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +9,16 @@ import {
 } from "@/components/ui/chat-bubble";
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatInput } from "@/components/ui/chat-input";
+import { toast } from "@/hooks/use-toast";
 
 interface AssistantSectionProps {
   className?: string;
+}
+
+interface Message {
+  id: number;
+  content: string;
+  sender: "user" | "ai";
 }
 
 const initialMessages = [
@@ -22,54 +29,97 @@ const initialMessages = [
   },
 ];
 
+// OpenAI API configuration
+const OPENAI_API_KEY = "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";
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+
 const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) => {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  // Function to send message to OpenAI API
+  const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
+    try {
+      const response = await fetch(OPENAI_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: "Ти AI-помічник Connexi, який допомагає клієнтам дізнатися про послуги компанії з впровадження AI-рішень. Відповідай коротко, україньскою мовою. Надавай конкретну інформацію про послуги Connexi з впровадження AI, наші контакти, та як ми можемо допомогти. Намагайся відповідати дружньо та професійно."
+            },
+            ...messages.map(msg => ({
+              role: msg.sender === "user" ? "user" : "assistant",
+              content: msg.content
+            })),
+            {
+              role: "user",
+              content: userMessage
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("OpenAI API Error:", errorData);
+        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+    } catch (error) {
+      console.error("Error calling OpenAI API:", error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     // Add user message
+    const userMessage = input.trim();
     setMessages((prev) => [
       ...prev,
       {
-        id: prev.length + 1,
-        content: input,
+        id: Date.now(),
+        content: userMessage,
         sender: "user",
       },
     ]);
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response after a delay
-    setTimeout(() => {
+    try {
+      // Get response from OpenAI
+      const aiResponse = await sendMessageToOpenAI(userMessage);
+      
       setMessages((prev) => [
         ...prev,
         {
-          id: prev.length + 1,
-          content: getAiResponse(input),
+          id: Date.now(),
+          content: aiResponse,
           sender: "ai",
         },
       ]);
+    } catch (error) {
+      toast({
+        title: "Помилка",
+        description: "Не вдалося отримати відповідь від AI. Спробуйте ще раз пізніше.",
+        variant: "destructive",
+      });
+      console.error("Error getting AI response:", error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
-  };
-
-  const getAiResponse = (userInput: string): string => {
-    const userInputLower = userInput.toLowerCase();
-    
-    if (userInputLower.includes("послуги") || userInputLower.includes("сервіси")) {
-      return "Ми пропонуємо широкий спектр послуг з впровадження AI, включаючи розробку індивідуальних моделей, інтеграцію AI в існуючі бізнес-процеси та автоматизацію рутинних завдань.";
-    } else if (userInputLower.includes("ціни") || userInputLower.includes("вартість")) {
-      return "Вартість наших послуг залежить від складності проекту. Ми пропонуємо індивідуальний підхід до кожного клієнта. Зв'яжіться з нами для отримання детальної консультації.";
-    } else if (userInputLower.includes("контакти") || userInputLower.includes("зв'язатися")) {
-      return "Ви можете зв'язатися з нами за телефоном +38 (067) 123-45-67 або заповнивши форму зворотного зв'язку в розділі 'Контакти'.";
-    } else if (userInputLower.includes("привіт") || userInputLower.includes("доброго дня")) {
-      return "Вітаю! Чим я можу вам допомогти сьогодні?";
-    } else {
-      return "Дякую за ваше запитання! Наша команда експертів готова допомогти вам впровадити AI-рішення для оптимізації вашого бізнесу. Розкажіть більше про ваші потреби або перегляньте розділ послуг для додаткової інформації.";
     }
   };
 
@@ -163,6 +213,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                       type="submit" 
                       size="sm" 
                       className="contact-button ml-auto gap-1.5"
+                      disabled={isLoading}
                     >
                       Відправити
                       <CornerDownLeft className="size-3.5" />
