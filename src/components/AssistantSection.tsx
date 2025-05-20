@@ -18,10 +18,10 @@ interface AssistantSectionProps {
 interface Message {
   id: number;
   content: string;
-  sender: "user" | "ai";
+  sender: "user" | "ai"; // This strictly defines that sender can only be "user" or "ai"
 }
 
-const initialMessages = [
+const initialMessages: Message[] = [
   {
     id: 1,
     content: "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
