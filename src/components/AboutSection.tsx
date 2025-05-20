@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -48,7 +49,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
         
         <div className="max-w-5xl mx-auto mb-20">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className={`${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>В��РОВАДЖУЄМО <br />ПРОЄКТИ </span>
+            <span className={`${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>ВПРОВАДЖУЄМО <br />ПРОЄКТИ </span>
             <span className="connexi-gradient-text">ШТУЧНОГО<br />ІНТЕЛЕКТУ</span>
           </h2>
 
@@ -57,9 +58,9 @@ const AboutSection: React.FC<AboutSectionProps> = ({
             animationDelay: "0.1s"
           }}>
               <p className={`text-lg ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
-                <span className="font-bold connexi-gradient-text">CONNEXI.AI</span> — ЦЕ ІНДИВІДУАЛЬНИЙ ПІДХІД ТА ПЕРЕДОВІ 
-                ПРАКТИКИ ШТУЧНОГО ІНТЕЛЕКТУ ДЛЯ ВИРІШЕННЯ ЗАВДАНЬ 
-                БУДЬ-ЯКОЇ СКЛАДНОСТІ
+                <span className="font-bold connexi-gradient-text">CONNEXI.AI</span> — ЦЕ ТЕХНОЛОГІЧНА КОМПАНІЯ, 
+                ЩО СПЕЦІАЛІЗУЄТЬСЯ НА ВПРОВАДЖЕННІ ШТУЧНОГО ІНТЕЛЕКТУ 
+                В БІЗНЕС-ПРОЦЕСИ КЛІЄНТІВ
               </p>
             </div>
             
@@ -67,10 +68,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({
             animationDelay: "0.2s"
           }}>
               <p className={`mb-8 ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}`}>
-                Багаторічна практика технічної експертизи в сфері штучного інтелекту,
-                накопичена в провідних IT-компаніях, дозволяє нам знаходити оптимальні 
-                рішення для завдань будь-якої складності, забезпечуючи якість, 
-                надійність та високий рівень сервісу.
+                Ми починаємо з глибокого вивчення вашого бізнесу, розробляємо та програмуємо 
+                AI-агентів під ваші задачі, інтегруємо їх у ваші бізнес-процеси
+                та навчаємо на основі унікального контенту вашої компанії, 
+                забезпечуючи максимальну ефективність.
               </p>
               
               <Button className="contact-button px-6 py-2 rounded-full transition-all pulse-on-hover">

@@ -70,9 +70,9 @@ const HeroSection: React.FC = () => {
 
               <div className="max-w-2xl" style={{ animationDelay: "0.2s" }}>
                 <p className="text-gray-700 mb-8">
-                  Забезпечуємо трансформацію бізнесу за допомогою
-                  <span className="connexi-gradient-text font-medium"> AI</span> - рішень з урахуванням
-                  кращих практик та підходів
+                  Ми розробляємо та інтегруємо AI-агентів у ваші бізнес-процеси,
+                  навчаємо їх на контенті вашої компанії для максимальної 
+                  <span className="connexi-gradient-text font-medium"> ефективності</span>
                 </p>
 
                 <a href="#services" className="inline-block">
@@ -95,8 +95,8 @@ const HeroSection: React.FC = () => {
               <div className="connexi-gradient-text font-medium mb-3">Сертифіковані спеціалісти з AI</div>
             </div>
             <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
-              <div className="text-gray-700 mb-3">Розробляємо і впроваджуємо AI-рішення</div>
-              <div className="text-gray-700">Створюємо індивідуальні AI-моделі</div>
+              <div className="text-gray-700 mb-3">Розробляємо чат-боти та голосових асистентів</div>
+              <div className="text-gray-700">Автоматизуємо бізнес-процеси за допомогою AI</div>
             </div>
           </div>
         </div>
