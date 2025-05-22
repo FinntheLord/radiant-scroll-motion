@@ -26,7 +26,7 @@ const VideoBackgroundSection: React.FC = () => {
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         {/* Light gradient overlay to maintain text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/70 to-white/70 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-white/50 z-10"></div>
         <div className="relative w-full h-full">
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
