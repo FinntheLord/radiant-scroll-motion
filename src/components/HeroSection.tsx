@@ -49,8 +49,9 @@ const HeroSection: React.FC = () => {
     <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/90 to-white/90 z-10"></div>
-        <div className="relative w-full h-full opacity-75">
+        {/* Lighter gradient overlay to make video more visible */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/70 to-white/70 z-10"></div>
+        <div className="relative w-full h-full">
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
             title="Blueprint Background Video"
@@ -58,7 +59,7 @@ const HeroSection: React.FC = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
-            style={{ mixBlendMode: 'soft-light' }}
+            style={{ mixBlendMode: 'normal' }} {/* Changed from soft-light to normal */}
           ></iframe>
         </div>
       </div>
