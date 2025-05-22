@@ -29,7 +29,7 @@ const VideoBackgroundSection: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent z-10"></div>
         <div className="relative w-full h-full">
           <iframe
-            src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+            src="https://www.youtube.com/embed/Hgg7M3kSqyE?autoplay=1&mute=1&loop=1&playlist=Hgg7M3kSqyE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
             title="Blueprint Background Video"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
