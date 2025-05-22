@@ -3,8 +3,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Suspense, lazy } from 'react'
-const Spline = lazy(() => import('@splinetool/react-spline'))
-
+// Lazy load Spline to avoid issues during build
+const Spline = lazy(() => import('@splinetool/react-spline').catch(() => ({
+  default: () => <div className="w-full h-full bg-black" />
+})));
 
 function HeroSplineBackground() {
   return (
