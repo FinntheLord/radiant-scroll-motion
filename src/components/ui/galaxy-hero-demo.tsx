@@ -4,7 +4,7 @@ import React from 'react';
 
 export function HeroSectionBasic() {
   return (
-    <main className="bg-black relative h-screen w-screen">
+    <main className="bg-black relative h-screen w-screen overflow-hidden">
       <HeroSection />
     </main>
   );
