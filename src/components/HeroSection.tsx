@@ -47,19 +47,20 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
-      {/* Video Background */}
+      {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/90 to-white/90 z-10"></div>
-        <video 
-          autoPlay 
-          muted 
-          loop 
-          className="w-full h-full object-cover opacity-75"
-          style={{ mixBlendMode: 'soft-light' }}
-        >
-          <source src="https://player.vimeo.com/progressive_redirect/playback/1361541894/rendition/1080p/file.mp4?loc=external&signature=4a995f3552fc30fd7a757dc33d5b8a00d65756534ed041f8c2b861851c621a99" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <div className="relative w-full h-full opacity-75">
+          <iframe
+            src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+            title="Blueprint Background Video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
+            style={{ mixBlendMode: 'soft-light' }}
+          ></iframe>
+        </div>
       </div>
       
       <div className="animated-bg-light absolute inset-0 z-5"></div>
