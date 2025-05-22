@@ -46,7 +46,24 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 animated-bg-light flex items-center bg-white hero-section">
+    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/90 to-white/90 z-10"></div>
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          className="w-full h-full object-cover opacity-75"
+          style={{ mixBlendMode: 'soft-light' }}
+        >
+          <source src="https://player.vimeo.com/progressive_redirect/playback/1361541894/rendition/1080p/file.mp4?loc=external&signature=4a995f3552fc30fd7a757dc33d5b8a00d65756534ed041f8c2b861851c621a99" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      
+      <div className="animated-bg-light absolute inset-0 z-5"></div>
+      
       <div className="container mx-auto px-4 relative z-10">
         <div className="py-12 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
