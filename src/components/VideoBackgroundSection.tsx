@@ -26,7 +26,7 @@ const VideoBackgroundSection: React.FC = () => {
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         {/* Light gradient overlay to maintain text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-white/50 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent z-10"></div>
         <div className="relative w-full h-full">
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
@@ -42,7 +42,7 @@ const VideoBackgroundSection: React.FC = () => {
       
       <div className="animated-bg-light absolute inset-0 z-5"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-20">
         <div className="max-w-5xl mx-auto text-center">
           <div className="mb-6 reveal-on-scroll">
             <TextShimmer 
