@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Lightbulb, Rocket, ShieldCheck } from "lucide-react";
 
@@ -5,7 +6,7 @@ const ServicesSection: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <section className={`py-20 ${className} relative`}>
       <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-gray-400">{ 05 } ПОСЛУГИ</span>
+        <span className="text-4xl md:text-5xl font-bold text-gray-400">{"{ 05 }"} ПОСЛУГИ</span>
       </div>
       
       <div className="container mx-auto px-4">

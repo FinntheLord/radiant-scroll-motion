@@ -28,7 +28,7 @@ const HeroSection: React.FC = () => {
     <>
       <section className="relative min-h-screen flex items-center justify-center text-white pt-20 hero-background overflow-hidden">
         <div className="absolute top-8 left-8 z-30">
-          <span className="text-4xl md:text-5xl font-bold text-white/30">{ 01 }</span>
+          <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 01 }"} ГОЛОВНА</span>
         </div>
         
         <div className="animated-bg absolute inset-0 z-0"></div>

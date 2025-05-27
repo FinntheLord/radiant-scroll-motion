@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -28,7 +27,7 @@ const VideoBackgroundSection: React.FC = () => {
     <>
       <section className="relative min-h-screen py-20 flex items-center video-background-section overflow-hidden">
         <div className="absolute top-8 left-8 z-30">
-          <span className="text-4xl md:text-5xl font-bold text-white/30">{ 03 } ТЕХНОЛОГІЇ</span>
+          <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 03 }"} ТЕХНОЛОГІЇ</span>
         </div>
         
         {/* YouTube Video Background */}

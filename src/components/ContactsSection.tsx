@@ -1,3 +1,4 @@
+
 import React from "react";
 import { MapPin, Mail, Phone } from "lucide-react";
 
@@ -5,7 +6,7 @@ const ContactsSection: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <footer className={`py-20 ${className} relative`}>
       <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-white/30">{ 08 } КОНТАКТИ</span>
+        <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 08 }"} КОНТАКТИ</span>
       </div>
       
       <div className="container mx-auto px-4">

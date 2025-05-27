@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Rocket } from "lucide-react";
 import { Sparkles } from "lucide-react";
@@ -13,7 +14,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ className }) => {
   return (
     <section className={`py-20 ${className}`}>
       <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-white/30">{ 02 } ПРО НАС</span>
+        <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 02 }"} ПРО НАС</span>
       </div>
       
       <div className="container mx-auto px-4">

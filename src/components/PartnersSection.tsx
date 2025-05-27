@@ -44,7 +44,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
   return (
     <section className={`py-20 ${className} relative`}>
       <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-white/30">{ 06 } ПАРТНЕРИ</span>
+        <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 06 }"} ПАРТНЕРИ</span>
       </div>
       
       <div className="container mx-auto px-4">

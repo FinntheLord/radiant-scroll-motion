@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -125,7 +126,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
   return (
     <section className={`py-20 ${className} relative`}>
       <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-white/30">{ 04 } ПОМІЧНИК</span>
+        <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 04 }"} ПОМІЧНИК</span>
       </div>
       
       <div className="container mx-auto px-4">
