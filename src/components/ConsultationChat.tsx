@@ -1,6 +1,6 @@
 
 import React, { useState, FormEvent } from "react";
-import { X, CornerDownLeft, Bot, User } from "lucide-react";
+import { X, CornerDownLeft, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -40,12 +40,6 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const initialMessage: Message = {
-    id: 1,
-    content: "Привіт! Я консультант Connexi. Щоб почати консультацію, будь ласка, надайте ваше ім'я та номер телефону.",
-    sender: "ai",
-  };
 
   // OpenAI API configuration
   const OPENAI_API_KEY = "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";
@@ -105,10 +99,9 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
 
     setIsInfoCollected(true);
     setMessages([
-      initialMessage,
       {
-        id: 2,
-        content: `Дякую, ${userInfo.name}! Тепер я можу вас проконсультувати. Які питання у вас є щодо впровадження AI в ваш бізнес?`,
+        id: 1,
+        content: `Привіт, ${userInfo.name}! Дякую за контактні дані. Чим можу допомогти з впровадженням AI у ваш бізнес?`,
         sender: "ai",
       },
     ]);
@@ -166,60 +159,60 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md h-[600px] p-0 overflow-hidden">
-        <DialogHeader className="p-4 border-b bg-connexi-gradient text-white">
-          <DialogTitle className="flex items-center gap-2">
+      <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden border-0 shadow-2xl">
+        <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white relative">
+          <DialogTitle className="flex items-center gap-2 text-lg">
             <Bot className="h-5 w-5" />
-            Консультація Connexi
+            Консультація AI
           </DialogTitle>
           <Button
             variant="ghost"
             size="icon"
             onClick={handleClose}
-            className="absolute right-4 top-4 text-white hover:bg-white/20"
+            className="absolute right-2 top-2 text-white hover:bg-white/20 h-8 w-8"
           >
             <X className="h-4 w-4" />
           </Button>
         </DialogHeader>
 
         {!isInfoCollected ? (
-          <div className="p-6 flex flex-col justify-center h-full">
+          <div className="p-6 flex flex-col justify-center h-full bg-white">
             <div className="text-center mb-6">
-              <Bot className="h-12 w-12 mx-auto mb-4 text-connexi-orange" />
-              <p className="text-gray-600 mb-6">
-                Привіт! Для початку консультації надайте, будь ласка, ваші контактні дані:
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Bot className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Безкоштовна консультація</h3>
+              <p className="text-sm text-gray-600">
+                Залиште контакти для персональної консультації
               </p>
             </div>
             
             <form onSubmit={handleInfoSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Ваше ім'я</label>
-                <Input
-                  type="text"
-                  value={userInfo.name}
-                  onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Введіть ваше ім'я"
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Номер телефону</label>
-                <Input
-                  type="tel"
-                  value={userInfo.phone}
-                  onChange={(e) => setUserInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  placeholder="+380..."
-                  className="w-full"
-                />
-              </div>
-              <Button type="submit" className="w-full contact-button">
+              <Input
+                type="text"
+                value={userInfo.name}
+                onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Ваше ім'я"
+                className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+              />
+              <Input
+                type="tel"
+                value={userInfo.phone}
+                onChange={(e) => setUserInfo(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="+38 (0__) ___-__-__"
+                className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+              />
+              <Button 
+                type="submit" 
+                className="w-full h-12 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-medium transition-all duration-200"
+              >
                 Почати консультацію
               </Button>
             </form>
           </div>
         ) : (
-          <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-hidden">
+          <div className="flex flex-col h-full bg-white">
+            <div className="flex-1 overflow-hidden p-2">
               <ChatMessageList>
                 {messages.map((message) => (
                   <ChatBubble
@@ -227,12 +220,13 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                     variant={message.sender === "user" ? "sent" : "received"}
                   >
                     <ChatBubbleAvatar
-                      className="h-8 w-8 shrink-0"
+                      className="h-7 w-7 shrink-0"
                       src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"}
                       fallback={message.sender === "user" ? "У" : "AI"}
                     />
                     <ChatBubbleMessage
                       variant={message.sender === "user" ? "sent" : "received"}
+                      className={message.sender === "user" ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white" : "bg-gray-100 text-gray-800"}
                     >
                       {message.content}
                     </ChatBubbleMessage>
@@ -242,31 +236,35 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                 {isLoading && (
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar
-                      className="h-8 w-8 shrink-0"
+                      className="h-7 w-7 shrink-0"
                       src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"
                       fallback="AI"
                     />
-                    <ChatBubbleMessage isLoading />
+                    <ChatBubbleMessage 
+                      isLoading 
+                      className="bg-gray-100 text-gray-800"
+                    />
                   </ChatBubble>
                 )}
               </ChatMessageList>
             </div>
 
-            <div className="p-4 border-t">
+            <div className="p-3 border-t border-gray-100">
               <form onSubmit={handleMessageSubmit} className="relative">
                 <ChatInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Введіть ваше повідомлення..."
-                  className="pr-12"
+                  placeholder="Напишіть ваше питання..."
+                  className="pr-12 h-10 border-gray-200 focus:border-orange-500 resize-none"
+                  disabled={isLoading}
                 />
                 <Button 
                   type="submit" 
                   size="sm" 
-                  className="absolute right-2 top-2 contact-button"
+                  className="absolute right-1 top-1 h-8 w-8 p-0 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
                   disabled={isLoading}
                 >
-                  <CornerDownLeft className="h-4 w-4" />
+                  <CornerDownLeft className="h-3 w-3" />
                 </Button>
               </form>
             </div>
