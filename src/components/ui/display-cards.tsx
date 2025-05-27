@@ -1,4 +1,3 @@
-
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -51,7 +50,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     {
       icon: <Sparkles className="size-4 text-white" />,
       title: "АНАЛІЗ ДАНИХ",
-      description: "Перетворюємо дані на інсайти",
+      description: "Виявлення слабких сторін",
       date: "AI-рішення",
       iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
       titleClassName: "text-connexi-orange",
