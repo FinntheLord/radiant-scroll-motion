@@ -120,7 +120,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
           <div className="space-y-8">
             <div className="flex items-center">
               <a href="/" className="flex items-center mb-4">
-                <img src="/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png" alt="connexi.ai logo" className="h-10 md:h-12" />
+                <img alt="connexi.ai logo" className="h-10 md:h-12" src="/lovable-uploads/774363a0-cc02-4bd3-a0f7-df3d7d252267.png" />
               </a>
             </div>
             
