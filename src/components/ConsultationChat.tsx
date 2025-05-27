@@ -1,6 +1,6 @@
 
 import React, { useState, FormEvent } from "react";
-import { X, CornerDownLeft, Bot } from "lucide-react";
+import { CornerDownLeft, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -159,20 +159,12 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden border-0 shadow-2xl">
-        <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white relative">
+      <DialogContent className="max-w-md h-[600px] p-0 overflow-hidden border-0 shadow-2xl">
+        <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Bot className="h-5 w-5" />
             Консультація AI
           </DialogTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleClose}
-            className="absolute right-2 top-2 text-white hover:bg-white/20 h-8 w-8"
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
 
         {!isInfoCollected ? (
@@ -212,8 +204,8 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
           </div>
         ) : (
           <div className="flex flex-col h-full bg-white">
-            <div className="flex-1 overflow-hidden p-2">
-              <ChatMessageList>
+            <div className="flex-1 min-h-0">
+              <ChatMessageList className="h-full">
                 {messages.map((message) => (
                   <ChatBubble
                     key={message.id}
@@ -249,7 +241,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
               </ChatMessageList>
             </div>
 
-            <div className="p-3 border-t border-gray-100">
+            <div className="p-3 border-t border-gray-100 bg-white">
               <form onSubmit={handleMessageSubmit} className="relative">
                 <ChatInput
                   value={input}
