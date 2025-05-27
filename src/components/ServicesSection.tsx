@@ -1,4 +1,3 @@
-
 import React from "react";
 import { MovingBorder } from "@/components/ui/moving-border";
 
@@ -28,7 +27,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
   return (
     <section id="services" className={`min-h-screen relative py-20 ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">{ "{ 01 }" } ПОСЛУГИ</div>
+        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">{"{03}"} ПОСЛУГИ</div>
         
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">

@@ -46,6 +46,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
     <section id="partners" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16 reveal-on-scroll">
+          <div className="text-orange-500 text-xl mb-6">{"{04}"} ПАРТНЕРИ</div>
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             + 50 ТЕХНОЛОГІЙ
           </h2>
