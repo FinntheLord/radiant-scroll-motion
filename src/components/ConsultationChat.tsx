@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent } from "react";
 import { CornerDownLeft, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -159,7 +158,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md h-[600px] p-0 overflow-hidden border-0 shadow-2xl">
+      <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden border-0 shadow-2xl">
         <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Bot className="h-5 w-5" />
@@ -204,8 +203,8 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
           </div>
         ) : (
           <div className="flex flex-col h-full bg-white">
-            <div className="flex-1 min-h-0">
-              <ChatMessageList className="h-full">
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <ChatMessageList className="h-full p-4">
                 {messages.map((message) => (
                   <ChatBubble
                     key={message.id}
@@ -241,7 +240,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
               </ChatMessageList>
             </div>
 
-            <div className="p-3 border-t border-gray-100 bg-white">
+            <div className="p-3 border-t border-gray-100 bg-white shrink-0">
               <form onSubmit={handleMessageSubmit} className="relative">
                 <ChatInput
                   value={input}
