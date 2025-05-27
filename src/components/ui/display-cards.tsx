@@ -1,3 +1,4 @@
+
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -49,11 +50,11 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
   const defaultCards = [
     {
       icon: <Sparkles className="size-4 text-white" />,
-      title: "АНАЛІЗ ДАНИХ",
-      description: "Виявлення слабких сторін",
-      date: "AI-рішення",
-      iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
-      titleClassName: "text-connexi-orange",
+      title: "АВТОМАТИЗАЦІЯ",
+      description: "Оптимізація бізнес-процесів",
+      date: "AI-системи",
+      iconClassName: "bg-gradient-to-br from-connexi-purple to-connexi-blue",
+      titleClassName: "text-connexi-purple",
       className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[0%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
     },
     {
@@ -67,11 +68,11 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     },
     {
       icon: <Sparkles className="size-4 text-white" />,
-      title: "АВТОМАТИЗАЦІЯ",
-      description: "Оптимізація бізнес-процесів",
-      date: "AI-системи",
-      iconClassName: "bg-gradient-to-br from-connexi-purple to-connexi-blue",
-      titleClassName: "text-connexi-purple",
+      title: "АНАЛІЗ ДАНИХ",
+      description: "Виявлення слабких сторін",
+      date: "AI-рішення",
+      iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
+      titleClassName: "text-connexi-orange",
       className: "[grid-area:stack] translate-x-32 translate-y-20 hover:translate-y-10",
     },
   ];
