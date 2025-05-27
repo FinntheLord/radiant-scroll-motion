@@ -1,83 +1,170 @@
 
-import React from "react";
-import { Rocket } from "lucide-react";
-import { Sparkles } from "lucide-react";
-import { ShieldCheck } from "lucide-react";
-import { Lightbulb } from "lucide-react";
-import DisplayCards from "@/components/ui/display-cards";
-
+import React, { useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 interface AboutSectionProps {
   className?: string;
 }
+const AboutSection: React.FC<AboutSectionProps> = ({
+  className = ""
+}) => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // Add animated background elements
+    const section = document.getElementById('about');
+    if (section) {
+      for (let i = 0; i < 5; i++) {
+        const element = document.createElement('div');
+        element.className = 'floating-element floating';
+        element.style.left = `${Math.random() * 100}%`;
+        element.style.top = `${Math.random() * 100}%`;
+        element.style.width = `${Math.random() * 100 + 50}px`;
+        element.style.height = `${Math.random() * 100 + 50}px`;
+        element.style.opacity = `${Math.random() * 0.15 + 0.02}`;
+        section.appendChild(element);
+      }
+    }
 
-const AboutSection: React.FC<AboutSectionProps> = ({ className }) => {
-  return (
-    <section className={`py-20 ${className}`}>
-      <div className="absolute top-8 left-8 z-30">
-        <span className="text-4xl md:text-5xl font-bold text-white/30">{"{ 02 }"} ПРО НАС</span>
-      </div>
-      
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 connexi-gradient-text">
-              ПРО КОМПАНІЮ
-            </h2>
-            <p className="text-gray-300 text-lg mb-8">
-              Ми — команда професіоналів, яка прагне надати вашому бізнесу
-              інноваційні рішення на основі штучного інтелекту. Наша місія
-              полягає в тому, щоб допомогти вам досягти нових висот,
-              використовуючи передові технології та індивідуальний підхід.
-            </p>
+    // Add click functionality to mobile carousel buttons
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    if (prevBtn && carouselRef.current) {
+      prevBtn.addEventListener('click', () => {
+        const prevButton = carouselRef.current?.querySelector('.embla__button--prev') as HTMLButtonElement | null;
+        prevButton?.click();
+      });
+    }
+    if (nextBtn && carouselRef.current) {
+      nextBtn.addEventListener('click', () => {
+        const nextButton = carouselRef.current?.querySelector('.embla__button--next') as HTMLButtonElement | null;
+        nextButton?.click();
+      });
+    }
+  }, []);
+  return <section id="about" className={`min-h-screen relative py-20 ${className}`}>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">ПРО КОМПАНІЮ</div>
+        
+        <div className="max-w-5xl mx-auto mb-20">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
+            <span className={`${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>ВПРОВАДЖУЄМО <br />ПРОЄКТИ </span>
+            <span className="connexi-gradient-text">ШТУЧНОГО<br />ІНТЕЛЕКТУ</span>
+          </h2>
 
-            <DisplayCards />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800 rounded-lg p-6">
-              <Rocket className="text-connexi-orange h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-white">
-                ІННОВАЦІЇ
-              </h3>
-              <p className="text-gray-400">
-                Постійно впроваджуємо новітні розробки в AI.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+            <div className="reveal-on-scroll" style={{
+            animationDelay: "0.1s"
+          }}>
+              <p className={`text-lg ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
+                <span className="font-bold connexi-gradient-text">CONNEXI.AI</span> — ЦЕ ТЕХНОЛОГІЧНА КОМПАНІЯ, 
+                ЩО СПЕЦІАЛІЗУЄТЬСЯ НА ВПРОВАДЖЕННІ ШТУЧНОГО ІНТЕЛЕКТУ 
+                В БІЗНЕС-ПРОЦЕСИ КЛІЄНТІВ
               </p>
             </div>
-
-            <div className="bg-gray-800 rounded-lg p-6">
-              <Sparkles className="text-connexi-orange h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-white">
-                ЕФЕКТИВНІСТЬ
-              </h3>
-              <p className="text-gray-400">
-                Оптимізуємо процеси для досягнення максимальних результатів.
+            
+            <div className="reveal-on-scroll" style={{
+            animationDelay: "0.2s"
+          }}>
+              <p className={`mb-8 ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}`}>
+                Ми починаємо з глибокого вивчення вашого бізнесу, розробляємо та програмуємо 
+                AI-агентів під ваші задачі, інтегруємо їх у ваші бізнес-процеси
+                та навчаємо на основі унікального контенту вашої компанії, 
+                забезпечуючи максимальну ефективність.
               </p>
-            </div>
-
-            <div className="bg-gray-800 rounded-lg p-6">
-              <ShieldCheck className="text-connexi-orange h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-white">
-                НАДІЙНІСТЬ
-              </h3>
-              <p className="text-gray-400">
-                Гарантуємо стабільність та безпеку ваших даних.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 rounded-lg p-6">
-              <Lightbulb className="text-connexi-orange h-8 w-8 mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-white">
-                ЕКСПЕРТИЗА
-              </h3>
-              <p className="text-gray-400">
-                Володіємо глибокими знаннями та багаторічним досвідом.
-              </p>
+              
+              <Button className="contact-button px-6 py-2 rounded-full transition-all pulse-on-hover">
+                ЗВ'ЯЗАТИСЯ
+              </Button>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-};
 
+        <div className="max-w-5xl mx-auto mt-20 relative">
+          <div className="mb-6 flex justify-between items-center reveal-on-scroll">
+            <h3 className="text-2xl connexi-gradient-text">Наші переваги</h3>
+            <div className="flex gap-2 md:hidden">
+              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full custom-carousel-button carousel-prev" aria-label="Попередній слайд">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full custom-carousel-button carousel-next" aria-label="Наступний слайд">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="card-glow absolute inset-0 -z-10 bg-connexi-pink/5 rounded-xl blur-3xl"></div>
+          
+          <Carousel className="w-full" opts={{
+          align: "start",
+          loop: true
+        }} ref={carouselRef}>
+            <CarouselContent>
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{
+                animationDelay: "0.3s"
+              }}>
+                  <CardContent className="p-6">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># ШВИДКО ТА ЯКІСНО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
+                      <p className="mb-4">
+                        Забезпечуємо <span className="connexi-gradient-text">на 30% більшу швидкість</span> розробки та 
+                        впровадження AI-рішень завдяки оптимізації ресурсів команди.
+                      </p>
+                      <p>
+                        Всі наші співробітники — фахівці з високопрофесійним
+                        підходом до вирішення завдань штучного інтелекту
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{
+                animationDelay: "0.4s"
+              }}>
+                  <CardContent className="p-6">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># ЕФЕКТИВНО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
+                      <p>
+                        Підвищуємо ефективність бізнес-процесів 
+                        на різних рівнях завдяки застосуванню новітніх 
+                        AI-технологій та тісній співпраці з 
+                        постачальниками рішень
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+                <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{
+                animationDelay: "0.5s"
+              }}>
+                  <CardContent className="p-6">
+                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}># НАДІЙНО</h3>
+                    <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
+                      <p>
+                        Гарантуємо високу якість і стабільність 
+                        усіх впроваджуваних AI-рішень завдяки використанню 
+                        перевірених технологій і багаторівневому 
+                        тестуванню
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            </CarouselContent>
+            
+            <div className="hidden md:block">
+              <CarouselPrevious className="custom-carousel-button" />
+              <CarouselNext className="custom-carousel-button" />
+            </div>
+          </Carousel>
+        </div>
+      </div>
+    </section>;
+};
 export default AboutSection;
