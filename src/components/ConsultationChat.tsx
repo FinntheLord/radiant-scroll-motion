@@ -203,8 +203,8 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
           </div>
         ) : (
           <div className="flex flex-col h-full bg-white">
-            <div className="flex-1 min-h-0 overflow-hidden">
-              <ChatMessageList className="h-full p-4">
+            <div className="flex-1 overflow-y-auto p-4 min-h-0">
+              <div className="space-y-4">
                 {messages.map((message) => (
                   <ChatBubble
                     key={message.id}
@@ -237,10 +237,10 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                     />
                   </ChatBubble>
                 )}
-              </ChatMessageList>
+              </div>
             </div>
 
-            <div className="p-3 border-t border-gray-100 bg-white shrink-0">
+            <div className="p-3 border-t border-gray-100 bg-white flex-shrink-0">
               <form onSubmit={handleMessageSubmit} className="relative">
                 <ChatInput
                   value={input}
