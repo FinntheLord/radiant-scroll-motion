@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <a href="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/b4617c09-81f1-4ed3-b38c-a1e477cc3b4a.png" 
+              src="/lovable-uploads/a8644c19-c54a-4906-82a8-1a2c5ba5a4b8.png" 
               alt="connexi.ai logo" 
               className="h-10 md:h-12"
             />
