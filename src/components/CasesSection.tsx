@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -36,8 +35,12 @@ const industries = [
 
 const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
   return (
-    <section id="cases" className={`py-20 overflow-hidden ${className}`}>
-      <div className="container mx-auto px-4 relative z-10">
+    <section className={`py-20 ${className} relative`}>
+      <div className="absolute top-8 left-8 z-30">
+        <span className="text-4xl md:text-5xl font-bold text-gray-400">{ 07 } КЕЙСИ</span>
+      </div>
+      
+      <div className="container mx-auto px-4">
         <div className="mb-4 reveal-on-scroll flex items-center">
           <span className="text-connexi-orange font-bold mr-2">02</span>
           <h2 className="text-2xl font-bold text-connexi-orange">КЕЙСИ</h2>

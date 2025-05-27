@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -43,8 +42,12 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
   }, [carouselApi]);
 
   return (
-    <section id="partners" className={`py-20 overflow-hidden ${className}`}>
-      <div className="container mx-auto px-4 relative z-10">
+    <section className={`py-20 ${className} relative`}>
+      <div className="absolute top-8 left-8 z-30">
+        <span className="text-4xl md:text-5xl font-bold text-white/30">{ 06 } ПАРТНЕРИ</span>
+      </div>
+      
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16 reveal-on-scroll">
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             + 50 ТЕХНОЛОГІЙ

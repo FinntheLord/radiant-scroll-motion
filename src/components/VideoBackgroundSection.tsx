@@ -27,6 +27,10 @@ const VideoBackgroundSection: React.FC = () => {
   return (
     <>
       <section className="relative min-h-screen py-20 flex items-center video-background-section overflow-hidden">
+        <div className="absolute top-8 left-8 z-30">
+          <span className="text-4xl md:text-5xl font-bold text-white/30">{ 03 } ТЕХНОЛОГІЇ</span>
+        </div>
+        
         {/* YouTube Video Background */}
         <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
           {/* Light gradient overlay to maintain text readability */}
