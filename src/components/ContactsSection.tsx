@@ -126,9 +126,8 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
   return (
     <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="mb-4 reveal-on-scroll flex items-center">
-          <span className="text-connexi-orange font-bold mr-2">04</span>
-          <h2 className="text-2xl font-bold text-connexi-orange">КОНТАКТИ</h2>
+        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
+          {"{06}"} КОНТАКТИ
         </div>
         
         <div className="text-center mb-16 reveal-on-scroll">
