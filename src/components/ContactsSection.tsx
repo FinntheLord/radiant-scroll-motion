@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { CornerDownLeft, Phone, Mail, MapPin } from "lucide-react";
@@ -170,8 +169,8 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "" }) => 
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+380999191191" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  +380999191191
+                <a href="tel:+380672002675" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
+                  +38 (067) 200-26-75
                 </a>
               </div>
             </div>
