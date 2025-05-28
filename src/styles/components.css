@@ -1,3 +1,4 @@
+
 /* Hero Section Styles */
 .hero-gradient {
   background: linear-gradient(135deg, #0832A2 0%, #9747FF 50%, #FF36A3 100%);
@@ -146,9 +147,9 @@
   opacity: 1;
 }
 
-/* Auto-scrolling carousel */
+/* Auto-scrolling carousel - optimized for mobile */
 .auto-scrolling-content {
-  animation: scroll-smooth 30s linear infinite;
+  animation: scroll-smooth 25s linear infinite;
   will-change: transform;
 }
 
@@ -202,6 +203,41 @@
     padding-left: 1rem !important;
     padding-right: 1rem !important;
     overflow-x: hidden !important;
+  }
+  
+  /* Mobile carousel optimization */
+  .auto-scrolling-content {
+    animation: scroll-smooth-mobile 20s linear infinite;
+  }
+  
+  @keyframes scroll-smooth-mobile {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-180px * 3));
+    }
+  }
+  
+  /* Mobile button improvements */
+  .contact-button {
+    font-size: 0.875rem !important;
+    padding: 0.75rem 1.5rem !important;
+  }
+  
+  /* Mobile text improvements */
+  .case-card-white .text-xs {
+    font-size: 0.625rem !important;
+  }
+  
+  /* Performance optimizations for mobile */
+  .floating-element {
+    display: none;
+  }
+  
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
 }
 
