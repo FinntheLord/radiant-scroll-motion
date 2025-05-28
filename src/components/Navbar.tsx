@@ -1,13 +1,27 @@
 
 import React, { useEffect, useState } from "react";
-import { MessageCircle, Menu, X } from "lucide-react";
+import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
 import ConsultationChat from "./ConsultationChat";
+import { Language, getTranslation } from "../lib/translations";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  lang: Language;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const switchLanguage = () => {
+    const newLang = lang === 'uk' ? 'en' : 'uk';
+    const newPath = newLang === 'en' ? '/en' : '/';
+    navigate(newPath);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +47,7 @@ const Navbar: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <a href="/" className="flex items-center">
+          <a href={lang === 'en' ? '/en' : '/'} className="flex items-center">
             <img 
               src="/lovable-uploads/09862013-fb91-4cc9-a2fc-8db3f0a33759.png" 
               alt="connexi.ai logo" 
@@ -43,35 +57,54 @@ const Navbar: React.FC = () => {
           
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#about" className="text-gray-700 hover:text-black transition-colors">
-              ПРО НАС
+              {getTranslation('about', lang)}
             </a>
             <a href="#assistant" className="text-gray-700 hover:text-black transition-colors">
-              ПОМІЧНИК
+              {getTranslation('assistant', lang)}
             </a>
             <a href="#services" className="text-gray-700 hover:text-black transition-colors">
-              ПОСЛУГИ
+              {getTranslation('services', lang)}
             </a>
             <a href="#partners" className="text-gray-700 hover:text-black transition-colors">
-              ПАРТНЕРИ
+              {getTranslation('partners', lang)}
             </a>
             <a href="#cases" className="text-gray-700 hover:text-black transition-colors">
-              КЕЙСИ
+              {getTranslation('cases', lang)}
             </a>
             <a href="#contacts" className="text-gray-700 hover:text-black transition-colors">
-              КОНТАКТИ
+              {getTranslation('contacts', lang)}
             </a>
+            
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={switchLanguage}
+              className="text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+            >
+              <Globe className="h-4 w-4" />
+              {lang === 'uk' ? 'EN' : 'УК'}
+            </Button>
+            
             <Button 
               className="contact-button"
               size="sm"
               onClick={() => setIsChatOpen(true)}
             >
-              Консультація
+              {getTranslation('consultation', lang)}
               <MessageCircle className="ml-2 h-4 w-4" />
             </Button>
           </nav>
           
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={switchLanguage}
+              className="text-gray-700 hover:text-black transition-colors"
+            >
+              <Globe className="h-4 w-4" />
+            </Button>
             <Button 
               className="contact-button"
               size="sm"
@@ -99,43 +132,57 @@ const Navbar: React.FC = () => {
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                ПРО НАС
+                {getTranslation('about', lang)}
               </a>
               <a 
                 href="#assistant" 
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                ПОМІЧНИК
+                {getTranslation('assistant', lang)}
               </a>
               <a 
                 href="#services" 
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                ПОСЛУГИ
+                {getTranslation('services', lang)}
               </a>
               <a 
                 href="#partners" 
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                ПАРТНЕРИ
+                {getTranslation('partners', lang)}
               </a>
               <a 
                 href="#cases" 
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                КЕЙСИ
+                {getTranslation('cases', lang)}
               </a>
               <a 
                 href="#contacts" 
                 className="text-gray-700 hover:text-black transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                КОНТАКТИ
+                {getTranslation('contacts', lang)}
               </a>
+              <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+                <span className="text-gray-600 text-sm">Language:</span>
+                <Button 
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    switchLanguage();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-connexi-orange hover:text-connexi-pink transition-colors"
+                >
+                  {lang === 'uk' ? 'English' : 'Українська'}
+                </Button>
+              </div>
             </nav>
           </div>
         )}
@@ -143,7 +190,8 @@ const Navbar: React.FC = () => {
 
       <ConsultationChat 
         isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
+        onClose={() => setIsChatOpen(false)}
+        lang={lang}
       />
     </>
   );

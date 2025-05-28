@@ -4,67 +4,85 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import ContactPopup from "./ContactPopup";
+import { Language, getTranslation } from "../lib/translations";
 
 interface CasesSectionProps {
   className?: string;
+  lang: Language;
 }
 
-const caseStudies = [
-  {
-    id: "001",
-    title: "Впровадження системи підтримки клієнтів на базі чат-бота для великої торгівельної мережі",
-    tags: ["ПІДТРИМКА КЛІЄНТІВ", "ЧАТ-БОТ", "АВТОМАТИЗАЦІЯ", "РИТЕЙЛ", "AI АНАЛІТИКА"]
-  },
-  {
-    id: "002",
-    title: "Розробка системи аналізу та прогнозування продажів для логістичної компанії",
-    tags: ["ПРОГНОЗУВАННЯ", "ЛОГІСТИКА", "АНАЛІЗ ДАНИХ", "ОПТИМІЗАЦІЯ", "АВТОМАТИЗАЦІЯ"]
-  },
-  {
-    id: "003",
-    title: "Впровадження AI-системи для виявлення шахрайства та оцінки ризиків у фінансовій організації",
-    tags: ["БЕЗПЕКА", "FINTECH", "АНАЛІЗ РИЗИКІВ", "ЗАХИСТ ДАНИХ", "АВТОМАТИЗАЦІЯ"]
-  }
-];
-
-const industries = [
-  { name: "FINTECH СЕКТОР", id: 1 },
-  { name: "РОЗДРІБНА ТОРГІВЛЯ", id: 2 },
-  { name: "ЛОГІСТИКА", id: 3 },
-  { name: "АПК", id: 4 },
-  { name: "IT & TECH", id: 5 },
-];
-
-const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
+const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => {
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
+
+  const caseStudies = [
+    {
+      id: "001",
+      titleKey: 'case1Title' as const,
+      tags: [
+        getTranslation('customerSupport', lang),
+        getTranslation('chatbot', lang),
+        getTranslation('automation', lang),
+        getTranslation('retail', lang),
+        getTranslation('aiAnalytics', lang)
+      ]
+    },
+    {
+      id: "002",
+      titleKey: 'case2Title' as const,
+      tags: [
+        getTranslation('forecasting', lang),
+        getTranslation('logistics', lang),
+        getTranslation('dataAnalysis', lang),
+        getTranslation('optimization', lang),
+        getTranslation('automation', lang)
+      ]
+    },
+    {
+      id: "003",
+      titleKey: 'case3Title' as const,
+      tags: [
+        getTranslation('security', lang),
+        getTranslation('fintech', lang),
+        getTranslation('riskAnalysis', lang),
+        getTranslation('dataProtection', lang),
+        getTranslation('automation', lang)
+      ]
+    }
+  ];
+
+  const industries = [
+    { nameKey: 'fintech' as const, id: 1 },
+    { nameKey: 'retail' as const, id: 2 },
+    { nameKey: 'logistics' as const, id: 3 },
+    { nameKey: 'agriculture' as const, id: 4 },
+    { nameKey: 'itTech' as const, id: 5 },
+  ];
 
   return (
     <section id="cases" className={`py-12 md:py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-4 reveal-on-scroll flex items-center">
-          <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6">{"{05}"} КЕЙСИ</div>
+          <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6">{getTranslation('casesSubtitle', lang)}</div>
         </div>
         
         <div className="text-center mb-12 md:mb-16 reveal-on-scroll">
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            МИ ДІЙСНО
+            {getTranslation('casesTitle1', lang)}
           </h2>
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            РОБИМО,
+            {getTranslation('casesTitle2', lang)}
           </h2>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-connexi-orange">
-            А НЕ ГОВОРИМО
+            {getTranslation('casesTitle3', lang)}
           </h2>
 
           <div className="mt-8 md:mt-12 text-2xl md:text-3xl lg:text-4xl font-bold">
-            <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}>{'{'} + </span>
-            <span className="text-connexi-orange">50</span>
-            <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}> кейсів у сфері AI {'}'}</span>
+            <span className={className?.includes('text-white') ? 'text-white' : 'text-gray-900'}>{getTranslation('casesExperience', lang)}</span>
           </div>
 
           <div className="mt-8 md:mt-10">
-            <p className={`uppercase mb-4 md:mb-6 text-sm md:text-base ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>ПІДТВЕРДЖЕНИЙ ДОСВІД У НАСТУПНИХ СФЕРАХ</p>
+            <p className={`uppercase mb-4 md:mb-6 text-sm md:text-base ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>{getTranslation('casesExperienceText', lang)}</p>
             
             <div className="flex flex-wrap justify-center gap-2 md:gap-4 mt-4">
               {industries.map((industry) => (
@@ -76,7 +94,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                       : 'border-gray-300 text-gray-800 hover:bg-gray-100'
                   }`}
                 >
-                  {industry.name}
+                  {getTranslation(industry.nameKey, lang)}
                 </span>
               ))}
             </div>
@@ -122,7 +140,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                   
                   <div className="p-4 md:p-6 lg:p-10 md:w-2/3 flex flex-col justify-between">
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                      {caseStudy.title}
+                      {getTranslation(caseStudy.titleKey, lang)}
                     </h4>
                     
                     <div className="mt-4">
@@ -130,7 +148,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
                         onClick={() => setIsDetailPopupOpen(true)}
                         className="bg-transparent hover:bg-transparent text-connexi-orange border-none shadow-none p-0 hover:text-white transition-colors"
                       >
-                        ЧИТАТИ ДЕТАЛЬНІШЕ
+                        {getTranslation('readMore', lang)}
                         <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
@@ -146,7 +164,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
             onClick={() => setIsContactPopupOpen(true)}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
-            УСІ КЕЙСИ
+            {getTranslation('allCases', lang)}
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </div>
@@ -159,13 +177,15 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "" }) => {
       <ContactPopup 
         isOpen={isContactPopupOpen}
         onClose={() => setIsContactPopupOpen(false)}
-        title="Переглянути всі кейси"
+        title={getTranslation('viewAllCases', lang)}
+        lang={lang}
       />
       
       <ContactPopup 
         isOpen={isDetailPopupOpen}
         onClose={() => setIsDetailPopupOpen(false)}
-        title="Детальна інформація про кейс"
+        title={getTranslation('caseDetails', lang)}
+        lang={lang}
       />
     </section>
   );

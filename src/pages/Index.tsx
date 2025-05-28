@@ -10,25 +10,33 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
+import { Language } from "../lib/translations";
 
-const Index = () => {
+interface IndexProps {
+  lang: Language;
+}
+
+const Index: React.FC<IndexProps> = ({ lang = 'uk' }) => {
   useEffect(() => {
-    // Set page title
-    document.title = "connexi.ai | AI-рішення для бізнесу в Україні";
-  }, []);
+    // Set page title based on language
+    const title = lang === 'en' 
+      ? "connexi.ai | AI solutions for business in Ukraine"
+      : "connexi.ai | AI-рішення для бізнесу в Україні";
+    document.title = title;
+  }, [lang]);
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
       <ScrollAnimation />
-      <Navbar />
-      <HeroSection />
-      <AboutSection className="bg-gray-900 text-white" />
-      <VideoBackgroundSection />
-      <AssistantSection className="bg-gray-900 text-white" />
-      <ServicesSection className="bg-white text-gray-900" />
-      <PartnersSection className="bg-gray-900 text-white" />
-      <CasesSection className="bg-white text-gray-900" />
-      <ContactsSection className="bg-gray-900 text-white" />
+      <Navbar lang={lang} />
+      <HeroSection lang={lang} />
+      <AboutSection className="bg-gray-900 text-white" lang={lang} />
+      <VideoBackgroundSection lang={lang} />
+      <AssistantSection className="bg-gray-900 text-white" lang={lang} />
+      <ServicesSection className="bg-white text-gray-900" lang={lang} />
+      <PartnersSection className="bg-gray-900 text-white" lang={lang} />
+      <CasesSection className="bg-white text-gray-900" lang={lang} />
+      <ContactsSection className="bg-gray-900 text-white" lang={lang} />
     </div>
   );
 };

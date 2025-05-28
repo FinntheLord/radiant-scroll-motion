@@ -3,8 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import ConsultationChat from "./ConsultationChat";
+import { Language, getTranslation } from "../lib/translations";
 
-const VideoBackgroundSection: React.FC = () => {
+interface VideoBackgroundSectionProps {
+  lang: Language;
+}
+
+const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
@@ -54,27 +59,26 @@ const VideoBackgroundSection: React.FC = () => {
                 duration={1.5}
                 spread={3}
               >
-                ВІДКРИВАЙТЕ НОВІ МОЖЛИВОСТІ
+                {getTranslation('videoSubtitle', lang)}
               </TextShimmer>
             </div>
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 reveal-on-scroll">
-              <span className="text-gray-800">ТЕХНОЛОГІЇ </span>
-              <span className="connexi-gradient-text font-extrabold">МАЙБУТНЬОГО</span>
-              <span className="text-gray-800"> ВЖЕ СЬОГОДНІ</span>
+              <span className="text-gray-800">{getTranslation('videoTitle1', lang)} </span>
+              <span className="connexi-gradient-text font-extrabold">{getTranslation('videoTitle2', lang)}</span>
+              <span className="text-gray-800">{getTranslation('videoTitle3', lang)}</span>
             </h2>
 
             <div className="max-w-3xl mx-auto mb-16 reveal-on-scroll">
               <p className="text-gray-700 text-lg mb-8">
-                Ми створюємо рішення, які допомагають бізнесу розвиватися
-                та залишатися конкурентоспроможним в епоху штучного інтелекту.
+                {getTranslation('videoDescription', lang)}
               </p>
 
               <Button 
                 className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
                 onClick={() => setIsChatOpen(true)}
               >
-                ДІЗНАТИСЯ БІЛЬШЕ
+                {getTranslation('learnMore', lang)}
               </Button>
             </div>
           </div>
@@ -83,7 +87,8 @@ const VideoBackgroundSection: React.FC = () => {
 
       <ConsultationChat 
         isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
+        onClose={() => setIsChatOpen(false)}
+        lang={lang}
       />
     </>
   );

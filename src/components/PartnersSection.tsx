@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import ContactPopup from "./ContactPopup";
+import { Language, getTranslation } from "../lib/translations";
 
 interface PartnersSectionProps {
   className?: string;
+  lang: Language;
 }
 
 const partners = [
@@ -25,7 +27,7 @@ const partners = [
   { name: "PyTorch", id: 8 },
 ];
 
-const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => {
+const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang }) => {
   const [carouselRef, carouselApi] = useEmblaCarousel({ 
     loop: true,
     align: "start",
@@ -50,18 +52,18 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
     <section id="partners" className={`py-12 md:py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 md:mb-16 reveal-on-scroll">
-          <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6">{"{04}"} ПАРТНЕРИ</div>
+          <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6">{getTranslation('partnersSubtitle', lang)}</div>
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            + 50 ТЕХНОЛОГІЙ
+            {getTranslation('partnersTitle1', lang)}
           </h2>
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            З ЯКИМИ
+            {getTranslation('partnersTitle2', lang)}
           </h2>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-            <span className="orange-highlight">МИ</span>
+            <span className="orange-highlight">{getTranslation('partnersTitle3', lang)}</span>
           </h2>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-            <span className="orange-highlight">ПРАЦЮЄМО</span>
+            <span className="orange-highlight">{getTranslation('partnersTitle4', lang)}</span>
           </h2>
         </div>
       </div>
@@ -94,7 +96,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
             onClick={() => setIsContactPopupOpen(true)}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
-            НАШІ КЕЙСИ
+            {getTranslation('ourCases', lang)}
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </div>
@@ -107,7 +109,8 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "" }) => 
       <ContactPopup 
         isOpen={isContactPopupOpen}
         onClose={() => setIsContactPopupOpen(false)}
-        title="Переглянути наші кейси"
+        title={getTranslation('viewCases', lang)}
+        lang={lang}
       />
     </section>
   );

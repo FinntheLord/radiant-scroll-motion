@@ -1,38 +1,41 @@
+
 import React from "react";
 import { MovingBorder } from "@/components/ui/moving-border";
+import { Language, getTranslation } from "../lib/translations";
 
 interface ServicesSectionProps {
   className?: string;
+  lang: Language;
 }
 
-const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => {
+const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang }) => {
   const services = [
     {
       id: "01",
-      title: "ПІДТРИМКА КЛІЄНТІВ І АВТОМАТИЗАЦІЯ",
-      description: "Створення чат-ботів та голосових асистентів для підтримки клієнтів, а також автоматизація рутинних завдань і документообігу для підвищення ефективності бізнес-процесів",
+      titleKey: 'service1Title' as const,
+      descriptionKey: 'service1Description' as const,
     },
     {
-      id: "02",
-      title: "АНАЛІЗ ДАНИХ І ПЕРСОНАЛІЗАЦІЯ",
-      description: "Обробка та аналіз великих даних для отримання цінних інсайтів, персоналізація маркетингу та пропозицій, прогнозування попиту та продажів на основі штучного інтелекту",
+      id: "02", 
+      titleKey: 'service2Title' as const,
+      descriptionKey: 'service2Description' as const,
     },
     {
       id: "03",
-      title: "ОПТИМІЗАЦІЯ БІЗНЕС-ПРОЦЕСІВ",
-      description: "Виявлення ризиків і шахрайства, оптимізація логістики та управління запасами, підбір і навчання персоналу, моніторинг виробничих процесів та автоматизація звітності у фінансах",
+      titleKey: 'service3Title' as const,
+      descriptionKey: 'service3Description' as const,
     }
   ];
 
   return (
     <section id="services" className={`min-h-screen relative py-20 ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">{"{03}"} ПОСЛУГИ</div>
+        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">{getTranslation('servicesSubtitle', lang)}</div>
         
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-gray-800">КОМПЛЕКСНО </span>
-            <span className="connexi-gradient-text">ВИРІШУЄМО<br />ЗАВДАННЯ</span>
+            <span className="text-gray-800">{getTranslation('servicesTitle1', lang)} </span>
+            <span className="connexi-gradient-text">{getTranslation('servicesTitle2', lang)}<br />{getTranslation('servicesTitle3', lang)}</span>
           </h2>
 
           <div className="space-y-12 mt-16">
@@ -50,15 +53,11 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "" }) => 
                     <div className="flex flex-col md:flex-row gap-8">
                       <div className="md:w-1/2">
                         <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
-                          {service.title.split(" ").map((word, i) => (
-                            <span key={i} className={i >= 3 ? "text-connexi-orange" : ""}>
-                              {word}{" "}
-                            </span>
-                          ))}
+                          {getTranslation(service.titleKey, lang)}
                         </h3>
                       </div>
                       <div className="md:w-1/2">
-                        <p className="text-gray-700">{service.description}</p>
+                        <p className="text-gray-700">{getTranslation(service.descriptionKey, lang)}</p>
                       </div>
                     </div>
                   </div>

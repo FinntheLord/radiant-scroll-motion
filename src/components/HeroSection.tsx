@@ -2,8 +2,13 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import DisplayCards from "@/components/ui/display-cards";
+import { Language, getTranslation } from "../lib/translations";
 
-const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  lang: Language;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
   useEffect(() => {
     // Mouse parallax effect
     const handleMouseMove = (e: MouseEvent) => {
@@ -60,29 +65,28 @@ const HeroSection: React.FC = () => {
                   duration={1.5}
                   spread={3}
                 >
-                  ВПРОВАДЖУЄМО
+                  {getTranslation('heroSubtitle', lang)}
                 </TextShimmer>
               </div>
 
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900" style={{ animationDelay: "0.1s" }}>
-                <span className="text-gray-800"># ШТУЧНИЙ </span>
+                <span className="text-gray-800">{getTranslation('heroTitle1', lang)} </span>
                 <br />
-                <span className="connexi-gradient-text font-extrabold parallax" data-speed="0.02">ІНТЕЛЕКТ</span>
-                <span className="text-gray-800"> ДЛЯ БІЗНЕСУ</span>
+                <span className="connexi-gradient-text font-extrabold parallax" data-speed="0.02">{getTranslation('heroTitle2', lang)}</span>
+                <span className="text-gray-800">{getTranslation('heroTitle3', lang)}</span>
               </h1>
 
               <div className="max-w-2xl" style={{ animationDelay: "0.2s" }}>
                 <p className="text-gray-700 mb-8">
-                  Ми розробляємо та інтегруємо AI-агентів у ваші бізнес-процеси,
-                  навчаємо їх на контенті вашої компанії для максимальної 
-                  <span className="connexi-gradient-text font-medium"> ефективності</span>
+                  {getTranslation('heroDescription', lang)}
+                  <span className="connexi-gradient-text font-medium">{getTranslation('heroDescriptionHighlight', lang)}</span>
                 </p>
 
                 <a href="#services" className="inline-block">
                   <Button 
                     className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
                   >
-                    НАШІ ПОСЛУГИ
+                    {getTranslation('ourServices', lang)}
                   </Button>
                 </a>
               </div>
@@ -95,11 +99,11 @@ const HeroSection: React.FC = () => {
 
           <div className="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="reveal-on-scroll parallax" data-speed="0.03" style={{ animationDelay: "0.3s" }}>
-              <div className="connexi-gradient-text font-medium mb-3">Сертифіковані спеціалісти з AI</div>
+              <div className="connexi-gradient-text font-medium mb-3">{getTranslation('certifiedSpecialists', lang)}</div>
             </div>
             <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
-              <div className="text-gray-700 mb-3">Розробляємо чат-боти та голосових асистентів</div>
-              <div className="text-gray-700">Автоматизуємо бізнес-процеси за допомогою AI</div>
+              <div className="text-gray-700 mb-3">{getTranslation('chatbotsDescription', lang)}</div>
+              <div className="text-gray-700">{getTranslation('automationDescription', lang)}</div>
             </div>
           </div>
         </div>

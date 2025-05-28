@@ -11,17 +11,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { Language, getTranslation } from "../lib/translations";
 
 interface ContactPopupProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
+  lang: Language;
 }
 
 const ContactPopup: React.FC<ContactPopupProps> = ({ 
   isOpen, 
   onClose, 
-  title = "Зв'язатися з нами" 
+  title,
+  lang
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -36,8 +39,8 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
     
     if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
       toast({
-        title: "Помилка",
-        description: "Будь ласка, заповніть всі обов'язкові поля",
+        title: getTranslation('contactError', lang),
+        description: getTranslation('contactErrorDescription', lang),
         variant: "destructive",
       });
       return;
@@ -49,8 +52,8 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Успішно відправлено!",
-      description: "Ми зв'яжемося з вами найближчим часом",
+      title: getTranslation('contactSuccess', lang),
+      description: getTranslation('contactSuccessDescription', lang),
     });
     
     setFormData({ name: "", phone: "", email: "", message: "" });
@@ -62,12 +65,14 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const displayTitle = title || getTranslation('contactTitle', lang);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 shadow-2xl">
         <DialogHeader className="p-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center justify-between text-lg">
-            {title}
+            {displayTitle}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -86,7 +91,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Ваше ім'я *"
+                placeholder={getTranslation('contactName', lang)}
                 className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                 required
               />
@@ -97,7 +102,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-                placeholder="+38 (0__) ___-__-__ *"
+                placeholder={getTranslation('contactPhone', lang)}
                 className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                 required
               />
@@ -108,7 +113,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                placeholder="Email *"
+                placeholder={getTranslation('contactEmail', lang)}
                 className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                 required
               />
@@ -118,7 +123,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
               <Textarea
                 value={formData.message}
                 onChange={(e) => handleInputChange("message", e.target.value)}
-                placeholder="Повідомлення (необов'язково)"
+                placeholder={getTranslation('contactMessage', lang)}
                 className="min-h-[100px] border-gray-200 focus:border-orange-500 focus:ring-orange-500 resize-none"
               />
             </div>
@@ -131,12 +136,12 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Відправляємо...
+                  {getTranslation('contactSending', lang)}
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <Send className="h-4 w-4" />
-                  Відправити
+                  {getTranslation('contactSend', lang)}
                 </div>
               )}
             </Button>
