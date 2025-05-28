@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { CornerDownLeft, Phone, Mail, MapPin } from "lucide-react";
@@ -129,7 +130,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
               <a href="/" className="flex items-center mb-4">
                 <img 
                   alt="connexi.ai logo" 
-                  className="h-10 md:h-12" 
+                  className="h-20 md:h-24" 
                   src="/lovable-uploads/0c823db9-7ce3-4eec-95d5-7f195348151d.png" 
                 />
               </a>
