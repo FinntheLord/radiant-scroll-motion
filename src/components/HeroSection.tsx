@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -11,11 +12,11 @@ const HeroSection: React.FC = () => {
       for (let i = 0; i < 8; i++) {
         const element = document.createElement('div');
         element.className = 'floating-element floating';
-        // Ensure elements stay within viewport boundaries
-        element.style.left = `${Math.random() * 80 + 10}%`; // 10% to 90% instead of 0% to 100%
-        element.style.top = `${Math.random() * 80 + 10}%`; // 10% to 90% instead of 0% to 100%
-        element.style.width = `${Math.random() * 150 + 50}px`;
-        element.style.height = `${Math.random() * 150 + 50}px`;
+        // Position elements more to the left and ensure they stay within safe boundaries
+        element.style.left = `${Math.random() * 60 + 5}%`; // 5% to 65% instead of 10% to 90%
+        element.style.top = `${Math.random() * 70 + 10}%`; // 10% to 80%
+        element.style.width = `${Math.random() * 120 + 40}px`; // Smaller circles
+        element.style.height = `${Math.random() * 120 + 40}px`; // Smaller circles
         element.style.opacity = `${Math.random() * 0.15 + 0.05}`;
         heroSection.appendChild(element);
       }
@@ -46,7 +47,7 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden overflow-x-hidden">
+    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         {/* Lighter gradient overlay to make video more visible */}
@@ -66,7 +67,7 @@ const HeroSection: React.FC = () => {
       
       <div className="animated-bg-light absolute inset-0 z-5"></div>
       
-      <div className="container mx-auto px-4 relative z-10 w-full max-w-full">
+      <div className="container mx-auto px-4 relative z-10 w-full max-w-full overflow-hidden">
         <div className="py-12 md:py-24 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto w-full">
             <div className="reveal-on-scroll">

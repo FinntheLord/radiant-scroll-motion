@@ -162,12 +162,15 @@
   }
 }
 
-/* Floating elements - connexi brand colors */
+/* Floating elements - connexi brand colors with clipping */
 .floating-element {
   position: absolute;
   border-radius: 50%;
   background: linear-gradient(45deg, rgba(255,122,0,0.05), rgba(255,54,163,0.05), rgba(151,71,255,0.05), rgba(8,50,162,0.05));
   z-index: 1;
+  /* Ensure elements are clipped by their container */
+  clip-path: inset(0);
+  max-width: calc(100vw - 40px); /* Prevent overflow beyond viewport */
 }
 
 /* Indicator dots */
