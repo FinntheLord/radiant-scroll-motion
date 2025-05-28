@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -47,7 +46,7 @@ const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
+    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden overflow-x-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         {/* Lighter gradient overlay to make video more visible */}
