@@ -6,19 +6,23 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatInput } from "@/components/ui/chat-input";
 import { toast } from "sonner";
+
 interface ContactsSectionProps {
   className?: string;
 }
+
 interface Message {
   id: number;
   content: string;
   sender: "user" | "ai";
 }
+
 const initialMessages: Message[] = [{
   id: 1,
   content: "Вітаю! Я інфо-бот Connexi. Розкажіть, яка інформація вас цікавить про наші послуги?",
   sender: "ai"
 }];
+
 const ContactsSection: React.FC<ContactsSectionProps> = ({
   className = ""
 }) => {
@@ -63,6 +67,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
       throw error;
     }
   };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -96,7 +101,9 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
       setIsLoading(false);
     }
   };
-  return <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
+
+  return (
+    <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
           {"{06}"} КОНТАКТИ
@@ -120,7 +127,11 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
           <div className="space-y-8">
             <div className="flex items-center">
               <a href="/" className="flex items-center mb-4">
-                <img alt="connexi.ai logo" className="h-10 md:h-12" src="/lovable-uploads/774363a0-cc02-4bd3-a0f7-df3d7d252267.png" />
+                <img 
+                  alt="connexi.ai logo" 
+                  className="h-10 md:h-12" 
+                  src="/lovable-uploads/0c823db9-7ce3-4eec-95d5-7f195348151d.png" 
+                />
               </a>
             </div>
             
@@ -170,23 +181,40 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
             
             <div className="flex-1 overflow-hidden">
               <ChatMessageList>
-                {messages.map(message => <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
-                    <ChatBubbleAvatar className="h-8 w-8 shrink-0" src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"} fallback={message.sender === "user" ? "Ви" : "AI"} />
+                {messages.map(message => (
+                  <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
+                    <ChatBubbleAvatar 
+                      className="h-8 w-8 shrink-0" 
+                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"} 
+                      fallback={message.sender === "user" ? "Ви" : "AI"} 
+                    />
                     <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
                       {message.content}
                     </ChatBubbleMessage>
-                  </ChatBubble>)}
+                  </ChatBubble>
+                ))}
 
-                {isLoading && <ChatBubble variant="received">
-                    <ChatBubbleAvatar className="h-8 w-8 shrink-0" src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png" fallback="AI" />
+                {isLoading && (
+                  <ChatBubble variant="received">
+                    <ChatBubbleAvatar 
+                      className="h-8 w-8 shrink-0" 
+                      src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png" 
+                      fallback="AI" 
+                    />
                     <ChatBubbleMessage isLoading />
-                  </ChatBubble>}
+                  </ChatBubble>
+                )}
               </ChatMessageList>
             </div>
 
             <div className="mt-auto pt-4 border-t border-gray-700">
               <form onSubmit={handleSubmit} className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange p-1">
-                <ChatInput value={input} onChange={e => setInput(e.target.value)} placeholder="Введіть ваше повідомлення..." className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white" />
+                <ChatInput 
+                  value={input} 
+                  onChange={(e) => setInput(e.target.value)} 
+                  placeholder="Введіть ваше повідомлення..." 
+                  className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white" 
+                />
                 <div className="flex items-center p-3 pt-0 justify-between">
                   <div className="flex"></div>
                   <Button type="submit" size="sm" className="contact-button ml-auto gap-1.5" disabled={isLoading}>
@@ -203,6 +231,8 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
       {/* Background elements */}
       <div className="floating-element w-96 h-96 top-20 -left-48 opacity-20"></div>
       <div className="floating-element w-80 h-80 bottom-10 -right-40 opacity-20"></div>
-    </section>;
+    </section>
+  );
 };
+
 export default ContactsSection;
