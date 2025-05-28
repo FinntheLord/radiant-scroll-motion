@@ -17,8 +17,13 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }
 
