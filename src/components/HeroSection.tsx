@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -6,22 +5,6 @@ import DisplayCards from "@/components/ui/display-cards";
 
 const HeroSection: React.FC = () => {
   useEffect(() => {
-    // Add floating elements to hero section
-    const heroSection = document.querySelector('.hero-section');
-    if (heroSection) {
-      for (let i = 0; i < 8; i++) {
-        const element = document.createElement('div');
-        element.className = 'floating-element floating';
-        // Position elements more to the left and ensure they stay within safe boundaries
-        element.style.left = `${Math.random() * 60 + 5}%`; // 5% to 65% instead of 10% to 90%
-        element.style.top = `${Math.random() * 70 + 10}%`; // 10% to 80%
-        element.style.width = `${Math.random() * 120 + 40}px`; // Smaller circles
-        element.style.height = `${Math.random() * 120 + 40}px`; // Smaller circles
-        element.style.opacity = `${Math.random() * 0.15 + 0.05}`;
-        heroSection.appendChild(element);
-      }
-    }
-
     // Mouse parallax effect
     const handleMouseMove = (e: MouseEvent) => {
       const parallaxElements = document.querySelectorAll('.parallax');
