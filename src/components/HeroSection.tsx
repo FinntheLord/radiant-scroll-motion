@@ -12,8 +12,9 @@ const HeroSection: React.FC = () => {
       for (let i = 0; i < 8; i++) {
         const element = document.createElement('div');
         element.className = 'floating-element floating';
-        element.style.left = `${Math.random() * 100}%`;
-        element.style.top = `${Math.random() * 100}%`;
+        // Ensure elements stay within viewport boundaries
+        element.style.left = `${Math.random() * 80 + 10}%`; // 10% to 90% instead of 0% to 100%
+        element.style.top = `${Math.random() * 80 + 10}%`; // 10% to 90% instead of 0% to 100%
         element.style.width = `${Math.random() * 150 + 50}px`;
         element.style.height = `${Math.random() * 150 + 50}px`;
         element.style.opacity = `${Math.random() * 0.15 + 0.05}`;
@@ -66,9 +67,9 @@ const HeroSection: React.FC = () => {
       
       <div className="animated-bg-light absolute inset-0 z-5"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="py-12 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+      <div className="container mx-auto px-4 relative z-10 w-full max-w-full">
+        <div className="py-12 md:py-24 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto w-full">
             <div className="reveal-on-scroll">
               <div className="mb-6">
                 <TextShimmer 
