@@ -1,5 +1,4 @@
 
-
 export const translations = {
   uk: {
     // Navbar
@@ -71,22 +70,11 @@ export const translations = {
     readMore: "ЧИТАТИ ДЕТАЛЬНІШЕ",
     
     // Contacts Section
-    contactsTitle: "ЗВ'ЯЗАТИСЯ З НАМИ",
-    contactsSubtitle: "ПРОКОНСУЛЬТУЄМО ТА РОЗРАХУЄМО. ВІД ЗАВДАННЯ ДО РІШЕННЯ ОДИН КРОК",
-    phone: "Телефон",
-    email: "Електронна пошта",
-    address: "Адреса",
-    addressLine1: "вул. Шевченка, 123",
-    addressLine2: "Київ, Україна, 01001",
-    workingHours: "Робочі години",
-    workingHoursWeekdays: "Пн-Пт: 9:00 - 18:00",
-    workingHoursWeekends: "Сб-Нд: 10:00 - 16:00",
-    quickContact: "Швидкий зв'язок",
-    openContactForm: "Відкрити форму зв'язку",
-    footerDescription: "Connexi.ai - провідна компанія з розробки та впровадження AI-рішень для бізнесу в Україні.",
-    quickLinks: "Швидкі посилання",
-    contactInfo: "Контактна інформація",
-    allRightsReserved: "Всі права захищені.",
+    contactsSubtitle: "{06} КОНТАКТИ",
+    contactsTitle1: "ПРОКОНСУЛЬТУЄМО",
+    contactsTitle2: "ТА РОЗРАХУЄМО",
+    contactsTitle3: "ВІД ЗАВДАННЯ ДО",
+    contactsTitle4: "РІШЕННЯ ОДИН КРОК",
     
     // Contact Popup
     contactTitle: "Зв'язатися з нами",
@@ -198,22 +186,11 @@ export const translations = {
     readMore: "READ MORE",
     
     // Contacts Section
-    contactsTitle: "CONTACT US",
-    contactsSubtitle: "WE WILL CONSULT AND CALCULATE. FROM TASK TO SOLUTION ONE STEP",
-    phone: "Phone",
-    email: "Email",
-    address: "Address",
-    addressLine1: "123 Shevchenko Street",
-    addressLine2: "Kyiv, Ukraine, 01001",
-    workingHours: "Working Hours",
-    workingHoursWeekdays: "Mon-Fri: 9:00 AM - 6:00 PM",
-    workingHoursWeekends: "Sat-Sun: 10:00 AM - 4:00 PM",
-    quickContact: "Quick Contact",
-    openContactForm: "Open Contact Form",
-    footerDescription: "Connexi.ai is a leading company in developing and implementing AI solutions for business in Ukraine.",
-    quickLinks: "Quick Links",
-    contactInfo: "Contact Information",
-    allRightsReserved: "All rights reserved.",
+    contactsSubtitle: "{06} CONTACTS",
+    contactsTitle1: "WE WILL CONSULT",
+    contactsTitle2: "AND CALCULATE",
+    contactsTitle3: "FROM TASK TO",
+    contactsTitle4: "SOLUTION ONE STEP",
     
     // Contact Popup
     contactTitle: "Contact us",
@@ -263,4 +240,3 @@ export type TranslationKey = keyof typeof translations.uk;
 export const getTranslation = (key: TranslationKey, lang: Language = 'uk'): string => {
   return translations[lang][key] || translations.uk[key] || key;
 };
-
