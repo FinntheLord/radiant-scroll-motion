@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageCircle, Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -6,14 +7,15 @@ import { Language, getTranslation } from '../lib/translations';
 
 interface ContactsSectionProps {
   lang: Language;
+  className?: string;
 }
 
-const ContactsSection: React.FC<ContactsSectionProps> = ({ lang }) => {
+const ContactsSection: React.FC<ContactsSectionProps> = ({ lang, className }) => {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   return (
     <>
-      <section id="contacts" className="contacts-section py-20 bg-gray-50">
+      <section id="contacts" className={`contacts-section py-20 bg-gray-50 ${className || ''}`}>
         
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -100,7 +102,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ lang }) => {
               <img 
                 src="/lovable-uploads/09862013-fb91-4cc9-a2fc-8db3f0a33759.png" 
                 alt="connexi.ai logo" 
-                className="h-13 md:h-16 mb-6 brightness-0 invert"
+                className="h-17 md:h-21 mb-6 brightness-0 invert"
               />
               <p className="text-gray-400 max-w-md">
                 {getTranslation('footerDescription', lang)}
@@ -146,3 +148,4 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ lang }) => {
 };
 
 export default ContactsSection;
+
