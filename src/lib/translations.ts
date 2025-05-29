@@ -42,6 +42,15 @@ export const translations = {
     service3Title: "ОПТИМІЗАЦІЯ БІЗНЕС-ПРОЦЕСІВ",
     service3Description: "Виявлення ризиків і шахрайства, оптимізація логістики та управління запасами, підбір і навчання персоналу, моніторинг виробничих процесів та автоматизація звітності у фінансах",
     
+    // Assistant Section
+    assistantSubtitle: "{02} ПОМІЧНИК",
+    assistantTitle1: "ОЗНАЙОМСЯ З НАШИМ",
+    assistantTitle2: "ПОМІЧНИКОМ",
+    assistantDescription1: "Наш AI-асистент готовий розповісти про наші послуги з розробки та впровадження штучного інтелекту для вашого бізнесу, включаючи чат-ботів, голосових асистентів та рішення для автоматизації бізнес-процесів.",
+    assistantDescription2: "Спробуйте задати питання прямо зараз і дізнайтеся більше про те, як ми можемо підвищити ефективність вашого бізнесу за допомогою AI-технологій.",
+    assistantFeature3: "Аналіз даних і персоналізація пропозицій",
+    assistantFeature4: "Оптимізація логістики та фінансової звітності",
+    
     // Partners Section
     partnersSubtitle: "{04} ПАРТНЕРИ",
     partnersTitle1: "+ 50 ТЕХНОЛОГІЙ",
@@ -59,6 +68,13 @@ export const translations = {
     casesExperienceText: "ПІДТВЕРДЖЕНИЙ ДОСВІД У НАСТУПНИХ СФЕРАХ",
     allCases: "УСІ КЕЙСИ",
     readMore: "ЧИТАТИ ДЕТАЛЬНІШЕ",
+    
+    // Contacts Section
+    contactsSubtitle: "{06} КОНТАКТИ",
+    contactsTitle1: "ПРОКОНСУЛЬТУЄМО",
+    contactsTitle2: "ТА РОЗРАХУЄМО",
+    contactsTitle3: "ВІД ЗАВДАННЯ ДО",
+    contactsTitle4: "РІШЕННЯ ОДИН КРОК",
     
     // Contact Popup
     contactTitle: "Зв'язатися з нами",
@@ -78,7 +94,6 @@ export const translations = {
     
     // Industries
     fintech: "FINTECH СЕКТОР",
-    retail: "РОЗДРІБНА ТОРГІВЛЯ", 
     logistics: "ЛОГІСТИКА",
     agriculture: "АПК",
     itTech: "IT & TECH",
@@ -143,6 +158,15 @@ export const translations = {
     service3Title: "BUSINESS PROCESS OPTIMIZATION",
     service3Description: "Risk and fraud detection, logistics and inventory management optimization, staff recruitment and training, production process monitoring and finance reporting automation",
     
+    // Assistant Section
+    assistantSubtitle: "{02} ASSISTANT",
+    assistantTitle1: "GET TO KNOW OUR",
+    assistantTitle2: "ASSISTANT",
+    assistantDescription1: "Our AI assistant is ready to tell you about our services for developing and implementing artificial intelligence for your business, including chatbots, voice assistants and solutions for automating business processes.",
+    assistantDescription2: "Try asking questions right now and learn more about how we can increase your business efficiency using AI technologies.",
+    assistantFeature3: "Data analysis and offer personalization",
+    assistantFeature4: "Logistics and financial reporting optimization",
+    
     // Partners Section
     partnersSubtitle: "{04} PARTNERS",
     partnersTitle1: "+ 50 TECHNOLOGIES",
@@ -160,6 +184,13 @@ export const translations = {
     casesExperienceText: "PROVEN EXPERIENCE IN THE FOLLOWING AREAS",
     allCases: "ALL CASES",
     readMore: "READ MORE",
+    
+    // Contacts Section
+    contactsSubtitle: "{06} CONTACTS",
+    contactsTitle1: "WE WILL CONSULT",
+    contactsTitle2: "AND CALCULATE",
+    contactsTitle3: "FROM TASK TO",
+    contactsTitle4: "SOLUTION ONE STEP",
     
     // Contact Popup
     contactTitle: "Contact us",
@@ -179,7 +210,6 @@ export const translations = {
     
     // Industries
     fintech: "FINTECH SECTOR",
-    retail: "RETAIL",
     logistics: "LOGISTICS",
     agriculture: "AGRICULTURE",
     itTech: "IT & TECH",

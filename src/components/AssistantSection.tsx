@@ -9,15 +9,17 @@ import {
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatInput } from "@/components/ui/chat-input";
 import { toast } from "@/hooks/use-toast";
+import { Language, getTranslation } from "../lib/translations";
 
 interface AssistantSectionProps {
   className?: string;
+  lang: Language;
 }
 
 interface Message {
   id: number;
   content: string;
-  sender: "user" | "ai"; // This strictly defines that sender can only be "user" or "ai"
+  sender: "user" | "ai";
 }
 
 const initialMessages: Message[] = [
@@ -32,14 +34,29 @@ const initialMessages: Message[] = [
 const OPENAI_API_KEY = "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";
 const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
-const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) => {
+const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lang }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Update initial message when language changes
+  useEffect(() => {
+    setMessages([{
+      id: 1,
+      content: lang === 'en' 
+        ? "Hello! I'm Connexi AI assistant. How can I help you today?"
+        : "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
+      sender: "ai",
+    }]);
+  }, [lang]);
+
   // Function to send message to OpenAI API
   const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
     try {
+      const systemPrompt = lang === 'en'
+        ? "You are Connexi AI assistant - from a technology company that specializes in implementing artificial intelligence in client business processes. Respond briefly in English. Our main services: developing chatbots and voice assistants for customer support, automating routine tasks, data analysis, marketing personalization, sales forecasting, fraud detection, logistics optimization, staff recruitment and reporting automation. We start by studying the client's business, develop AI agents for their tasks, integrate them into business processes and train them on the company's unique content. Tell about these capabilities professionally and friendly."
+        : "Ти AI-помічник Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси клієнтів. Відповідай коротко, українською мовою. Наші основні послуги: розробка чат-ботів та голосових асистентів для підтримки клієнтів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизація звітності. Ми починаємо з вивчення бізнесу клієнта, розробляємо AI-агентів під їхні задачі, інтегруємо їх у бізнес-процеси та навчаємо на унікальному контенті компанії. Розкажи про ці можливості професійно та дружньо.";
+
       const response = await fetch(OPENAI_API_URL, {
         method: "POST",
         headers: {
@@ -51,7 +68,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
           messages: [
             {
               role: "system",
-              content: "Ти AI-помічник Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси клієнтів. Відповідай коротко, українською мовою. Наші основні послуги: розробка чат-ботів та голосових асистентів для підтримки клієнтів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизація звітності. Ми починаємо з вивчення бізнесу клієнта, розробляємо AI-агентів під їхні задачі, інтегруємо їх у бізнес-процеси та навчаємо на унікальному контенті компанії. Розкажи про ці можливості професійно та дружньо."
+              content: systemPrompt
             },
             ...messages.map(msg => ({
               role: msg.sender === "user" ? "user" : "assistant",
@@ -112,8 +129,8 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
       ]);
     } catch (error) {
       toast({
-        title: "Помилка",
-        description: "Не вдалося отримати відповідь від AI. Спробуйте ще раз пізніше.",
+        title: getTranslation('contactError', lang),
+        description: lang === 'en' ? "Failed to get AI response. Please try again later." : "Не вдалося отримати відповідь від AI. Спробуйте ще раз пізніше.",
         variant: "destructive",
       });
       console.error("Error getting AI response:", error);
@@ -126,31 +143,28 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
-          {"{02}"} ПОМІЧНИК
+          {getTranslation('assistantSubtitle', lang)}
         </div>
         
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 text-center reveal-on-scroll">
-            <span className="text-white">ОЗНАЙОМСЯ З НАШИМ </span>
-            <span className="connexi-gradient-text">ПОМІЧНИКОМ</span>
+            <span className="text-white">{getTranslation('assistantTitle1', lang)} </span>
+            <span className="connexi-gradient-text">{getTranslation('assistantTitle2', lang)}</span>
           </h2>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="reveal-on-scroll">
               <p className="text-lg text-white/80 mb-6">
-                Наш AI-асистент готовий розповісти про наші послуги з розробки та впровадження
-                штучного інтелекту для вашого бізнесу, включаючи чат-ботів, голосових асистентів
-                та рішення для автоматизації бізнес-процесів.
+                {getTranslation('assistantDescription1', lang)}
               </p>
               <p className="text-lg text-white/80 mb-6">
-                Спробуйте задати питання прямо зараз і дізнайтеся більше про те, як ми можемо
-                підвищити ефективність вашого бізнесу за допомогою AI-технологій.
+                {getTranslation('assistantDescription2', lang)}
               </p>
               <ul className="list-disc list-inside space-y-2 text-white/80 pl-4">
-                <li>Розробка чат-ботів та голосових асистентів</li>
-                <li>Автоматизація рутинних завдань і документообігу</li>
-                <li>Аналіз даних і персоналізація пропозицій</li>
-                <li>Оптимізація логістики та фінансової звітності</li>
+                <li>{getTranslation('chatbotsDescription', lang)}</li>
+                <li>{getTranslation('automationDescription', lang)}</li>
+                <li>{getTranslation('assistantFeature3', lang)}</li>
+                <li>{getTranslation('assistantFeature4', lang)}</li>
               </ul>
             </div>
             
@@ -172,7 +186,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
                         src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"}
-                        fallback={message.sender === "user" ? "Ви" : "AI"}
+                        fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
                       />
                       <ChatBubbleMessage
                         variant={message.sender === "user" ? "sent" : "received"}
@@ -203,7 +217,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                   <ChatInput
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Введіть ваше повідомлення..."
+                    placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'}
                     className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white"
                   />
                   <div className="flex items-center p-3 pt-0 justify-between">
@@ -214,7 +228,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "" }) =
                       className="contact-button ml-auto gap-1.5"
                       disabled={isLoading}
                     >
-                      Відправити
+                      {lang === 'en' ? 'Send' : 'Відправити'}
                       <CornerDownLeft className="size-3.5" />
                     </Button>
                   </div>

@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent } from "react";
 import { CornerDownLeft, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,10 +17,12 @@ import {
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatInput } from "@/components/ui/chat-input";
 import { toast } from "@/hooks/use-toast";
+import { Language, getTranslation } from "../lib/translations";
 
 interface ConsultationChatProps {
   isOpen: boolean;
   onClose: () => void;
+  lang: Language;
 }
 
 interface Message {
@@ -33,7 +36,7 @@ interface UserInfo {
   phone: string;
 }
 
-const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) => {
+const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, lang }) => {
   const [userInfo, setUserInfo] = useState<UserInfo>({ name: "", phone: "" });
   const [isInfoCollected, setIsInfoCollected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -46,6 +49,10 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
 
   const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
     try {
+      const systemPrompt = lang === 'en' 
+        ? `You are a consultant for Connexi - a technology company that specializes in implementing artificial intelligence in business processes. The client's name is ${userInfo.name}, their phone is ${userInfo.phone}. Respond professionally and friendly in English. Our services: developing chatbots and voice assistants, automating routine tasks, data analysis, marketing personalization, sales forecasting, fraud detection, logistics optimization, staff recruitment and reporting automation. Offer specific solutions according to client needs.`
+        : `Ти консультант компанії Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси. Клієнта звати ${userInfo.name}, його телефон ${userInfo.phone}. Відповідай професійно та дружньо українською мовою. Наші послуги: розробка чат-ботів та голосових асистентів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизація звітності. Пропонуй конкретні рішення відповідно до потреб клієнта.`;
+
       const response = await fetch(OPENAI_API_URL, {
         method: "POST",
         headers: {
@@ -57,7 +64,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
           messages: [
             {
               role: "system",
-              content: `Ти консультант компанії Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси. Клієнта звати ${userInfo.name}, його телефон ${userInfo.phone}. Відповідай професійно та дружньо українською мовою. Наші послуги: розробка чат-ботів та голосових асистентів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизація звітності. Пропонуй конкретні рішення відповідно до потреб клієнта.`
+              content: systemPrompt
             },
             ...messages.map(msg => ({
               role: msg.sender === "user" ? "user" : "assistant",
@@ -74,7 +81,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
       });
 
       if (!response.ok) {
-        throw new Error("Помилка API");
+        throw new Error("API Error");
       }
 
       const data = await response.json();
@@ -89,18 +96,22 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
     e.preventDefault();
     if (!userInfo.name.trim() || !userInfo.phone.trim()) {
       toast({
-        title: "Помилка",
-        description: "Будь ласка, заповніть всі поля",
+        title: getTranslation('contactError', lang),
+        description: getTranslation('contactErrorDescription', lang),
         variant: "destructive",
       });
       return;
     }
 
     setIsInfoCollected(true);
+    const welcomeMessage = lang === 'en' 
+      ? `Hello, ${userInfo.name}! Thank you for your contact details. How can I help you with AI implementation for your business?`
+      : `Привіт, ${userInfo.name}! Дякую за контактні дані. Чим можу допомогти з впровадженням AI у ваш бізнес?`;
+    
     setMessages([
       {
         id: 1,
-        content: `Привіт, ${userInfo.name}! Дякую за контактні дані. Чим можу допомогти з впровадженням AI у ваш бізнес?`,
+        content: welcomeMessage,
         sender: "ai",
       },
     ]);
@@ -135,8 +146,8 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
       ]);
     } catch (error) {
       toast({
-        title: "Помилка",
-        description: "Не вдалося отримати відповідь. Спробуйте ще раз.",
+        title: getTranslation('contactError', lang),
+        description: lang === 'en' ? "Failed to get response. Please try again." : "Не вдалося отримати відповідь. Спробуйте ще раз.",
         variant: "destructive",
       });
     } finally {
@@ -162,7 +173,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
         <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Bot className="h-5 w-5" />
-            Консультація AI
+            {lang === 'en' ? 'AI Consultation' : 'Консультація AI'}
           </DialogTitle>
         </DialogHeader>
 
@@ -172,9 +183,11 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
               <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <Bot className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Безкоштовна консультація</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                {lang === 'en' ? 'Free Consultation' : 'Безкоштовна консультація'}
+              </h3>
               <p className="text-sm text-gray-600">
-                Залиште контакти для персональної консультації
+                {lang === 'en' ? 'Leave your contacts for personal consultation' : 'Залиште контакти для персональної консультації'}
               </p>
             </div>
             
@@ -183,21 +196,21 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                 type="text"
                 value={userInfo.name}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Ваше ім'я"
+                placeholder={getTranslation('contactName', lang)}
                 className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
               />
               <Input
                 type="tel"
                 value={userInfo.phone}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="+38 (0__) ___-__-__"
+                placeholder={getTranslation('contactPhone', lang)}
                 className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
               />
               <Button 
                 type="submit" 
                 className="w-full h-12 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-medium transition-all duration-200"
               >
-                Почати консультацію
+                {lang === 'en' ? 'Start Consultation' : 'Почати консультацію'}
               </Button>
             </form>
           </div>
@@ -213,7 +226,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                     <ChatBubbleAvatar
                       className="h-7 w-7 shrink-0"
                       src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"}
-                      fallback={message.sender === "user" ? "У" : "AI"}
+                      fallback={message.sender === "user" ? (lang === 'en' ? "You" : "У") : "AI"}
                     />
                     <ChatBubbleMessage
                       variant={message.sender === "user" ? "sent" : "received"}
@@ -245,7 +258,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose }) 
                 <ChatInput
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Напишіть ваше питання..."
+                  placeholder={lang === 'en' ? 'Write your question...' : 'Напишіть ваше питання...'}
                   className="pr-12 h-10 border-gray-200 focus:border-orange-500 resize-none"
                   disabled={isLoading}
                 />
