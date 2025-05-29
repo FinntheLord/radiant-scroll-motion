@@ -1,262 +1,147 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState } from 'react';
+import { MessageCircle, Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { CornerDownLeft, Phone, Mail, MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
-import { ChatMessageList } from "@/components/ui/chat-message-list";
-import { ChatInput } from "@/components/ui/chat-input";
-import { toast } from "sonner";
-import { Language, getTranslation } from "../lib/translations";
+import ContactPopup from './ContactPopup';
+import { Language, getTranslation } from '../lib/translations';
 
 interface ContactsSectionProps {
-  className?: string;
   lang: Language;
 }
 
-interface Message {
-  id: number;
-  content: string;
-  sender: "user" | "ai";
-}
-
-const ContactsSection: React.FC<ContactsSectionProps> = ({
-  className = "",
-  lang
-}) => {
-  const initialMessages: Message[] = [{
-    id: 1,
-    content: lang === 'en' 
-      ? "Hello! I'm Connexi info-bot. Tell me, what information are you interested in about our services?"
-      : "Вітаю! Я інфо-бот Connexi. Розкажіть, яка інформація вас цікавить про наші послуги?",
-    sender: "ai"
-  }];
-
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Function to send message to OpenAI API (similar to AssistantSection)
-  const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
-    try {
-      const systemPrompt = lang === 'en'
-        ? "You are Connexi information bot. Your goal is to collect contact information from potential clients and basic information about their needs. Ask about company name, contact person, phone, email and brief task description. Respond briefly in English. Offer specific AI integration services depending on client requests."
-        : "Ти інформаційний бот Connexi. Твоя мета — зібрати контактну інформацію потенційних клієнтів та базову інформацію про їхні потреби. Запитуй про назву компанії, контактну особу, телефон, email та коротке пояснення завдання. Відповідай коротко, українською мовою. Пропонуй конкретні послуги AI-інтеграції залежно від запитів клієнта.";
-
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer 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`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [{
-            role: "system",
-            content: systemPrompt
-          }, ...messages.map(msg => ({
-            role: msg.sender === "user" ? "user" : "assistant",
-            content: msg.content
-          })), {
-            role: "user",
-            content: userMessage
-          }],
-          temperature: 0.7,
-          max_tokens: 500
-        })
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API Error:", errorData);
-        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
-      }
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error("Error calling OpenAI API:", error);
-      throw error;
-    }
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    // Add user message
-    const userMessage = input.trim();
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      content: userMessage,
-      sender: "user"
-    }]);
-    setInput("");
-    setIsLoading(true);
-    try {
-      // Get response from OpenAI
-      const aiResponse = await sendMessageToOpenAI(userMessage);
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        content: aiResponse,
-        sender: "ai"
-      }]);
-
-      // Check if the message contains contact information and thank the user
-      if (userMessage.includes("@") || /\d{3,}/.test(userMessage) || userMessage.length > 100) {
-        toast.success(lang === 'en' 
-          ? "Thank you for the information! Our manager will contact you soon."
-          : "Дякуємо за інформацію! Наш менеджер зв'яжеться з вами найближчим часом."
-        );
-      }
-    } catch (error) {
-      toast.error(lang === 'en' 
-        ? "Failed to get response. Please try again later."
-        : "Не вдалося отримати відповідь. Спробуйте ще раз пізніше."
-      );
-      console.error("Error getting AI response:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const ContactsSection: React.FC<ContactsSectionProps> = ({ lang }) => {
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   return (
-    <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
-          {getTranslation('contactsSubtitle', lang)}
-        </div>
+    <>
+      <section id="contacts" className="contacts-section py-20 bg-gray-50">
         
-        <div className="text-center mb-16 reveal-on-scroll">
-          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            {getTranslation('contactsTitle1', lang)}
-          </h2>
-          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            {getTranslation('contactsTitle2', lang)}
-          </h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-connexi-orange">
-            {getTranslation('contactsTitle3', lang)}
-          </h2>
-          <h2 className="text-4xl md:text-5xl font-bold text-connexi-orange">
-            {getTranslation('contactsTitle4', lang)}
-          </h2>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 connexi-gradient-text">
+              {getTranslation('contactsTitle', lang)}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {getTranslation('contactsSubtitle', lang)}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Contact Information */}
+            <div className="space-y-8">
+              <div className="flex items-start space-x-4">
+                <div className="bg-connexi-orange/10 p-3 rounded-lg">
+                  <Phone className="h-6 w-6 text-connexi-orange" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">{getTranslation('phone', lang)}</h3>
+                  <p className="text-gray-600">+380 63 123 45 67</p>
+                  <p className="text-gray-600">+380 50 987 65 43</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-connexi-pink/10 p-3 rounded-lg">
+                  <Mail className="h-6 w-6 text-connexi-pink" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">{getTranslation('email', lang)}</h3>
+                  <p className="text-gray-600">info@connexi.ai</p>
+                  <p className="text-gray-600">support@connexi.ai</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-connexi-purple/10 p-3 rounded-lg">
+                  <MapPin className="h-6 w-6 text-connexi-purple" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">{getTranslation('address', lang)}</h3>
+                  <p className="text-gray-600">
+                    {getTranslation('addressLine1', lang)}<br />
+                    {getTranslation('addressLine2', lang)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-connexi-blue/10 p-3 rounded-lg">
+                  <Clock className="h-6 w-6 text-connexi-blue" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">{getTranslation('workingHours', lang)}</h3>
+                  <p className="text-gray-600">
+                    {getTranslation('workingHoursWeekdays', lang)}<br />
+                    {getTranslation('workingHoursWeekends', lang)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <h3 className="text-2xl font-semibold mb-6">{getTranslation('quickContact', lang)}</h3>
+              <Button 
+                className="contact-button w-full"
+                onClick={() => setIsContactOpen(true)}
+              >
+                {getTranslation('openContactForm', lang)}
+                <MessageCircle className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 reveal-on-scroll">
-          {/* Contact Information */}
-          <div className="space-y-8">
-            <div className="flex items-center">
-              <a href="/" className="flex items-center mb-4">
-                <img 
-                  alt="connexi.ai logo" 
-                  className="h-20 md:h-24" 
-                  src="/lovable-uploads/0c823db9-7ce3-4eec-95d5-7f195348151d.png" 
-                />
-              </a>
-            </div>
-            
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Contacts:' : 'Контакти:'}
-              </h3>
-              <div className="flex items-center space-x-2 mb-2">
-                <Mail className="text-connexi-orange" size={20} />
-                <a href="mailto:info@connexi.ai" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  info@connexi.ai
-                </a>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+380672002675" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  +38 (067) 200-26-75
-                </a>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Address:' : 'Адреса:'}
-              </h3>
-              <div className="flex items-start space-x-2">
-                <MapPin className="text-connexi-orange mt-1" size={20} />
-                <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                  {lang === 'en' ? 'Dnipro, Robochaya, 23K' : 'Дніпро, Рабочая, 23К'}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Leave your contacts:' : 'Залиште свої контакти:'}
-              </h3>
-              <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                {lang === 'en'
-                  ? 'Use our chatbot to leave your contact details and request. We will contact you within the business day to discuss cooperation details.'
-                  : 'Скористайтеся нашим чат-ботом, щоб залишити свої контактні дані та запит. Ми зв\'яжемося з вами протягом робочого дня для обговорення деталей співпраці.'
-                }
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <img 
+                src="/lovable-uploads/09862013-fb91-4cc9-a2fc-8db3f0a33759.png" 
+                alt="connexi.ai logo" 
+                className="h-13 md:h-16 mb-6 brightness-0 invert"
+              />
+              <p className="text-gray-400 max-w-md">
+                {getTranslation('footerDescription', lang)}
               </p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">{getTranslation('quickLinks', lang)}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#about" className="hover:text-white transition-colors">{getTranslation('about', lang)}</a></li>
+                <li><a href="#services" className="hover:text-white transition-colors">{getTranslation('services', lang)}</a></li>
+                <li><a href="#cases" className="hover:text-white transition-colors">{getTranslation('cases', lang)}</a></li>
+                <li><a href="#contacts" className="hover:text-white transition-colors">{getTranslation('contacts', lang)}</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">{getTranslation('contactInfo', lang)}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>+380 63 123 45 67</li>
+                <li>info@connexi.ai</li>
+                <li>
+                  {getTranslation('addressLine1', lang)}<br />
+                  {getTranslation('addressLine2', lang)}
+                </li>
+              </ul>
             </div>
           </div>
           
-          {/* Chat Bot - similar to AssistantSection but focused on information gathering */}
-          <div className={`p-6 rounded-lg ${className?.includes('bg-gray-900') ? 'bg-gray-800 bg-opacity-40' : 'bg-gray-50'} h-[500px] flex flex-col`}>
-            <div className="flex items-center gap-2 p-3 border-b border-gray-700 mb-3">
-              <div className="size-3 rounded-full bg-red-500"></div>
-              <div className="size-3 rounded-full bg-yellow-500"></div>
-              <div className="size-3 rounded-full bg-green-500"></div>
-              <div className="ml-2 text-sm font-medium text-connexi-orange">Connexi Info Bot</div>
-            </div>
-            
-            <div className="flex-1 overflow-hidden">
-              <ChatMessageList>
-                {messages.map(message => (
-                  <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
-                    <ChatBubbleAvatar 
-                      className="h-8 w-8 shrink-0" 
-                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"} 
-                      fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"} 
-                    />
-                    <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
-                      {message.content}
-                    </ChatBubbleMessage>
-                  </ChatBubble>
-                ))}
-
-                {isLoading && (
-                  <ChatBubble variant="received">
-                    <ChatBubbleAvatar 
-                      className="h-8 w-8 shrink-0" 
-                      src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png" 
-                      fallback="AI" 
-                    />
-                    <ChatBubbleMessage isLoading />
-                  </ChatBubble>
-                )}
-              </ChatMessageList>
-            </div>
-
-            <div className="mt-auto pt-4 border-t border-gray-700">
-              <form onSubmit={handleSubmit} className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange p-1">
-                <ChatInput 
-                  value={input} 
-                  onChange={(e) => setInput(e.target.value)} 
-                  placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'} 
-                  className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white" 
-                />
-                <div className="flex items-center p-3 pt-0 justify-between">
-                  <div className="flex"></div>
-                  <Button type="submit" size="sm" className="contact-button ml-auto gap-1.5" disabled={isLoading}>
-                    {lang === 'en' ? 'Send' : 'Відправити'}
-                    <CornerDownLeft className="size-3.5" />
-                  </Button>
-                </div>
-              </form>
-            </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Connexi.ai. {getTranslation('allRightsReserved', lang)}</p>
           </div>
         </div>
-      </div>
-      
-      {/* Background elements */}
-      <div className="floating-element w-96 h-96 top-20 -left-48 opacity-20"></div>
-      <div className="floating-element w-80 h-80 bottom-10 -right-40 opacity-20"></div>
-    </section>
+      </footer>
+
+      <ContactPopup 
+        isOpen={isContactOpen} 
+        onClose={() => setIsContactOpen(false)}
+        lang={lang}
+      />
+    </>
   );
 };
 

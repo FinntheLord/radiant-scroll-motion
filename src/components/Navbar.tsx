@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
             <img 
               src="/lovable-uploads/09862013-fb91-4cc9-a2fc-8db3f0a33759.png" 
               alt="connexi.ai logo" 
-              className="h-10 md:h-12"
+              className="h-13 md:h-16"
             />
           </a>
           
