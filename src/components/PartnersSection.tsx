@@ -31,22 +31,50 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
   const [carouselRef, carouselApi] = useEmblaCarousel({ 
     loop: true,
     align: "start",
-    dragFree: true 
+    dragFree: true,
+    slidesToScroll: 1,
+    skipSnaps: false
   });
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   
-  // Set up auto scroll
+  // Улучшенный auto scroll с проверкой видимости
   useEffect(() => {
     if (carouselApi) {
-      const autoScrollInterval = setInterval(() => {
-        carouselApi.scrollNext();
-      }, 2500); // Reduced time for better mobile performance
+      let autoScrollInterval: NodeJS.Timeout;
+      
+      const startAutoScroll = () => {
+        autoScrollInterval = setInterval(() => {
+          if (document.visibilityState === 'visible') {
+            carouselApi.scrollNext();
+          }
+        }, 3000);
+      };
+
+      const stopAutoScroll = () => {
+        if (autoScrollInterval) {
+          clearInterval(autoScrollInterval);
+        }
+      };
+
+      // Начать автоскролл
+      startAutoScroll();
+      
+      // Остановить на hover (только для десктопа)
+      const carousel = carouselRef.current;
+      if (carousel && window.innerWidth > 768) {
+        carousel.addEventListener('mouseenter', stopAutoScroll);
+        carousel.addEventListener('mouseleave', startAutoScroll);
+      }
       
       return () => {
-        clearInterval(autoScrollInterval);
+        stopAutoScroll();
+        if (carousel && window.innerWidth > 768) {
+          carousel.removeEventListener('mouseenter', stopAutoScroll);
+          carousel.removeEventListener('mouseleave', startAutoScroll);
+        }
       };
     }
-  }, [carouselApi]);
+  }, [carouselApi, carouselRef]);
 
   return (
     <section id="partners" className={`py-12 md:py-20 overflow-hidden ${className}`}>
@@ -68,7 +96,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         </div>
       </div>
       
-      {/* Full-width carousel container with mobile optimization */}
+      {/* Оптимизированный carousel для мобильных устройств */}
       <div className="w-full overflow-hidden mb-12 md:mb-16 reveal-on-scroll">
         <Carousel
           ref={carouselRef}
@@ -76,13 +104,15 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
           opts={{
             align: "start",
             loop: true,
+            slidesToScroll: 1,
+            skipSnaps: false,
           }}
         >
-          <CarouselContent className="py-4">
+          <CarouselContent className="py-4 -ml-2 md:-ml-4">
             {partners.map((partner) => (
-              <CarouselItem key={partner.id} className="basis-2/3 md:basis-1/3 lg:basis-1/4 pl-4">
-                <div className={`h-24 md:h-36 p-4 md:p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
-                  <div className="text-sm md:text-xl font-bold text-center">{partner.name}</div>
+              <CarouselItem key={partner.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-2 md:pl-4">
+                <div className={`h-20 md:h-32 lg:h-36 p-3 md:p-4 lg:p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
+                  <div className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-center break-words">{partner.name}</div>
                 </div>
               </CarouselItem>
             ))}
@@ -102,9 +132,9 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         </div>
       </div>
       
-      {/* Background elements */}
-      <div className="floating-element w-64 h-64 md:w-96 md:h-96 top-20 -left-32 md:-left-48 opacity-20"></div>
-      <div className="floating-element w-48 h-48 md:w-80 md:h-80 bottom-10 -right-24 md:-right-40 opacity-20"></div>
+      {/* Background elements with better mobile optimization */}
+      <div className="floating-element w-32 h-32 md:w-64 md:h-64 lg:w-96 lg:h-96 top-20 -left-16 md:-left-32 lg:-left-48 opacity-10 md:opacity-20"></div>
+      <div className="floating-element w-24 h-24 md:w-48 md:h-48 lg:w-80 lg:h-80 bottom-10 -right-12 md:-right-24 lg:-right-40 opacity-10 md:opacity-20"></div>
       
       <ContactPopup 
         isOpen={isContactPopupOpen}

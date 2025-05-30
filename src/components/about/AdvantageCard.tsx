@@ -20,6 +20,28 @@ const AdvantageCard: React.FC<AdvantageCardProps> = ({
   animationDelay,
   lang
 }) => {
+  const renderContentWithHighlight = () => {
+    if (!highlight) {
+      return content;
+    }
+
+    const parts = content.split(highlight);
+    const result = [];
+    
+    for (let i = 0; i < parts.length; i++) {
+      if (i > 0) {
+        result.push(
+          <span key={`highlight-${i}`} className="connexi-gradient-text">
+            {highlight}
+          </span>
+        );
+      }
+      result.push(parts[i]);
+    }
+    
+    return result;
+  };
+
   return (
     <Card 
       className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${
@@ -37,14 +59,7 @@ const AdvantageCard: React.FC<AdvantageCardProps> = ({
         </h3>
         <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
           <p className="mb-4 text-sm md:text-base">
-            {content.split(highlight || '').map((part, index) => (
-              <React.Fragment key={index}>
-                {part}
-                {index < content.split(highlight || '').length - 1 && highlight && (
-                  <span className="connexi-gradient-text">{highlight}</span>
-                )}
-              </React.Fragment>
-            ))}
+            {renderContentWithHighlight()}
           </p>
         </div>
       </CardContent>

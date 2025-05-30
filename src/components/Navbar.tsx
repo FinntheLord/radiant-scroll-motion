@@ -49,9 +49,9 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <a href={lang === 'en' ? '/en' : '/'} className="flex items-center">
             <img 
-              src="/lovable-uploads/09862013-fb91-4cc9-a2fc-8db3f0a33759.png" 
+              src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
               alt="connexi.ai logo" 
-              className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto"
+              className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
             />
           </a>
           
