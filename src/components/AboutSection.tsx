@@ -121,15 +121,15 @@ const AboutSection: React.FC<AboutSectionProps> = ({
           <div className="card-glow absolute inset-0 -z-10 bg-connexi-pink/5 rounded-xl blur-3xl"></div>
           
           <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setApi}>
-            <CarouselContent>
-              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+            <CarouselContent className="-ml-2 md:-ml-4">
+              <CarouselItem className="pl-2 md:pl-4 basis-full md:basis-1/2">
                 <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.3s" }}>
-                  <CardContent className="p-6">
-                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
+                  <CardContent className="p-4 md:p-6">
+                    <h3 className={`text-xl md:text-2xl mb-6 md:mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
                       {lang === 'en' ? '# FAST AND QUALITY' : '# ШВИДКО ТА ЯКІСНО'}
                     </h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
-                      <p className="mb-4">
+                      <p className="mb-4 text-sm md:text-base">
                         {lang === 'en' 
                           ? 'We provide '
                           : 'Забезпечуємо '
@@ -142,7 +142,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                           : ' розробки та впровадження AI-рішень завдяки оптимізації ресурсів команди.'
                         }
                       </p>
-                      <p>
+                      <p className="text-sm md:text-base">
                         {lang === 'en'
                           ? 'All our employees are specialists with a highly professional approach to solving artificial intelligence tasks'
                           : 'Всі наші співробітники — фахівці з високопрофесійним підходом до вирішення завдань штучного інтелекту'
@@ -153,14 +153,14 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 </Card>
               </CarouselItem>
               
-              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+              <CarouselItem className="pl-2 md:pl-4 basis-full md:basis-1/2">
                 <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.4s" }}>
-                  <CardContent className="p-6">
-                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
+                  <CardContent className="p-4 md:p-6">
+                    <h3 className={`text-xl md:text-2xl mb-6 md:mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
                       {lang === 'en' ? '# EFFICIENTLY' : '# ЕФЕКТИВНО'}
                     </h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
-                      <p>
+                      <p className="text-sm md:text-base">
                         {lang === 'en'
                           ? 'We increase business process efficiency at various levels through the application of the latest AI technologies and close cooperation with solution providers'
                           : 'Підвищуємо ефективність бізнес-процесів на різних рівнях завдяки застосуванню новітніх AI-технологій та тісній співпраці з постачальниками рішень'
@@ -171,14 +171,14 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 </Card>
               </CarouselItem>
               
-              <CarouselItem className="md:basis-1/2 lg:basis-1/2">
+              <CarouselItem className="pl-2 md:pl-4 basis-full md:basis-1/2">
                 <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.5s" }}>
-                  <CardContent className="p-6">
-                    <h3 className={`text-2xl mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
+                  <CardContent className="p-4 md:p-6">
+                    <h3 className={`text-xl md:text-2xl mb-6 md:mb-8 ${className?.includes('text-white') ? 'text-white' : 'text-gray-800'}`}>
                       {lang === 'en' ? '# RELIABLY' : '# НАДІЙНО'}
                     </h3>
                     <div className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-700'}>
-                      <p>
+                      <p className="text-sm md:text-base">
                         {lang === 'en'
                           ? 'We guarantee high quality and stability of all implemented AI solutions through the use of proven technologies and multi-level testing'
                           : 'Гарантуємо високу якість і стабільність усіх впроваджуваних AI-рішень завдяки використанню перевірених технологій і багаторівневому тестуванню'
