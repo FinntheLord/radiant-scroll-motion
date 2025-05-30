@@ -1,7 +1,8 @@
+
 import React, { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Language, getTranslation } from "../lib/translations";
 
@@ -14,7 +15,20 @@ const AboutSection: React.FC<AboutSectionProps> = ({
   className = "",
   lang
 }) => {
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [api, setApi] = React.useState<CarouselApi>();
+
+  const scrollPrev = React.useCallback(() => {
+    if (api) {
+      api.scrollPrev();
+    }
+  }, [api]);
+
+  const scrollNext = React.useCallback(() => {
+    if (api) {
+      api.scrollNext();
+    }
+  }, [api]);
+
   useEffect(() => {
     // Add animated background elements
     const section = document.getElementById('about');
@@ -30,23 +44,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({
         section.appendChild(element);
       }
     }
-
-    // Add click functionality to mobile carousel buttons
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-    if (prevBtn && carouselRef.current) {
-      prevBtn.addEventListener('click', () => {
-        const prevButton = carouselRef.current?.querySelector('.embla__button--prev') as HTMLButtonElement | null;
-        prevButton?.click();
-      });
-    }
-    if (nextBtn && carouselRef.current) {
-      nextBtn.addEventListener('click', () => {
-        const nextButton = carouselRef.current?.querySelector('.embla__button--next') as HTMLButtonElement | null;
-        nextButton?.click();
-      });
-    }
   }, []);
+
   return (
     <section id="about" className={`min-h-screen relative py-20 ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
@@ -98,10 +97,22 @@ const AboutSection: React.FC<AboutSectionProps> = ({
               {lang === 'en' ? 'Our advantages' : 'Наші переваги'}
             </h3>
             <div className="flex gap-2 md:hidden">
-              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full custom-carousel-button carousel-prev" aria-label={lang === 'en' ? 'Previous slide' : 'Попередній слайд'}>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8 rounded-full custom-carousel-button" 
+                aria-label={lang === 'en' ? 'Previous slide' : 'Попередній слайд'}
+                onClick={scrollPrev}
+              >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full custom-carousel-button carousel-next" aria-label={lang === 'en' ? 'Next slide' : 'Наступний слайд'}>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8 rounded-full custom-carousel-button" 
+                aria-label={lang === 'en' ? 'Next slide' : 'Наступний слайд'}
+                onClick={scrollNext}
+              >
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -109,7 +120,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
           
           <div className="card-glow absolute inset-0 -z-10 bg-connexi-pink/5 rounded-xl blur-3xl"></div>
           
-          <Carousel className="w-full" opts={{ align: "start", loop: true }} ref={carouselRef}>
+          <Carousel className="w-full" opts={{ align: "start", loop: true }} setApi={setApi}>
             <CarouselContent>
               <CarouselItem className="md:basis-1/2 lg:basis-1/2">
                 <Card className={`shadow-sm border rounded-lg p-4 reveal-on-scroll h-full card-hover ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`} style={{ animationDelay: "0.3s" }}>
