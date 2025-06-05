@@ -1,22 +1,93 @@
 
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>connexi.ai | AI-рішення для бізнесу в Україні</title>
-    <meta name="description" content="Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій." />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій. Розробка чат-ботів, голосових асистентів та аналіз даних." />
+    <meta name="keywords" content="AI, штучний інтелект, чат-боти, автоматизація, бізнес-процеси, Україна, машинне навчання, голосові асистенти" />
     <meta name="author" content="connexi.ai" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="Ukrainian" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://connexi.ai/" />
+    
+    <!-- Favicon -->
     <link rel="icon" href="/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png" type="image/png">
-
-    <meta property="og:title" content="connexi.ai | AI-рішення для бізнесу" />
-    <meta property="og:description" content="Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій." />
+    <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png" />
+    <meta property="og:url" content="https://connexi.ai/" />
+    <meta property="og:title" content="connexi.ai | AI-рішення для бізнесу в Україні" />
+    <meta property="og:description" content="Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій." />
+    <meta property="og:image" content="https://connexi.ai/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="connexi.ai" />
+    <meta property="og:locale" content="uk_UA" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://connexi.ai/" />
+    <meta name="twitter:title" content="connexi.ai | AI-рішення для бізнесу" />
+    <meta name="twitter:description" content="Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій." />
+    <meta name="twitter:image" content="https://connexi.ai/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png" />
     <meta name="twitter:site" content="@connexi_ai" />
-    <meta name="twitter:image" content="/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png" />
+    <meta name="twitter:creator" content="@connexi_ai" />
+
+    <!-- Performance optimization -->
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap"></noscript>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "connexi.ai",
+      "url": "https://connexi.ai/",
+      "logo": "https://connexi.ai/lovable-uploads/dbf89901-caf3-4069-a5bc-0ac9cbade5ff.png",
+      "description": "Впровадження штучного інтелекту в бізнес-процеси. Оптимізація та автоматизація за допомогою AI-технологій.",
+      "foundingDate": "2024",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "UA"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": ["Ukrainian", "English"]
+      },
+      "sameAs": [
+        "https://twitter.com/connexi_ai"
+      ],
+      "service": [
+        {
+          "@type": "Service",
+          "name": "Розробка чат-ботів та голосових асистентів",
+          "description": "Створення інтелектуальних асистентів для бізнесу"
+        },
+        {
+          "@type": "Service",
+          "name": "Автоматизація бізнес-процесів",
+          "description": "Впровадження AI для оптимізації робочих процесів"
+        },
+        {
+          "@type": "Service",
+          "name": "Аналіз даних і персоналізація",
+          "description": "Обробка даних та персоналізовані рішення"
+        }
+      ]
+    }
+    </script>
     
     <!-- Improve text rendering -->
     <style>
@@ -24,12 +95,35 @@
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        font-display: swap;
+      }
+      
+      /* Critical CSS for above-the-fold content */
+      .hero-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      
+      /* Preload animation to prevent layout shift */
+      .preload * {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
       }
     </style>
   </head>
 
-  <body>
+  <body class="preload">
     <div id="root"></div>
+    
+    <!-- Remove preload class after page loads -->
+    <script>
+      window.addEventListener('load', function() {
+        document.body.classList.remove('preload');
+      });
+    </script>
+    
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
