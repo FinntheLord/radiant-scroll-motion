@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { CornerDownLeft, Phone, Mail, MapPin } from "lucide-react";
@@ -217,7 +218,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
                   <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
                     <ChatBubbleAvatar 
                       className="h-8 w-8 shrink-0" 
-                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"} 
+                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"} 
                       fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"} 
                     />
                     <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
@@ -230,7 +231,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar 
                       className="h-8 w-8 shrink-0" 
-                      src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png" 
+                      src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
                       fallback="AI" 
                     />
                     <ChatBubbleMessage isLoading />
