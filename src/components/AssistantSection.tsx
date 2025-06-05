@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
   }, [lang]);
 
   // Function to send message to OpenAI API
-  const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
+  async function sendMessageToOpenAI(userMessage: string): Promise<string> {
     try {
       const systemPrompt = lang === 'en'
         ? "You are Connexi AI assistant - from a technology company that specializes in implementing artificial intelligence in client business processes. Respond briefly in English. Our main services: developing chatbots and voice assistants for customer support, automating routine tasks, data analysis, marketing personalization, sales forecasting, fraud detection, logistics optimization, staff recruitment and reporting automation. We start by studying the client's business, develop AI agents for their tasks, integrate them into business processes and train them on the company's unique content. Tell about these capabilities professionally and friendly."
@@ -97,9 +96,10 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
       console.error("Error calling OpenAI API:", error);
       throw error;
     }
-  };
+  }
 
-  const handleSubmit = async (e: FormEvent) => {
+  // Function to send message to OpenAI API
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -138,7 +138,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
@@ -162,8 +162,8 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                 {getTranslation('assistantDescription2', lang)}
               </p>
               <ul className="list-disc list-inside space-y-2 text-white/80 pl-4">
-                <li>{getTranslation('chatbotsDescription', lang)}</li>
-                <li>{getTranslation('automationDescription', lang)}</li>
+                <li>{getTranslation('assistantFeature1', lang)}</li>
+                <li>{getTranslation('assistantFeature2', lang)}</li>
                 <li>{getTranslation('assistantFeature3', lang)}</li>
                 <li>{getTranslation('assistantFeature4', lang)}</li>
               </ul>

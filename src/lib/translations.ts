@@ -48,7 +48,9 @@ export const translations = {
     assistantTitle2: "ПОМІЧНИКОМ",
     assistantDescription1: "Наш AI-асистент готовий розповісти про наші послуги з розробки та впровадження штучного інтелекту для вашого бізнесу, включаючи чат-ботів, голосових асистентів та рішення для автоматизації бізнес-процесів.",
     assistantDescription2: "Спробуйте задати питання прямо зараз і дізнайтеся більше про те, як ми можемо підвищити ефективність вашого бізнесу за допомогою AI-технологій.",
-    assistantFeature3: "Аналіз даних і персоналізація пропозицій",
+    assistantFeature1: "Розробка чат-ботів та голосових асистентів",
+    assistantFeature2: "Автоматизація бізнес-процесів із використанням штучного інтелекту",
+    assistantFeature3: "Аналіз даних і персоналізація пропозицій для клієнтів",
     assistantFeature4: "Оптимізація логістики та фінансової звітності",
     
     // Partners Section
@@ -164,7 +166,9 @@ export const translations = {
     assistantTitle2: "ASSISTANT",
     assistantDescription1: "Our AI assistant is ready to tell you about our services for developing and implementing artificial intelligence for your business, including chatbots, voice assistants and solutions for automating business processes.",
     assistantDescription2: "Try asking questions right now and learn more about how we can increase your business efficiency using AI technologies.",
-    assistantFeature3: "Data analysis and offer personalization",
+    assistantFeature1: "Development of chatbots and voice assistants",
+    assistantFeature2: "Business process automation using artificial intelligence",
+    assistantFeature3: "Data analysis and client offer personalization",
     assistantFeature4: "Logistics and financial reporting optimization",
     
     // Partners Section
