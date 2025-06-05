@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -96,7 +97,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         </div>
       </div>
       
-      {/* Optimized carousel for mobile devices */}
+      {/* Fixed carousel for mobile devices */}
       <div ref={carouselContainerRef} className="w-full overflow-hidden mb-12 md:mb-16 reveal-on-scroll">
         <Carousel
           ref={carouselRef}
@@ -111,8 +112,10 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
           <CarouselContent className="py-4 -ml-2 md:-ml-4">
             {partners.map((partner) => (
               <CarouselItem key={partner.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pl-2 md:pl-4">
-                <div className={`h-20 md:h-32 lg:h-36 p-3 md:p-4 lg:p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
-                  <div className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-center break-words">{partner.name}</div>
+                <div className={`min-h-[80px] md:h-32 lg:h-36 p-4 md:p-4 lg:p-6 flex items-center justify-center rounded-lg shadow-sm border hover:shadow-md transition-all ${className?.includes('bg-gray-900') ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-100 text-gray-800'}`}>
+                  <div className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-center break-words leading-tight w-full">
+                    {partner.name}
+                  </div>
                 </div>
               </CarouselItem>
             ))}
