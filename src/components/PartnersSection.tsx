@@ -37,7 +37,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
   });
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   
-  // Улучшенный auto scroll с проверкой видимости
+  // Fixed auto scroll with proper ref handling
   useEffect(() => {
     if (carouselApi) {
       let autoScrollInterval: NodeJS.Timeout;
@@ -56,21 +56,21 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         }
       };
 
-      // Начать автоскролл
+      // Start auto scroll
       startAutoScroll();
       
-      // Остановить на hover (только для десктопа)
-      const carousel = carouselRef.current;
-      if (carousel && window.innerWidth > 768) {
-        carousel.addEventListener('mouseenter', stopAutoScroll);
-        carousel.addEventListener('mouseleave', startAutoScroll);
+      // Stop on hover (only for desktop) - using the carousel container element
+      const carouselContainer = carouselRef.current;
+      if (carouselContainer && window.innerWidth > 768) {
+        carouselContainer.addEventListener('mouseenter', stopAutoScroll);
+        carouselContainer.addEventListener('mouseleave', startAutoScroll);
       }
       
       return () => {
         stopAutoScroll();
-        if (carousel && window.innerWidth > 768) {
-          carousel.removeEventListener('mouseenter', stopAutoScroll);
-          carousel.removeEventListener('mouseleave', startAutoScroll);
+        if (carouselContainer && window.innerWidth > 768) {
+          carouselContainer.removeEventListener('mouseenter', stopAutoScroll);
+          carouselContainer.removeEventListener('mouseleave', startAutoScroll);
         }
       };
     }
@@ -96,7 +96,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         </div>
       </div>
       
-      {/* Оптимизированный carousel для мобильных устройств */}
+      {/* Optimized carousel for mobile devices */}
       <div className="w-full overflow-hidden mb-12 md:mb-16 reveal-on-scroll">
         <Carousel
           ref={carouselRef}
