@@ -74,12 +74,20 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
                 {getTranslation('videoDescription', lang)}
               </p>
 
-              <Button 
-                className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
-                onClick={() => setIsChatOpen(true)}
-              >
-                {getTranslation('learnMore', lang)}
-              </Button>
+              <div className="flex items-center justify-center gap-4">
+                <Button 
+                  className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
+                  onClick={() => setIsChatOpen(true)}
+                >
+                  {getTranslation('learnMore', lang)}
+                </Button>
+                
+                <img
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                  alt="AI Animation"
+                  className="h-[60px] w-auto rounded-lg opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </div>
             </div>
           </div>
         </div>
