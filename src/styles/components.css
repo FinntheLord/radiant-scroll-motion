@@ -91,7 +91,7 @@
   animation: pulse 6s ease-in-out infinite;
 }
 
-/* Button Styles */
+/* Button Styles - Fixed shaking issue */
 .contact-button {
   position: relative;
   overflow: hidden;
@@ -99,16 +99,20 @@
   background: linear-gradient(45deg, #FF7A00, #FF36A3) !important;
   border: none !important;
   color: white !important;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+  will-change: transform; /* Optimize for animations */
 }
 
 .contact-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px) translateZ(0); /* Reduced movement and force hardware acceleration */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Reduced shadow intensity */
   background: linear-gradient(45deg, #FF36A3, #9747FF) !important;
 }
 
 .contact-button:active {
   background: linear-gradient(45deg, #9747FF, #0832A2) !important;
+  transform: translateY(-1px) translateZ(0); /* Smoother active state */
 }
 
 .contact-button::after {
