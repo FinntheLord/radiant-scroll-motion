@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -173,7 +174,14 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                 <div className="size-3 rounded-full bg-red-500"></div>
                 <div className="size-3 rounded-full bg-yellow-500"></div>
                 <div className="size-3 rounded-full bg-green-500"></div>
-                <div className="ml-2 text-sm font-medium text-white/70">Connexi AI Assistant</div>
+                <div className="ml-2 text-sm font-medium text-white/70 flex items-center gap-2">
+                  <img
+                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                    alt="AI Animation"
+                    className="h-4 w-4 rounded opacity-90"
+                  />
+                  Connexi AI Assistant
+                </div>
               </div>
               
               <div className="flex-1 overflow-hidden">
@@ -185,7 +193,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                     >
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/assistant-chat-icon.webp"}
+                        src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"}
                         fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
                       />
                       <ChatBubbleMessage
@@ -200,7 +208,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                     <ChatBubble variant="received">
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src="/lovable-uploads/assistant-chat-icon.webp"
+                        src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                         fallback="AI"
                       />
                       <ChatBubbleMessage isLoading />
