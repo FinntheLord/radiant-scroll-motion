@@ -40,7 +40,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center reveal-on-scroll" style={{ animationDelay: "0.4s" }}>
             <Button className="contact-button px-8 py-3 text-lg rounded-full transition-all pulse-on-hover">
-              {getTranslation('heroButton', lang)}
+              {getTranslation('consultation', lang)}
             </Button>
             
             <img 
