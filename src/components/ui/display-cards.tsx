@@ -34,7 +34,7 @@ function DisplayCard({
         <span className={cn("relative inline-block rounded-full bg-gray-800 p-1", iconClassName)}>
           {icon}
         </span>
-        <p className={cn("text-lg font-medium", titleClassName)}>{title}</p>
+        <p className={cn("text-lg font-bold", titleClassName)}>{title}</p>
       </div>
       <p className="whitespace-nowrap text-lg">{description}</p>
       <p className="text-gray-400">{date}</p>
@@ -54,7 +54,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
       description: "Оптимізація бізнес-процесів",
       date: "AI-системи",
       iconClassName: "bg-gradient-to-br from-connexi-purple to-connexi-blue",
-      titleClassName: "text-connexi-purple",
+      titleClassName: "text-white font-bold drop-shadow-lg",
       className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[0%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
     },
     {
@@ -63,7 +63,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
       description: "Передбачення трендів бізнесу",
       date: "ML-моделі",
       iconClassName: "bg-gradient-to-br from-connexi-pink to-connexi-purple",
-      titleClassName: "text-connexi-pink",
+      titleClassName: "text-white font-bold drop-shadow-lg",
       className: "[grid-area:stack] translate-x-16 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[0%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
     },
     {
@@ -72,7 +72,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
       description: "Виявлення слабких сторін",
       date: "AI-рішення",
       iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
-      titleClassName: "text-connexi-orange",
+      titleClassName: "text-white font-bold drop-shadow-lg",
       className: "[grid-area:stack] translate-x-32 translate-y-20 hover:translate-y-10",
     },
   ];
