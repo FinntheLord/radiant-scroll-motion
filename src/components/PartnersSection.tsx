@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -36,6 +35,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
     skipSnaps: false
   });
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
   
   // Fixed auto scroll with proper ref handling
   useEffect(() => {
@@ -60,7 +60,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
       startAutoScroll();
       
       // Stop on hover (only for desktop) - using the carousel container element
-      const carouselContainer = carouselRef.current;
+      const carouselContainer = carouselContainerRef.current;
       if (carouselContainer && window.innerWidth > 768) {
         carouselContainer.addEventListener('mouseenter', stopAutoScroll);
         carouselContainer.addEventListener('mouseleave', startAutoScroll);
@@ -74,7 +74,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
         }
       };
     }
-  }, [carouselApi, carouselRef]);
+  }, [carouselApi]);
 
   return (
     <section id="partners" className={`py-12 md:py-20 overflow-hidden ${className}`}>
@@ -97,7 +97,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
       </div>
       
       {/* Optimized carousel for mobile devices */}
-      <div className="w-full overflow-hidden mb-12 md:mb-16 reveal-on-scroll">
+      <div ref={carouselContainerRef} className="w-full overflow-hidden mb-12 md:mb-16 reveal-on-scroll">
         <Carousel
           ref={carouselRef}
           className="w-full"
