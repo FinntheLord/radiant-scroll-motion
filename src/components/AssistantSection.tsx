@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -143,12 +142,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
-        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll flex items-center gap-3">
-          <img 
-            src="/lovable-uploads/assistant-icon.webp" 
-            alt="AI Assistant Icon"
-            className="w-8 h-8 object-contain"
-          />
+        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
           {getTranslation('assistantSubtitle', lang)}
         </div>
         
