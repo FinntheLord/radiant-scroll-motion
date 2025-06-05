@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -53,10 +54,10 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
               className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
             />
             <div className="flex flex-col">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold connexi-gradient-text">
                 connexi
               </div>
-              <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
+              <div className="text-xs sm:text-sm md:text-base text-gray-600 italic font-medium">
                 Linking Ideas to Solutions
               </div>
             </div>
