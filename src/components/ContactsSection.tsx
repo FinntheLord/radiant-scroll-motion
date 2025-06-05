@@ -201,7 +201,14 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
               <div className="size-3 rounded-full bg-red-500"></div>
               <div className="size-3 rounded-full bg-yellow-500"></div>
               <div className="size-3 rounded-full bg-green-500"></div>
-              <div className="ml-2 text-sm font-medium text-connexi-orange">Connexi Info Bot</div>
+              <div className="ml-2 text-sm font-medium text-connexi-orange flex items-center gap-2">
+                <img
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                  alt="AI Animation"
+                  className="h-4 w-4 rounded opacity-90"
+                />
+                Connexi Info Bot
+              </div>
             </div>
             
             <div className="flex-1 overflow-hidden">

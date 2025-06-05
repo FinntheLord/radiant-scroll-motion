@@ -172,7 +172,11 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
       <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden border-0 shadow-2xl">
         <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg">
-            <Bot className="h-5 w-5" />
+            <img
+              src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+              alt="AI Animation"
+              className="h-5 w-5 rounded opacity-90"
+            />
             {lang === 'en' ? 'AI Consultation' : 'Консультація AI'}
           </DialogTitle>
         </DialogHeader>
@@ -181,7 +185,11 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
           <div className="p-6 flex flex-col justify-center h-full bg-white">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Bot className="h-8 w-8 text-white" />
+                <img
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                  alt="AI Animation"
+                  className="h-8 w-8 rounded opacity-90"
+                />
               </div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
                 {lang === 'en' ? 'Free Consultation' : 'Безкоштовна консультація'}

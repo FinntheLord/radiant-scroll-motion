@@ -72,7 +72,14 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 shadow-2xl">
         <DialogHeader className="p-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center justify-between text-lg">
-            {displayTitle}
+            <div className="flex items-center gap-3">
+              <img
+                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                alt="AI Animation"
+                className="h-6 w-6 rounded opacity-90"
+              />
+              {displayTitle}
+            </div>
             <Button 
               variant="ghost" 
               size="icon" 
