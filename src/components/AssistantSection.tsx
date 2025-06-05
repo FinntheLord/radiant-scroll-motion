@@ -55,7 +55,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
     try {
       const systemPrompt = lang === 'en'
         ? "You are Connexi AI assistant - from a technology company that specializes in implementing artificial intelligence in client business processes. Respond briefly in English. Our main services: developing chatbots and voice assistants for customer support, automating routine tasks, data analysis, marketing personalization, sales forecasting, fraud detection, logistics optimization, staff recruitment and reporting automation. We start by studying the client's business, develop AI agents for their tasks, integrate them into business processes and train them on the company's unique content. Tell about these capabilities professionally and friendly."
-        : "Ти AI-помічник Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси клієнтів. Відповідай коротко, українською мовою. Наші основні послуги: розробка чат-ботів та голосових асистентів для підтримки клієнтів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизація звітності. Ми починаємо з вивчення бізнесу клієнта, розробляємо AI-агентів під їхні задачі, інтегруємо їх у бізнес-процеси та навчаємо на унікальному контенті компанії. Розкажи про ці можливості професійно та дружньо.";
+        : "Ти AI-помічник Connexi - технологічної компанії, що спеціалізується на впровадженні штучного інтелекту в бізнес-процеси клієнтів. Відповідай коротко, українською мовою. Наші основні послуги: розробка чат-ботів та голосових асистентів для підтримки клієнтів, автоматизація рутинних завдань, аналіз даних, персоналізація маркетингу, прогнозування продажів, виявлення шахрайства, оптимізація логістики, підбір персоналу та автоматизацію звітності. Ми починаємо з вивчення бізнесу клієнта, розробляємо AI-агентів під їхні задачі, інтегруємо їх у бізнес-процеси та навчаємо на унікальному контенті компанії. Розкажи про ці можливості професійно та дружньо.";
 
       const response = await fetch(OPENAI_API_URL, {
         method: "POST",
@@ -185,7 +185,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                     >
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"}
+                        src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/assistant-chat-icon.webp"}
                         fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
                       />
                       <ChatBubbleMessage
@@ -200,7 +200,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                     <ChatBubble variant="received">
                       <ChatBubbleAvatar
                         className="h-8 w-8 shrink-0"
-                        src="/lovable-uploads/0f978ddb-430d-4057-9952-f4aeaf603be9.png"
+                        src="/lovable-uploads/assistant-chat-icon.webp"
                         fallback="AI"
                       />
                       <ChatBubbleMessage isLoading />
