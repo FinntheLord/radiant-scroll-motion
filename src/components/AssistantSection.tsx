@@ -2,7 +2,7 @@
 import React from "react";
 import { Language, getTranslation } from "../lib/translations";
 import AssistantDescription from "./AssistantDescription";
-import { Button } from "@/components/ui/button";
+import AssistantChat from "./AssistantChat";
 
 interface AssistantSectionProps {
   className?: string;
@@ -10,11 +10,6 @@ interface AssistantSectionProps {
 }
 
 const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lang }) => {
-  const handleAskQuestion = () => {
-    // Можна додати логіку для відкриття форми чату або модального вікна
-    console.log("Відкриваємо форму для запитань");
-  };
-
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
@@ -30,30 +25,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <AssistantDescription lang={lang} />
-            
-            <div className="flex flex-col items-center justify-center space-y-8 reveal-on-scroll">
-              <div className="text-center">
-                <img
-                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTayLTQxMjAtODkzMy0yNW I5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZW JwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
-                  alt="AI Assistant"
-                  className="h-32 w-32 mx-auto mb-6 rounded-full opacity-90"
-                />
-                <p className="text-lg text-white/80 mb-8">
-                  {lang === 'en' 
-                    ? "Ready to answer your questions about AI solutions for your business"
-                    : "Готовий відповісти на ваші запитання про AI-рішення для вашого бізнесу"
-                  }
-                </p>
-              </div>
-              
-              <Button 
-                onClick={handleAskQuestion}
-                size="lg"
-                className="contact-button text-lg px-8 py-4 h-auto"
-              >
-                {lang === 'en' ? 'Ask a Question' : 'Задати питання'}
-              </Button>
-            </div>
+            <AssistantChat lang={lang} />
           </div>
         </div>
       </div>
