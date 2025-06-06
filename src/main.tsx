@@ -40,33 +40,18 @@ const optimizePerformance = () => {
   }
 };
 
-// Web Vitals measurement - only in production
-const measureWebVitals = async () => {
+// Web Vitals measurement
+const measureWebVitals = () => {
   if (import.meta.env.PROD) {
-    try {
-      const [
-        { getCLS },
-        { getFID },
-        { getFCP },
-        { getLCP },
-        { getTTFB }
-      ] = await Promise.all([
-        import('web-vitals/dist/modules/getCLS.js'),
-        import('web-vitals/dist/modules/getFID.js'),
-        import('web-vitals/dist/modules/getFCP.js'),
-        import('web-vitals/dist/modules/getLCP.js'),
-        import('web-vitals/dist/modules/getTTFB.js')
-      ]);
-      
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
       getCLS(console.log);
       getFID(console.log);
       getFCP(console.log);
       getLCP(console.log);
       getTTFB(console.log);
-    } catch (error) {
-      // Silent fail if web-vitals package is not available
-      console.debug('Web Vitals not available');
-    }
+    }).catch(() => {
+      // Silent fail if web-vitals not available
+    });
   }
 };
 
