@@ -18,6 +18,7 @@ interface IndexProps {
 
 const Index: React.FC<IndexProps> = ({ lang = 'uk' }) => {
   useEffect(() => {
+    console.log('Index component mounted with lang:', lang);
     // Set page title based on language
     const title = lang === 'en' 
       ? "connexi.ai | AI solutions for business in Ukraine"

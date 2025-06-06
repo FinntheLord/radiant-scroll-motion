@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AssistantChat from "./AssistantChat";

@@ -22,16 +22,16 @@ interface Message {
   sender: "user" | "ai";
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    content: "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
-    sender: "ai",
-  },
-];
-
 const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      content: lang === 'en' 
+        ? "Hello! I'm Connexi AI assistant. How can I help you today?"
+        : "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
+      sender: "ai",
+    }
+  ]);
   const [input, setInput] = useState("");
   const { sendMessage, isLoading } = useOpenAI(lang);
 
@@ -76,7 +76,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
             >
               <ChatBubbleAvatar
                 className="h-8 w-8 shrink-0"
-                src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"}
+                src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
                 fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
               />
               <ChatBubbleMessage
