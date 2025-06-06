@@ -17,29 +17,44 @@ interface IndexProps {
 }
 
 const Index: React.FC<IndexProps> = ({ lang = 'uk' }) => {
+  console.log('Index component rendering with lang:', lang);
+
   useEffect(() => {
     console.log('Index component mounted with lang:', lang);
-    // Set page title based on language
-    const title = lang === 'en' 
-      ? "connexi.ai | AI solutions for business in Ukraine"
-      : "connexi.ai | AI-рішення для бізнесу в Україні";
-    document.title = title;
+    try {
+      const title = lang === 'en' 
+        ? "connexi.ai | AI solutions for business in Ukraine"
+        : "connexi.ai | AI-рішення для бізнесу в Україні";
+      document.title = title;
+      console.log('Page title set successfully');
+    } catch (error) {
+      console.error('Error setting page title:', error);
+    }
   }, [lang]);
 
-  return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
-      <ScrollAnimation />
-      <Navbar lang={lang} />
-      <HeroSection lang={lang} />
-      <AboutSection className="bg-gray-900 text-white" lang={lang} />
-      <VideoBackgroundSection lang={lang} />
-      <AssistantSection className="bg-gray-900 text-white" lang={lang} />
-      <ServicesSection className="bg-white text-gray-900" lang={lang} />
-      <PartnersSection className="bg-gray-900 text-white" lang={lang} />
-      <CasesSection className="bg-white text-gray-900" lang={lang} />
-      <ContactsSection className="bg-gray-900 text-white" lang={lang} />
-    </div>
-  );
+  try {
+    return (
+      <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
+        <ScrollAnimation />
+        <Navbar lang={lang} />
+        <HeroSection lang={lang} />
+        <AboutSection className="bg-gray-900 text-white" lang={lang} />
+        <VideoBackgroundSection lang={lang} />
+        <AssistantSection className="bg-gray-900 text-white" lang={lang} />
+        <ServicesSection className="bg-white text-gray-900" lang={lang} />
+        <PartnersSection className="bg-gray-900 text-white" lang={lang} />
+        <CasesSection className="bg-white text-gray-900" lang={lang} />
+        <ContactsSection className="bg-gray-900 text-white" lang={lang} />
+      </div>
+    );
+  } catch (error) {
+    console.error('Error rendering Index component:', error);
+    return (
+      <div style={{ padding: '20px', color: 'red' }}>
+        Error loading page. Check console for details.
+      </div>
+    );
+  }
 };
 
 export default Index;
