@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
 interface ChatContextType {
   isChatOpen: boolean;
@@ -14,13 +14,26 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const openChat = () => {
+    // Открываем Chatra чат
+    if (window.Chatra) {
+      window.Chatra('openChat', true);
+    }
+  };
 
-  const openChat = () => setIsChatOpen(true);
-  const closeChat = () => setIsChatOpen(false);
+  const closeChat = () => {
+    // Закрываем Chatra чат
+    if (window.Chatra) {
+      window.Chatra('openChat', false);
+    }
+  };
 
   return (
-    <ChatContext.Provider value={{ isChatOpen, openChat, closeChat }}>
+    <ChatContext.Provider value={{ 
+      isChatOpen: false, // Chatra управляет своим состоянием
+      openChat, 
+      closeChat 
+    }}>
       {children}
     </ChatContext.Provider>
   );
@@ -33,3 +46,11 @@ export const useChat = () => {
   }
   return context;
 };
+
+// Добавляем типы для Chatra
+declare global {
+  interface Window {
+    Chatra?: (action: string, value?: boolean) => void;
+    ChatraID?: string;
+  }
+}
