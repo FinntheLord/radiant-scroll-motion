@@ -2,7 +2,7 @@
 import React from "react";
 import { Language, getTranslation } from "../lib/translations";
 import AssistantDescription from "./AssistantDescription";
-import AssistantChat from "./AssistantChat";
+import { Button } from "@/components/ui/button";
 
 interface AssistantSectionProps {
   className?: string;
@@ -10,6 +10,11 @@ interface AssistantSectionProps {
 }
 
 const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lang }) => {
+  const handleAskQuestion = () => {
+    // Можна додати логіку для відкриття форми чату або модального вікна
+    console.log("Відкриваємо форму для запитань");
+  };
+
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
@@ -25,7 +30,30 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <AssistantDescription lang={lang} />
-            <AssistantChat lang={lang} />
+            
+            <div className="flex flex-col items-center justify-center space-y-8 reveal-on-scroll">
+              <div className="text-center">
+                <img
+                  src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
+                  alt="AI Assistant"
+                  className="h-32 w-32 mx-auto mb-6 rounded-full opacity-90"
+                />
+                <p className="text-lg text-white/80 mb-8">
+                  {lang === 'en' 
+                    ? "Ready to answer your questions about AI solutions for your business"
+                    : "Готовий відповісти на ваші запитання про AI-рішення для вашого бізнесу"
+                  }
+                </p>
+              </div>
+              
+              <Button 
+                onClick={handleAskQuestion}
+                size="lg"
+                className="contact-button text-lg px-8 py-4 h-auto"
+              >
+                {lang === 'en' ? 'Ask a Question' : 'Задати питання'}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
