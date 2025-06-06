@@ -44,13 +44,13 @@ const optimizePerformance = () => {
 const measureWebVitals = async () => {
   if (import.meta.env.PROD) {
     try {
-      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+      const webVitals = await import('web-vitals');
       
-      getCLS(console.log);
-      getFID(console.log);
-      getFCP(console.log);
-      getLCP(console.log);
-      getTTFB(console.log);
+      if (webVitals.onCLS) webVitals.onCLS(console.log);
+      if (webVitals.onFID) webVitals.onFID(console.log);
+      if (webVitals.onFCP) webVitals.onFCP(console.log);
+      if (webVitals.onLCP) webVitals.onLCP(console.log);
+      if (webVitals.onTTFB) webVitals.onTTFB(console.log);
     } catch (error) {
       // Silent fail if web-vitals package is not available
       console.debug('Web Vitals not available');
