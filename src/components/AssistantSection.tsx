@@ -37,7 +37,7 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
               <div className="flex flex-col items-center justify-center space-y-8 reveal-on-scroll">
                 <div className="text-center">
                   <img
-                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTayLTQxMjAtODkzMy0yNW I5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZW JwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                     alt="AI Assistant"
                     className="h-32 w-32 mx-auto mb-6 rounded-full opacity-90"
                   />
@@ -47,6 +47,40 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                       : "Готовий відповісти на ваші запитання про AI-рішення для вашого бізнесу"
                     }
                   </p>
+                </div>
+
+                {/* Chat preview mockup with animated gif */}
+                <div className="w-full max-w-md bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-700 p-4 mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <img
+                      src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                      alt="AI Assistant Animation"
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <div>
+                      <div className="text-white font-medium text-sm">AI Assistant</div>
+                      <div className="text-white/60 text-xs">
+                        {lang === 'en' ? 'Online' : 'В мережі'}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="bg-gray-700/50 rounded-lg p-3 text-white/80 text-sm">
+                      {lang === 'en' 
+                        ? "How can I help optimize your business with AI?"
+                        : "Як я можу допомогти оптимізувати ваш бізнес за допомогою AI?"
+                      }
+                    </div>
+                    <div className="flex justify-end">
+                      <div className="bg-connexi-orange/20 rounded-lg p-3 text-white text-sm max-w-xs">
+                        {lang === 'en' 
+                          ? "Tell me about automation solutions"
+                          : "Розкажи про рішення для автоматизації"
+                        }
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 <Button 
