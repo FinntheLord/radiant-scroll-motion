@@ -34,9 +34,9 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
             <div className="flex flex-col items-center justify-center space-y-8 reveal-on-scroll">
               <div className="text-center">
                 <img
-                  src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
-                  alt="AI Assistant"
-                  className="h-32 w-32 mx-auto mb-6 rounded-full opacity-90"
+                  src="/lovable-uploads/assistant-chat-icon.webp"
+                  alt="AI Assistant Icon"
+                  className="h-16 w-16 mx-auto mb-6 opacity-90"
                 />
                 <p className="text-lg text-white/80 mb-8">
                   {lang === 'en' 
