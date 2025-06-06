@@ -130,27 +130,30 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
         </ChatMessageList>
       </div>
 
-      <div className="p-4 border-t border-gray-800">
+      {/* Improved mobile input area */}
+      <div className="p-3 md:p-4 border-t border-gray-800 bg-gray-900/80 backdrop-blur-sm">
         <form
           onSubmit={handleSubmit}
-          className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange p-1"
+          className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange"
         >
           <ChatInput
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'}
-            className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white"
+            className="min-h-12 max-h-32 resize-none rounded-lg bg-transparent border-0 p-3 pr-12 shadow-none focus-visible:ring-0 text-white text-base md:text-sm leading-relaxed"
+            rows={1}
           />
-          <div className="flex items-center p-3 pt-0 justify-between">
-            <div className="flex"></div>
+          <div className="absolute right-2 bottom-2 top-2 flex items-end">
             <Button 
               type="submit" 
               size="sm" 
-              className="contact-button ml-auto gap-1.5"
-              disabled={isLoading}
+              className="contact-button h-8 w-8 p-0 min-w-8 shrink-0"
+              disabled={isLoading || !input.trim()}
             >
-              {lang === 'en' ? 'Send' : 'Відправити'}
               <CornerDownLeft className="size-3.5" />
+              <span className="sr-only">
+                {lang === 'en' ? 'Send' : 'Відправити'}
+              </span>
             </Button>
           </div>
         </form>
