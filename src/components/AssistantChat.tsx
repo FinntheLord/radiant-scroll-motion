@@ -94,7 +94,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   }
 
   return (
-    <div className="h-full bg-gray-800 rounded-lg flex flex-col overflow-hidden">      
+    <div className="h-full bg-gray-900 rounded-lg flex flex-col overflow-hidden">      
       <div className="flex-1 overflow-hidden">
         <ChatMessageList className="h-full">
           {messages.map((message) => (
@@ -102,7 +102,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
               key={message.id}
               variant={message.sender === "user" ? "sent" : "received"}
             >
-              {message.sender === "received" && (
+              {message.sender === "ai" && (
                 <ChatBubbleAvatar
                   src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                   fallback="AI"
@@ -128,25 +128,25 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
         </ChatMessageList>
       </div>
 
-      {/* Input area в стиле скриншота */}
-      <div className="p-4 border-t border-gray-700">
+      {/* Input area */}
+      <div className="p-6 border-t border-gray-700">
         <form onSubmit={handleSubmit} className="relative">
-          <div className="flex items-end gap-2 bg-gray-700 rounded-3xl px-4 py-2 focus-within:ring-1 focus-within:ring-blue-500">
+          <div className="flex items-end gap-3 bg-gray-700 rounded-full px-5 py-3 focus-within:ring-2 focus-within:ring-blue-500">
             <ChatInput
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Спросите что-нибудь..."
-              className="flex-1 bg-transparent border-0 focus:ring-0 resize-none"
+              className="flex-1 bg-transparent border-0 focus:ring-0 resize-none text-white placeholder:text-gray-400"
               onSend={handleSubmit}
               disabled={isLoading}
             />
             <Button 
               type="submit" 
               size="sm" 
-              className="h-8 w-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0"
+              className="h-10 w-10 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0 transition-colors"
               disabled={isLoading || !input.trim()}
             >
-              <ArrowUp className="h-4 w-4" />
+              <ArrowUp className="h-5 w-5" />
             </Button>
           </div>
         </form>
