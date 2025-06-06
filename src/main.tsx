@@ -47,7 +47,7 @@ const measureWebVitals = async () => {
       const webVitals = await import('web-vitals');
       
       if (webVitals.onCLS) webVitals.onCLS(console.log);
-      if (webVitals.onFID) webVitals.onFID(console.log);
+      if (webVitals.onINP) webVitals.onINP(console.log);
       if (webVitals.onFCP) webVitals.onFCP(console.log);
       if (webVitals.onLCP) webVitals.onLCP(console.log);
       if (webVitals.onTTFB) webVitals.onTTFB(console.log);
