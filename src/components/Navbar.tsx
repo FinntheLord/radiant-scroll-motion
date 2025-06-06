@@ -13,7 +13,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { openChat } = useChat();
+  const { openSidebarChat } = useChat();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -95,7 +95,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           <Button 
             className="contact-button"
             size="sm"
-            onClick={openChat}
+            onClick={openSidebarChat}
           >
             {getTranslation('consultation', lang)}
             <MessageCircle className="ml-2 h-4 w-4" />
@@ -115,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           <Button 
             className="contact-button"
             size="sm"
-            onClick={openChat}
+            onClick={openSidebarChat}
           >
             <MessageCircle className="h-4 w-4" />
           </Button>

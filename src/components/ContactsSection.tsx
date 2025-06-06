@@ -1,12 +1,8 @@
 
-import React, { useState, FormEvent } from "react";
+import React from "react";
+import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Phone, Mail, MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
-import { ChatMessageList } from "@/components/ui/chat-message-list";
-import { ChatInput } from "@/components/ui/chat-input";
-import { toast } from "sonner";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ContactsSectionProps {
@@ -14,251 +10,57 @@ interface ContactsSectionProps {
   lang: Language;
 }
 
-interface Message {
-  id: number;
-  content: string;
-  sender: "user" | "ai";
-}
-
-const ContactsSection: React.FC<ContactsSectionProps> = ({
-  className = "",
-  lang
-}) => {
-  const initialMessages: Message[] = [{
-    id: 1,
-    content: "Чем я могу помочь?",
-    sender: "ai"
-  }];
-
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Function to send message to OpenAI API (similar to AssistantSection)
-  const sendMessageToOpenAI = async (userMessage: string): Promise<string> => {
-    try {
-      const systemPrompt = lang === 'en'
-        ? "You are Connexi information bot. Your goal is to collect contact information from potential clients and basic information about their needs. Ask about company name, contact person, phone, email and brief task description. Respond briefly in English. Offer specific AI integration services depending on client requests."
-        : "Ти інформаційний бот Connexi. Твоя мета — зібрати контактну інформацію потенційних клієнтів та базову інформацію про їхні потреби. Запитуй про назву компанії, контактну особу, телефон, email та коротке пояснення завдання. Відповідай коротко, українською мовою. Пропонуй конкретні послуги AI-інтеграції залежно від запитів клієнта.";
-
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer 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`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [{
-            role: "system",
-            content: systemPrompt
-          }, ...messages.map(msg => ({
-            role: msg.sender === "user" ? "user" : "assistant",
-            content: msg.content
-          })), {
-            role: "user",
-            content: userMessage
-          }],
-          temperature: 0.7,
-          max_tokens: 500
-        })
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API Error:", errorData);
-        throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
-      }
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error("Error calling OpenAI API:", error);
-      throw error;
-    }
-  };
-
-  const handleSubmit = async (e?: FormEvent) => {
-    e?.preventDefault();
-    if (!input.trim() || isLoading) return;
-
-    // Add user message
-    const userMessage = input.trim();
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      content: userMessage,
-      sender: "user"
-    }]);
-    setInput("");
-    setIsLoading(true);
-    try {
-      // Get response from OpenAI
-      const aiResponse = await sendMessageToOpenAI(userMessage);
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        content: aiResponse,
-        sender: "ai"
-      }]);
-
-      // Check if the message contains contact information and thank the user
-      if (userMessage.includes("@") || /\d{3,}/.test(userMessage) || userMessage.length > 100) {
-        toast.success(lang === 'en' 
-          ? "Thank you for the information! Our manager will contact you soon."
-          : "Дякуємо за інформацію! Наш менеджер зв'яжеться з вами найближчим часом."
-        );
-      }
-    } catch (error) {
-      toast.error(lang === 'en' 
-        ? "Failed to get response. Please try again later."
-        : "Не вдалося отримати відповідь. Спробуйте ще раз пізніше."
-      );
-      console.error("Error getting AI response:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang }) => {
+  const { openSidebarChat } = useChat();
 
   return (
-    <section id="contacts" className={`py-20 overflow-hidden ${className}`}>
+    <section id="contacts" className={`py-20 relative overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
-          {getTranslation('contactsSubtitle', lang)}
-        </div>
-        
-        <div className="text-center mb-16 reveal-on-scroll">
-          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            {getTranslation('contactsTitle1', lang)}
-          </h2>
-          <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-            {getTranslation('contactsTitle2', lang)}
-          </h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-connexi-orange">
-            {getTranslation('contactsTitle3', lang)}
-          </h2>
-          <h2 className="text-4xl md:text-5xl font-bold text-connexi-orange">
-            {getTranslation('contactsTitle4', lang)}
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 reveal-on-scroll">
-          {/* Contact Information */}
-          <div className="space-y-8">
-            <div className="flex items-center">
-              <a href="/" className="flex items-center mb-4">
-                <img 
-                  alt="connexi.ai logo" 
-                  className="h-20 md:h-24" 
-                  src="/lovable-uploads/0c823db9-7ce3-4eec-95d5-7f195348151d.png" 
-                />
-              </a>
-            </div>
-            
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Contacts:' : 'Контакти:'}
-              </h3>
-              <div className="flex items-center space-x-2 mb-2">
-                <Mail className="text-connexi-orange" size={20} />
-                <a href="mailto:info@connexi.ai" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  info@connexi.ai
-                </a>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="text-connexi-orange" size={20} />
-                <a href="tel:+380672002675" className={`hover:text-connexi-orange transition-colors ${className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}`}>
-                  +38 (067) 200-26-75
-                </a>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Address:' : 'Адреса:'}
-              </h3>
-              <div className="flex items-start space-x-2">
-                <MapPin className="text-connexi-orange mt-1" size={20} />
-                <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                  {lang === 'en' ? 'Dnipro, Robochaya, 23K' : 'Дніпро, Рабочая, 23К'}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className={`text-xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                {lang === 'en' ? 'Leave your contacts:' : 'Залиште свої контакти:'}
-              </h3>
-              <p className={className?.includes('text-white') ? 'text-gray-300' : 'text-gray-600'}>
-                {lang === 'en'
-                  ? 'Use our chatbot to leave your contact details and request. We will contact you within the business day to discuss cooperation details.'
-                  : 'Скористайтеся нашим чат-ботом, щоб залишити свої контактні дані та запит. Ми зв\'яжемося з вами протягом робочого дня для обговорення деталей співпраці.'
-                }
-              </p>
-            </div>
+        <div className="text-center">
+          <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
+            {getTranslation('contactsSubtitle', lang)}
           </div>
           
-          {/* Chat Bot - переделанный в стиле скриншота */}
-          <div className="bg-gray-800 rounded-lg h-[500px] flex flex-col overflow-hidden">
-            <div className="flex items-center gap-2 p-3 border-b border-gray-700">
-              <div className="size-3 rounded-full bg-red-500"></div>
-              <div className="size-3 rounded-full bg-yellow-500"></div>
-              <div className="size-3 rounded-full bg-green-500"></div>
-              <div className="ml-2 text-sm font-medium text-gray-200 flex items-center gap-2">
-                <img
-                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
-                  alt="AI Animation"
-                  className="h-4 w-4 rounded opacity-90"
-                />
-                Connexi Info Bot
-              </div>
-            </div>
-            
-            <div className="flex-1 overflow-hidden">
-              <ChatMessageList>
-                {messages.map(message => (
-                  <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
-                    {message.sender === "ai" && (
-                      <ChatBubbleAvatar 
-                        src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
-                        fallback="AI"
-                      />
-                    )}
-                    <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
-                      {message.content}
-                    </ChatBubbleMessage>
-                  </ChatBubble>
-                ))}
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white reveal-on-scroll">
+            <span className="text-white">{getTranslation('contactsTitle1', lang)} </span>
+            <span className="connexi-gradient-text">{getTranslation('contactsTitle2', lang)}</span>
+          </h2>
 
-                {isLoading && (
-                  <ChatBubble variant="received">
-                    <ChatBubbleAvatar 
-                      src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
-                      fallback="AI" 
-                    />
-                    <ChatBubbleMessage isLoading />
-                  </ChatBubble>
-                )}
-              </ChatMessageList>
-            </div>
+          <p className="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto reveal-on-scroll">
+            {getTranslation('contactsDescription', lang)}
+          </p>
 
-            <div className="p-4 border-t border-gray-700">
-              <form onSubmit={handleSubmit} className="relative">
-                <div className="flex items-end gap-2 bg-gray-700 rounded-3xl px-4 py-2 focus-within:ring-1 focus-within:ring-blue-500">
-                  <ChatInput 
-                    value={input} 
-                    onChange={(e) => setInput(e.target.value)} 
-                    placeholder="Спросите что-нибудь..."
-                    className="flex-1 bg-transparent border-0 focus:ring-0 resize-none"
-                    onSend={handleSubmit}
-                    disabled={isLoading}
-                  />
-                  <Button 
-                    type="submit" 
-                    size="sm" 
-                    className="h-8 w-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0"
-                    disabled={isLoading || !input.trim()}
-                  >
-                    <ArrowUp className="h-4 w-4" />
-                  </Button>
-                </div>
-              </form>
+          <div className="flex flex-col items-center gap-6 reveal-on-scroll">
+            <Button 
+              className="contact-button px-12 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg"
+              onClick={openSidebarChat}
+            >
+              <MessageCircle className="mr-3 h-5 w-5" />
+              {lang === 'en' ? 'Consultation' : 'Консультація'}
+            </Button>
+
+            <div className="flex items-center gap-4">
+              <a 
+                href="https://t.me/connexi_ai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors"
+              >
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+              </a>
+              
+              <a 
+                href="https://wa.me/380123456789" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 transition-colors"
+              >
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
