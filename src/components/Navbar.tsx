@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
@@ -15,13 +15,24 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { openSidebarChat } = useChat();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const switchLanguage = () => {
+  const switchLanguage = useCallback(() => {
     const newLang = lang === 'uk' ? 'en' : 'uk';
     const newPath = newLang === 'en' ? '/en' : '/';
     navigate(newPath);
-  };
+  }, [lang, navigate]);
+
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  const handleMobileNavClick = useCallback((href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    closeMobileMenu();
+  }, [closeMobileMenu]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -134,48 +145,42 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-200">
           <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <a 
-              href="#about" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button 
+              onClick={() => handleMobileNavClick('#about')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('about', lang)}
-            </a>
-            <a 
-              href="#assistant" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#assistant')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('assistant', lang)}
-            </a>
-            <a 
-              href="#services" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#services')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('services', lang)}
-            </a>
-            <a 
-              href="#partners" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#partners')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('partners', lang)}
-            </a>
-            <a 
-              href="#cases" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#cases')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('cases', lang)}
-            </a>
-            <a 
-              href="#contacts" 
-              className="text-gray-700 hover:text-black transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#contacts')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
             >
               {getTranslation('contacts', lang)}
-            </a>
+            </button>
             <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
               <span className="text-gray-600 text-sm">Language:</span>
               <Button 
@@ -183,7 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
                 size="sm"
                 onClick={() => {
                   switchLanguage();
-                  setIsMobileMenuOpen(false);
+                  closeMobileMenu();
                 }}
                 className="text-connexi-orange hover:text-connexi-pink transition-colors"
               >

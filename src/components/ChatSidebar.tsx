@@ -1,10 +1,13 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/ui/chat-input";
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
+import { useChat } from "../contexts/ChatContext";
+import { useChatApi } from "../hooks/useChatApi";
+import { ChatMessage } from "../types/chat";
 import { Language } from "../lib/translations";
 
 interface ChatSidebarProps {
@@ -13,58 +16,73 @@ interface ChatSidebarProps {
   lang: Language;
 }
 
-interface Message {
-  id: string;
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp: Date;
-}
-
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: lang === 'en' 
-        ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
-        : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
-      role: 'assistant',
-      timestamp: new Date()
-    }
-  ]);
+  const { messages, addMessage, isLoading, setIsLoading } = useChat();
+  const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  // Инициализация приветственного сообщения
+  useEffect(() => {
+    if (messages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: '1',
+        content: lang === 'en' 
+          ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
+          : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      addMessage(welcomeMessage);
+    }
+  }, [messages.length, addMessage, lang]);
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isLoading) return;
 
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content: inputMessage.trim(),
       role: 'user',
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    addMessage(userMessage);
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      // Симуляція API відповіді
-      setTimeout(() => {
-        const botResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          content: lang === 'en' 
-            ? 'Thank you for your question! Our AI specialists will help you implement artificial intelligence solutions to optimize your business processes. Would you like to schedule a consultation?'
-            : 'Дякую за ваше питання! Наші AI-спеціалісти допоможуть вам впровадити рішення штучного інтелекту для оптимізації бізнес-процесів. Хочете записатися на консультацію?',
-          role: 'assistant',
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, botResponse]);
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error('Error sending message:', error);
+      const response = await sendMessage(inputMessage.trim(), lang);
+      
+      const botResponse: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: response,
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      addMessage(botResponse);
+    } catch (err) {
+      console.error('Error sending message:', err);
+      
+      const errorResponse: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: lang === 'en' 
+          ? 'Sorry, I encountered an error. Please try again later.'
+          : 'Вибачте, сталася помилка. Спробуйте пізніше.',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      addMessage(errorResponse);
+    } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -136,7 +154,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   </ChatBubbleMessage>
                   {message.role === 'user' && (
                     <ChatBubbleAvatar 
-                      fallback="Ви" 
+                      fallback={lang === 'en' ? 'You' : 'Ви'} 
                       className="bg-blue-600"
                     />
                   )}
@@ -156,6 +174,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
 
           {/* Input */}
           <div className="p-4 border-t border-gray-800">
+            {error && (
+              <div className="mb-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm">
+                {error}
+              </div>
+            )}
             <div className="flex gap-2">
               <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors">
                 <ChatInput
@@ -163,6 +186,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onSend={handleSendMessage}
+                  onKeyDown={handleKeyPress}
                   disabled={isLoading}
                   className="text-white placeholder:text-gray-400"
                 />

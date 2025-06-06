@@ -12,7 +12,7 @@
   transition: all 0.3s ease;
 }
 
-/* Tabs animation optimized */
+/* Optimized tabs animation */
 .services-tab-content {
   opacity: 0;
   visibility: hidden;
@@ -128,5 +128,41 @@
     display: flex;
     touch-action: pan-y pinch-zoom;
     -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Chat optimization */
+.chat-message {
+  contain: layout style paint;
+}
+
+/* Performance improvements */
+.contact-button {
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+}
+
+.floating-element {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Prevent layout shifts */
+.navbar-logo {
+  aspect-ratio: auto;
+}
+
+/* Smooth scrolling optimization */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

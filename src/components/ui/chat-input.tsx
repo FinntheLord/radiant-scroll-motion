@@ -21,8 +21,15 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
       target.style.height = 'auto';
       target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
       
+      // Правильная обработка onChange
+      const changeEvent = {
+        ...e,
+        target: target,
+        currentTarget: target,
+      } as React.ChangeEvent<HTMLTextAreaElement>;
+      
       if (props.onChange) {
-        props.onChange(e as React.ChangeEvent<HTMLTextAreaElement>);
+        props.onChange(changeEvent);
       }
     };
 
