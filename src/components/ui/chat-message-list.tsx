@@ -26,17 +26,18 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
       <div className="relative w-full h-full">
         <div
           className={cn(
-            "flex flex-col w-full h-full px-4 py-6 overflow-y-auto overflow-x-hidden",
-            "scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent",
-            // Mobile specific scroll improvements
-            "touch-pan-y overscroll-contain",
+            "flex flex-col w-full h-full px-4 py-6",
+            // Desktop scroll functionality
+            "md:overflow-y-auto md:overflow-x-hidden",
+            "md:scrollbar-thin md:scrollbar-thumb-gray-600 md:scrollbar-track-transparent",
+            // Mobile - no scroll, fixed height
+            "overflow-hidden",
             className
           )}
           ref={scrollRef}
           onWheel={disableAutoScroll}
-          onTouchMove={disableAutoScroll}
           style={{
-            WebkitOverflowScrolling: 'touch', // iOS smooth scrolling
+            WebkitOverflowScrolling: smooth ? 'touch' : 'auto',
             scrollBehavior: smooth ? 'smooth' : 'auto'
           }}
           {...props}
@@ -44,6 +45,7 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
           <div className="flex flex-col space-y-4 min-h-full">{children}</div>
         </div>
 
+        {/* Hide scroll-to-bottom button on mobile */}
         {!isAtBottom && (
           <Button
             onClick={() => {
@@ -51,7 +53,7 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
             }}
             size="icon"
             variant="outline"
-            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 rounded-full bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 shadow-lg z-10"
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 rounded-full bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 shadow-lg z-10 hidden md:flex"
             aria-label="Scroll to bottom"
           >
             <ArrowDown className="h-4 w-4" />
