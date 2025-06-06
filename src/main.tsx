@@ -44,19 +44,7 @@ const optimizePerformance = () => {
 const measureWebVitals = async () => {
   if (import.meta.env.PROD) {
     try {
-      const [
-        { getCLS },
-        { getFID },
-        { getFCP },
-        { getLCP },
-        { getTTFB }
-      ] = await Promise.all([
-        import('web-vitals/dist/modules/getCLS.js'),
-        import('web-vitals/dist/modules/getFID.js'),
-        import('web-vitals/dist/modules/getFCP.js'),
-        import('web-vitals/dist/modules/getLCP.js'),
-        import('web-vitals/dist/modules/getTTFB.js')
-      ]);
+      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
       
       getCLS(console.log);
       getFID(console.log);
