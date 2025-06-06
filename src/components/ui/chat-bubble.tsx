@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -49,7 +48,9 @@ export function ChatBubbleMessage({
   return (
     <div
       className={cn(
-        "rounded-lg p-3",
+        "rounded-lg p-3 min-w-0 break-words",
+        // Remove max-height and overflow restrictions for mobile
+        "max-w-[85%] md:max-w-md",
         variant === "sent" ? "bg-connexi-gradient text-white" : "bg-white text-black",
         className
       )}
@@ -59,7 +60,9 @@ export function ChatBubbleMessage({
           <MessageLoading />
         </div>
       ) : (
-        children
+        <div className="whitespace-pre-wrap">
+          {children}
+        </div>
       )}
     </div>
   )
@@ -77,9 +80,9 @@ export function ChatBubbleAvatar({
   className,
 }: ChatBubbleAvatarProps) {
   return (
-    <Avatar className={cn("h-8 w-8", className)}>
+    <Avatar className={cn("h-8 w-8 shrink-0", className)}>
       {src && <AvatarImage src={src} />}
-      <AvatarFallback>{fallback}</AvatarFallback>
+      <AvatarFallback className="text-xs">{fallback}</AvatarFallback>
     </Avatar>
   )
 }

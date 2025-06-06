@@ -1,4 +1,3 @@
-
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -106,7 +105,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
             >
               <ChatBubbleAvatar
                 className="h-8 w-8 shrink-0"
-                src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
+                src={message.sender === "ai" ? "/lovable-uploads/assistant-chat-icon.webp" : undefined}
                 fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
               />
               <ChatBubbleMessage
@@ -121,7 +120,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
             <ChatBubble variant="received">
               <ChatBubbleAvatar
                 className="h-8 w-8 shrink-0"
-                src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
+                src="/lovable-uploads/assistant-chat-icon.webp"
                 fallback="AI"
               />
               <ChatBubbleMessage isLoading />
