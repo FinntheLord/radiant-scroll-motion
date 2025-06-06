@@ -10,7 +10,6 @@ import {
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatInput } from "@/components/ui/chat-input";
 import { Language } from "../lib/translations";
-import { useOpenAI } from "../hooks/useOpenAI";
 
 interface AssistantChatProps {
   lang: Language;
@@ -21,6 +20,38 @@ interface Message {
   content: string;
   sender: "user" | "ai";
 }
+
+// Simple mock function instead of using external hook
+const useMockOpenAI = (lang: Language) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sendMessage = async (
+    userMessage: string,
+    messages: Message[],
+    setMessages: React.Dispatch<React.SetStateAction<Message[]>>
+  ) => {
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      const aiResponse = lang === 'en' 
+        ? "Thank you for your message. I'm here to help you with AI solutions for your business."
+        : "Дякую за ваше повідомлення. Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу.";
+      
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now(),
+          content: aiResponse,
+          sender: "ai",
+        },
+      ]);
+      
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  return { sendMessage, isLoading };
+};
 
 const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   const [messages, setMessages] = useState<Message[]>([
@@ -33,7 +64,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
     }
   ]);
   const [input, setInput] = useState("");
-  const { sendMessage, isLoading } = useOpenAI(lang);
+  const { sendMessage, isLoading } = useMockOpenAI(lang);
 
   // Update initial message when language changes
   useEffect(() => {
@@ -50,7 +81,6 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Add user message
     const userMessage = input.trim();
     setMessages((prev) => [
       ...prev,
