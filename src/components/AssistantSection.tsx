@@ -10,6 +10,15 @@ interface AssistantSectionProps {
 }
 
 const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lang }) => {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("Image failed to load:", e);
+    console.log("Image src:", e.currentTarget.src);
+  };
+
+  const handleImageLoad = () => {
+    console.log("Image loaded successfully");
+  };
+
   return (
     <section id="assistant" className={`min-h-screen py-20 ${className}`}>
       <div className="container mx-auto px-4">
@@ -40,6 +49,8 @@ const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lan
                       src="/lovable-uploads/assistant-chat-icon.webp"
                       alt="AI Animation"
                       className="h-[60px] w-auto rounded-lg opacity-80 hover:opacity-100 transition-opacity"
+                      onError={handleImageError}
+                      onLoad={handleImageLoad}
                     />
                   </div>
                 </div>
