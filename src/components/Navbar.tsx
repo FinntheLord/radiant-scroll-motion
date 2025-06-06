@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
-import ConsultationChat from "./ConsultationChat";
+import ChatSidebar from "./ChatSidebar";
 import { Language, getTranslation } from "../lib/translations";
 
 interface NavbarProps {
@@ -195,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
         )}
       </header>
 
-      <ConsultationChat 
+      <ChatSidebar 
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)}
         lang={lang}

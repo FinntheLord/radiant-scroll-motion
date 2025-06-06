@@ -66,21 +66,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   }
 
   return (
-    <div className="h-[500px] border border-gray-800 bg-gray-900/50 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden shadow-xl reveal-on-scroll">
-      <div className="flex items-center gap-2 p-3 border-b border-gray-800">
-        <div className="size-3 rounded-full bg-red-500"></div>
-        <div className="size-3 rounded-full bg-yellow-500"></div>
-        <div className="size-3 rounded-full bg-green-500"></div>
-        <div className="ml-2 text-sm font-medium text-white/70 flex items-center gap-2">
-          <img
-            src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
-            alt="AI Animation"
-            className="h-4 w-4 rounded opacity-90"
-          />
-          Connexi AI Assistant
-        </div>
-      </div>
-      
+    <div className="h-full border border-gray-800 bg-gray-900/50 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden shadow-xl">      
       <div className="flex-1 overflow-hidden">
         <ChatMessageList>
           {messages.map((message) => (
