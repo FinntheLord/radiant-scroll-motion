@@ -24,11 +24,10 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white reveal-on-scroll">
             <span className="text-white">{getTranslation('contactsTitle1', lang)} </span>
             <span className="connexi-gradient-text">{getTranslation('contactsTitle2', lang)}</span>
+            <br />
+            <span className="text-white">{getTranslation('contactsTitle3', lang)} </span>
+            <span className="connexi-gradient-text">{getTranslation('contactsTitle4', lang)}</span>
           </h2>
-
-          <p className="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto reveal-on-scroll">
-            {getTranslation('contactsDescription', lang)}
-          </p>
 
           <div className="flex flex-col items-center gap-6 reveal-on-scroll">
             <Button 
@@ -36,7 +35,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
               onClick={openSidebarChat}
             >
               <MessageCircle className="mr-3 h-5 w-5" />
-              {lang === 'en' ? 'Consultation' : 'Консультація'}
+              {getTranslation('consultation', lang)}
             </Button>
 
             <div className="flex items-center gap-4">
