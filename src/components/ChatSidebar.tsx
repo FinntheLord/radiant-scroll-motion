@@ -54,9 +54,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
           </Button>
         </div>
 
-        {/* Chat Content - improved mobile layout */}
-        <div className="h-[calc(100vh-80px)] md:h-[calc(100%-80px)] p-4">
-          <div className="h-full">
+        {/* Chat Content - improved mobile layout with proper scroll */}
+        <div className="h-[calc(100vh-80px)] md:h-[calc(100%-80px)] p-4 overflow-hidden">
+          <div className="h-full overflow-hidden">
             <AssistantChat lang={lang} />
           </div>
         </div>

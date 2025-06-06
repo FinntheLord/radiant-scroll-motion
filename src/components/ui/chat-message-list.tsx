@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,15 +26,22 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
       <div className="relative w-full h-full">
         <div
           className={cn(
-            "flex flex-col w-full h-full px-4 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent",
+            "flex flex-col w-full h-full px-4 py-6 overflow-y-auto overflow-x-hidden",
+            "scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent",
+            // Mobile specific scroll improvements
+            "touch-pan-y overscroll-contain",
             className
           )}
           ref={scrollRef}
           onWheel={disableAutoScroll}
           onTouchMove={disableAutoScroll}
+          style={{
+            WebkitOverflowScrolling: 'touch', // iOS smooth scrolling
+            scrollBehavior: smooth ? 'smooth' : 'auto'
+          }}
           {...props}
         >
-          <div className="flex flex-col space-y-4">{children}</div>
+          <div className="flex flex-col space-y-4 min-h-full">{children}</div>
         </div>
 
         {!isAtBottom && (
