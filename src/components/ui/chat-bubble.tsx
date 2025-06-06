@@ -23,7 +23,7 @@ export function ChatBubble({
   return (
     <div
       className={cn(
-        "flex items-start gap-2 mb-4",
+        "flex items-start gap-3 mb-6",
         variant === "sent" && "flex-row-reverse",
         className,
       )}
@@ -49,10 +49,10 @@ export function ChatBubbleMessage({
   return (
     <div
       className={cn(
-        "rounded-lg p-3 min-w-0 break-words",
-        // Full width adaptation for mobile, no height restrictions
-        "max-w-[85%] md:max-w-md w-auto",
-        variant === "sent" ? "bg-connexi-gradient text-white" : "bg-white text-black",
+        "rounded-2xl px-4 py-3 max-w-[80%] break-words",
+        variant === "sent" 
+          ? "bg-blue-600 text-white ml-auto" 
+          : "bg-gray-700 text-gray-100",
         className
       )}
     >
@@ -61,7 +61,7 @@ export function ChatBubbleMessage({
           <MessageLoading />
         </div>
       ) : (
-        <div className="whitespace-pre-wrap leading-relaxed">
+        <div className="whitespace-pre-wrap text-sm leading-relaxed">
           {children}
         </div>
       )}
@@ -83,7 +83,7 @@ export function ChatBubbleAvatar({
   return (
     <Avatar className={cn("h-8 w-8 shrink-0", className)}>
       {src && <AvatarImage src={src} />}
-      <AvatarFallback className="text-xs">{fallback}</AvatarFallback>
+      <AvatarFallback className="text-xs bg-gray-600 text-gray-200">{fallback}</AvatarFallback>
     </Avatar>
   )
 }

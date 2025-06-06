@@ -1,6 +1,6 @@
 
 import React, { useState, FormEvent, useEffect } from "react";
-import { CornerDownLeft } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ChatBubble,
@@ -58,8 +58,8 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
     {
       id: 1,
       content: lang === 'en' 
-        ? "Hello! I'm Connexi AI assistant. How can I help you today?"
-        : "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
+        ? "Чем я могу помочь?"
+        : "Чем я могу помочь?",
       sender: "ai",
     }
   ]);
@@ -70,16 +70,14 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   useEffect(() => {
     setMessages([{
       id: 1,
-      content: lang === 'en' 
-        ? "Hello! I'm Connexi AI assistant. How can I help you today?"
-        : "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
+      content: "Чем я могу помочь?",
       sender: "ai",
     }]);
   }, [lang]);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!input.trim()) return;
+  async function handleSubmit(e?: FormEvent) {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
     setMessages((prev) => [
@@ -96,23 +94,22 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   }
 
   return (
-    <div className="h-full border border-gray-800 bg-gray-900/50 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden shadow-xl">      
+    <div className="h-full bg-gray-800 rounded-lg flex flex-col overflow-hidden">      
       <div className="flex-1 overflow-hidden">
         <ChatMessageList className="h-full">
           {messages.map((message) => (
             <ChatBubble
               key={message.id}
               variant={message.sender === "user" ? "sent" : "received"}
-              className="mb-4"
             >
-              <ChatBubbleAvatar
-                className="h-8 w-8 shrink-0"
-                src={message.sender === "ai" ? "/lovable-uploads/assistant-chat-icon.webp" : undefined}
-                fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
-              />
+              {message.sender === "received" && (
+                <ChatBubbleAvatar
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                  fallback="AI"
+                />
+              )}
               <ChatBubbleMessage
                 variant={message.sender === "user" ? "sent" : "received"}
-                className="text-sm md:text-base leading-relaxed"
               >
                 {message.content}
               </ChatBubbleMessage>
@@ -120,10 +117,9 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
           ))}
 
           {isLoading && (
-            <ChatBubble variant="received" className="mb-4">
+            <ChatBubble variant="received">
               <ChatBubbleAvatar
-                className="h-8 w-8 shrink-0"
-                src="/lovable-uploads/assistant-chat-icon.webp"
+                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                 fallback="AI"
               />
               <ChatBubbleMessage isLoading />
@@ -132,30 +128,25 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
         </ChatMessageList>
       </div>
 
-      {/* Optimized mobile input area */}
-      <div className="p-3 md:p-4 border-t border-gray-800 bg-gray-900/80 backdrop-blur-sm shrink-0">
-        <form
-          onSubmit={handleSubmit}
-          className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange"
-        >
-          <ChatInput
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'}
-            className="min-h-12 max-h-32 resize-none rounded-lg bg-transparent border-0 p-3 pr-12 shadow-none focus-visible:ring-0 text-white text-base leading-relaxed"
-            rows={1}
-          />
-          <div className="absolute right-2 bottom-2 top-2 flex items-end">
+      {/* Input area в стиле скриншота */}
+      <div className="p-4 border-t border-gray-700">
+        <form onSubmit={handleSubmit} className="relative">
+          <div className="flex items-end gap-2 bg-gray-700 rounded-3xl px-4 py-2 focus-within:ring-1 focus-within:ring-blue-500">
+            <ChatInput
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Спросите что-нибудь..."
+              className="flex-1 bg-transparent border-0 focus:ring-0 resize-none"
+              onSend={handleSubmit}
+              disabled={isLoading}
+            />
             <Button 
               type="submit" 
               size="sm" 
-              className="contact-button h-8 w-8 p-0 min-w-8 shrink-0"
+              className="h-8 w-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0"
               disabled={isLoading || !input.trim()}
             >
-              <CornerDownLeft className="size-3.5" />
-              <span className="sr-only">
-                {lang === 'en' ? 'Send' : 'Відправити'}
-              </span>
+              <ArrowUp className="h-4 w-4" />
             </Button>
           </div>
         </form>

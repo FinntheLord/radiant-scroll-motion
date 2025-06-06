@@ -1,7 +1,7 @@
 
 import React, { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { CornerDownLeft, Phone, Mail, MapPin } from "lucide-react";
+import { ArrowUp, Phone, Mail, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
 import { ChatMessageList } from "@/components/ui/chat-message-list";
@@ -26,9 +26,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
 }) => {
   const initialMessages: Message[] = [{
     id: 1,
-    content: lang === 'en' 
-      ? "Hello! I'm Connexi info-bot. Tell me, what information are you interested in about our services?"
-      : "Вітаю! Я інфо-бот Connexi. Розкажіть, яка інформація вас цікавить про наші послуги?",
+    content: "Чем я могу помочь?",
     sender: "ai"
   }];
 
@@ -78,9 +76,9 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleSubmit = async (e?: FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
 
     // Add user message
     const userMessage = input.trim();
@@ -196,13 +194,13 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
             </div>
           </div>
           
-          {/* Chat Bot - similar to AssistantSection but focused on information gathering */}
-          <div className={`p-6 rounded-lg ${className?.includes('bg-gray-900') ? 'bg-gray-800 bg-opacity-40' : 'bg-gray-50'} h-[500px] flex flex-col`}>
-            <div className="flex items-center gap-2 p-3 border-b border-gray-700 mb-3">
+          {/* Chat Bot - переделанный в стиле скриншота */}
+          <div className="bg-gray-800 rounded-lg h-[500px] flex flex-col overflow-hidden">
+            <div className="flex items-center gap-2 p-3 border-b border-gray-700">
               <div className="size-3 rounded-full bg-red-500"></div>
               <div className="size-3 rounded-full bg-yellow-500"></div>
               <div className="size-3 rounded-full bg-green-500"></div>
-              <div className="ml-2 text-sm font-medium text-connexi-orange flex items-center gap-2">
+              <div className="ml-2 text-sm font-medium text-gray-200 flex items-center gap-2">
                 <img
                   src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                   alt="AI Animation"
@@ -216,11 +214,12 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
               <ChatMessageList>
                 {messages.map(message => (
                   <ChatBubble key={message.id} variant={message.sender === "user" ? "sent" : "received"}>
-                    <ChatBubbleAvatar 
-                      className="h-8 w-8 shrink-0" 
-                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"} 
-                      fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"} 
-                    />
+                    {message.sender === "ai" && (
+                      <ChatBubbleAvatar 
+                        src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
+                        fallback="AI"
+                      />
+                    )}
                     <ChatBubbleMessage variant={message.sender === "user" ? "sent" : "received"}>
                       {message.content}
                     </ChatBubbleMessage>
@@ -230,7 +229,6 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
                 {isLoading && (
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar 
-                      className="h-8 w-8 shrink-0" 
                       src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
                       fallback="AI" 
                     />
@@ -240,19 +238,24 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({
               </ChatMessageList>
             </div>
 
-            <div className="mt-auto pt-4 border-t border-gray-700">
-              <form onSubmit={handleSubmit} className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange p-1">
-                <ChatInput 
-                  value={input} 
-                  onChange={(e) => setInput(e.target.value)} 
-                  placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'} 
-                  className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white" 
-                />
-                <div className="flex items-center p-3 pt-0 justify-between">
-                  <div className="flex"></div>
-                  <Button type="submit" size="sm" className="contact-button ml-auto gap-1.5" disabled={isLoading}>
-                    {lang === 'en' ? 'Send' : 'Відправити'}
-                    <CornerDownLeft className="size-3.5" />
+            <div className="p-4 border-t border-gray-700">
+              <form onSubmit={handleSubmit} className="relative">
+                <div className="flex items-end gap-2 bg-gray-700 rounded-3xl px-4 py-2 focus-within:ring-1 focus-within:ring-blue-500">
+                  <ChatInput 
+                    value={input} 
+                    onChange={(e) => setInput(e.target.value)} 
+                    placeholder="Спросите что-нибудь..."
+                    className="flex-1 bg-transparent border-0 focus:ring-0 resize-none"
+                    onSend={handleSubmit}
+                    disabled={isLoading}
+                  />
+                  <Button 
+                    type="submit" 
+                    size="sm" 
+                    className="h-8 w-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0"
+                    disabled={isLoading || !input.trim()}
+                  >
+                    <ArrowUp className="h-4 w-4" />
                   </Button>
                 </div>
               </form>

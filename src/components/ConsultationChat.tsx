@@ -1,6 +1,6 @@
 
 import React, { useState, FormEvent } from "react";
-import { CornerDownLeft, Bot } from "lucide-react";
+import { ArrowUp, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -117,9 +117,9 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
     ]);
   };
 
-  const handleMessageSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleMessageSubmit = async (e?: FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
     setMessages((prev) => [
@@ -169,7 +169,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden border-0 shadow-2xl">
+      <DialogContent className="max-w-md h-[500px] p-0 overflow-hidden bg-gray-800 border-gray-600 text-gray-100">
         <DialogHeader className="p-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <img
@@ -182,7 +182,7 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
         </DialogHeader>
 
         {!isInfoCollected ? (
-          <div className="p-6 flex flex-col justify-center h-full bg-white">
+          <div className="p-6 flex flex-col justify-center h-full bg-gray-800">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <img
@@ -191,10 +191,10 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
                   className="h-8 w-8 rounded opacity-90"
                 />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              <h3 className="text-lg font-semibold text-gray-100 mb-2">
                 {lang === 'en' ? 'Free Consultation' : 'Безкоштовна консультація'}
               </h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 {lang === 'en' ? 'Leave your contacts for personal consultation' : 'Залиште контакти для персональної консультації'}
               </p>
             </div>
@@ -205,14 +205,14 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
                 value={userInfo.name}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, name: e.target.value }))}
                 placeholder={getTranslation('contactName', lang)}
-                className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                className="h-12 bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500"
               />
               <Input
                 type="tel"
                 value={userInfo.phone}
                 onChange={(e) => setUserInfo(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder={getTranslation('contactPhone', lang)}
-                className="h-12 border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                className="h-12 bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-orange-500 focus:ring-orange-500"
               />
               <Button 
                 type="submit" 
@@ -223,22 +223,22 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
             </form>
           </div>
         ) : (
-          <div className="flex flex-col h-full bg-white">
-            <div className="flex-1 overflow-y-auto p-4 min-h-0">
-              <div className="space-y-4">
+          <div className="flex flex-col h-full bg-gray-800">
+            <div className="flex-1 overflow-hidden">
+              <ChatMessageList>
                 {messages.map((message) => (
                   <ChatBubble
                     key={message.id}
                     variant={message.sender === "user" ? "sent" : "received"}
                   >
-                    <ChatBubbleAvatar
-                      className="h-7 w-7 shrink-0"
-                      src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"}
-                      fallback={message.sender === "user" ? (lang === 'en' ? "You" : "У") : "AI"}
-                    />
+                    {message.sender === "ai" && (
+                      <ChatBubbleAvatar
+                        src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                        fallback="AI"
+                      />
+                    )}
                     <ChatBubbleMessage
                       variant={message.sender === "user" ? "sent" : "received"}
-                      className={message.sender === "user" ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white" : "bg-gray-100 text-gray-800"}
                     >
                       {message.content}
                     </ChatBubbleMessage>
@@ -248,36 +248,35 @@ const ConsultationChat: React.FC<ConsultationChatProps> = ({ isOpen, onClose, la
                 {isLoading && (
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar
-                      className="h-7 w-7 shrink-0"
                       src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                       fallback="AI"
                     />
-                    <ChatBubbleMessage 
-                      isLoading 
-                      className="bg-gray-100 text-gray-800"
-                    />
+                    <ChatBubbleMessage isLoading />
                   </ChatBubble>
                 )}
-              </div>
+              </ChatMessageList>
             </div>
 
-            <div className="p-3 border-t border-gray-100 bg-white flex-shrink-0">
+            <div className="p-4 border-t border-gray-700">
               <form onSubmit={handleMessageSubmit} className="relative">
-                <ChatInput
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder={lang === 'en' ? 'Write your question...' : 'Напишіть ваше питання...'}
-                  className="pr-12 h-10 border-gray-200 focus:border-orange-500 resize-none"
-                  disabled={isLoading}
-                />
-                <Button 
-                  type="submit" 
-                  size="sm" 
-                  className="absolute right-1 top-1 h-8 w-8 p-0 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
-                  disabled={isLoading}
-                >
-                  <CornerDownLeft className="h-3 w-3" />
-                </Button>
+                <div className="flex items-end gap-2 bg-gray-700 rounded-3xl px-4 py-2 focus-within:ring-1 focus-within:ring-blue-500">
+                  <ChatInput
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={lang === 'en' ? 'Write your question...' : 'Напишіть ваше питання...'}
+                    className="flex-1 bg-transparent border-0 focus:ring-0 resize-none"
+                    onSend={handleMessageSubmit}
+                    disabled={isLoading}
+                  />
+                  <Button 
+                    type="submit" 
+                    size="sm" 
+                    className="h-8 w-8 p-0 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 shrink-0"
+                    disabled={isLoading || !input.trim()}
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                </div>
               </form>
             </div>
           </div>
