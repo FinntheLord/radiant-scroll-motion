@@ -1,7 +1,9 @@
+
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import DisplayCards from "@/components/ui/display-cards";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface HeroSectionProps {
@@ -9,6 +11,8 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
+  const { openChat } = useChat();
+
   useEffect(() => {
     // Mouse parallax effect
     const handleMouseMove = (e: MouseEvent) => {
@@ -82,13 +86,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                   <span className="connexi-gradient-text font-medium">{getTranslation('heroDescriptionHighlight', lang)}</span>
                 </p>
 
-                <a href="#services" className="inline-block">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
-                    className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
+                    className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
+                    onClick={openChat}
                   >
                     {getTranslation('ourServices', lang)}
                   </Button>
-                </a>
+                  <Button 
+                    variant="outline"
+                    className="px-10 py-6 rounded-full transition-all hover:bg-gray-100 font-semibold"
+                    onClick={openChat}
+                  >
+                    {lang === 'en' ? 'Learn More' : 'Дізнатися більше'}
+                  </Button>
+                </div>
               </div>
             </div>
 

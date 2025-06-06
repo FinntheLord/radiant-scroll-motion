@@ -1,6 +1,8 @@
 
 import React from "react";
 import { MovingBorder } from "@/components/ui/moving-border";
+import { Button } from "@/components/ui/button";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ServicesSectionProps {
@@ -9,6 +11,8 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang }) => {
+  const { openChat } = useChat();
+  
   const services = [
     {
       id: "01",
@@ -49,6 +53,13 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
                   <div className="relative bg-white/80 backdrop-blur-sm rounded-md p-6 z-10 border-l-4 border-connexi-orange">
                     <div className="flex items-center justify-between mb-6">
                       <div className="text-gray-400">{ `{ ${service.id} }` }</div>
+                      <Button 
+                        className="contact-button px-6 py-2 rounded-full"
+                        onClick={openChat}
+                        size="sm"
+                      >
+                        {lang === 'en' ? 'Start Chat' : 'Почати чат'}
+                      </Button>
                     </div>
                     <div className="flex flex-col md:flex-row gap-8">
                       <div className="md:w-1/2">
@@ -64,6 +75,15 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="text-center mt-16">
+            <Button 
+              className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg"
+              onClick={openChat}
+            >
+              {lang === 'en' ? 'Our Services' : 'Наші послуги'}
+            </Button>
           </div>
         </div>
       </div>
