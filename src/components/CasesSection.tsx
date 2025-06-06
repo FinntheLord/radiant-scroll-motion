@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import ContactPopup from "./ContactPopup";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface CasesSectionProps {
@@ -12,8 +11,7 @@ interface CasesSectionProps {
 }
 
 const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => {
-  const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
-  const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
+  const { openChat } = useChat();
 
   const caseStudies = [
     {
@@ -145,7 +143,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                     
                     <div className="mt-4">
                       <Button 
-                        onClick={() => setIsDetailPopupOpen(true)}
+                        onClick={openChat}
                         className="bg-transparent hover:bg-transparent text-connexi-orange border-none shadow-none p-0 hover:text-white transition-colors"
                       >
                         {getTranslation('readMore', lang)}
@@ -161,7 +159,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
         
         <div className="flex justify-center mt-8 md:mt-12 reveal-on-scroll">
           <Button 
-            onClick={() => setIsContactPopupOpen(true)}
+            onClick={openChat}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
             {getTranslation('allCases', lang)}
@@ -173,20 +171,6 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       {/* Background elements */}
       <div className="floating-element w-64 h-64 md:w-96 md:h-96 top-20 -left-32 md:-left-48 opacity-20"></div>
       <div className="floating-element w-48 h-48 md:w-80 md:h-80 bottom-10 -right-24 md:-right-40 opacity-20"></div>
-      
-      <ContactPopup 
-        isOpen={isContactPopupOpen}
-        onClose={() => setIsContactPopupOpen(false)}
-        title={getTranslation('viewAllCases', lang)}
-        lang={lang}
-      />
-      
-      <ContactPopup 
-        isOpen={isDetailPopupOpen}
-        onClose={() => setIsDetailPopupOpen(false)}
-        title={getTranslation('caseDetails', lang)}
-        lang={lang}
-      />
     </section>
   );
 };

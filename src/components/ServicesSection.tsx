@@ -53,13 +53,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
                   <div className="relative bg-white/80 backdrop-blur-sm rounded-md p-6 z-10 border-l-4 border-connexi-orange">
                     <div className="flex items-center justify-between mb-6">
                       <div className="text-gray-400">{ `{ ${service.id} }` }</div>
-                      <Button 
-                        className="contact-button px-6 py-2 rounded-full"
-                        onClick={openChat}
-                        size="sm"
-                      >
-                        {lang === 'en' ? 'Start Chat' : 'Почати чат'}
-                      </Button>
                     </div>
                     <div className="flex flex-col md:flex-row gap-8">
                       <div className="md:w-1/2">
