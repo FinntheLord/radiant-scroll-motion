@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
-import ConsultationChat from "./ConsultationChat";
 import { Language, getTranslation } from "../lib/translations";
+import { useSiteChat } from "../contexts/SiteChatContext";
 
 interface NavbarProps {
   lang: Language;
@@ -11,10 +12,10 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { openChat } = useSiteChat();
 
   const switchLanguage = () => {
     const newLang = lang === 'uk' ? 'en' : 'uk';
@@ -95,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
             <Button 
               className="contact-button"
               size="sm"
-              onClick={() => setIsChatOpen(true)}
+              onClick={openChat}
             >
               {getTranslation('consultation', lang)}
               <MessageCircle className="ml-2 h-4 w-4" />
@@ -115,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
             <Button 
               className="contact-button"
               size="sm"
-              onClick={() => setIsChatOpen(true)}
+              onClick={openChat}
             >
               <MessageCircle className="h-4 w-4" />
             </Button>
@@ -194,12 +195,6 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           </div>
         )}
       </header>
-
-      <ConsultationChat 
-        isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)}
-        lang={lang}
-      />
     </>
   );
 };

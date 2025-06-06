@@ -1,120 +1,56 @@
-import React, { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { TextShimmer } from "@/components/ui/text-shimmer";
-import DisplayCards from "@/components/ui/display-cards";
+
+import React from "react";
 import { Language, getTranslation } from "../lib/translations";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
+import { useSiteChat } from "../contexts/SiteChatContext";
 
 interface HeroSectionProps {
   lang: Language;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
-  useEffect(() => {
-    // Mouse parallax effect
-    const handleMouseMove = (e: MouseEvent) => {
-      const parallaxElements = document.querySelectorAll('.parallax');
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-      
-      parallaxElements.forEach((element: Element) => {
-        const speed = parseFloat((element as HTMLElement).dataset.speed || '0.05');
-        const x = (mouseX - windowWidth / 2) * speed;
-        const y = (mouseY - windowHeight / 2) * speed;
-        
-        (element as HTMLElement).style.transform = `translate(${x}px, ${y}px)`;
-      });
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
+  const { openChat } = useSiteChat();
+  
   return (
-    <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
-      {/* YouTube Video Background */}
-      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        {/* Lighter gradient overlay to make video more visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/70 to-white/70 z-10"></div>
-        <div className="relative w-full h-full">
-          <iframe
-            src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-            title="Blueprint Background Video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
-            style={{ mixBlendMode: 'normal' }}
-          ></iframe>
+    <section className="min-h-screen flex flex-col justify-center items-center relative px-4 text-center">
+      <div className="max-w-4xl mx-auto z-10 reveal-on-scroll">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6">
+          <span className="text-white block mb-2">{getTranslation('heroTitle1', lang)}</span>
+          <span className="connexi-gradient-text">{getTranslation('heroTitle2', lang)}</span>
+        </h1>
+        
+        <p className="text-xl sm:text-2xl text-white/80 mb-12 max-w-3xl mx-auto">
+          {getTranslation('heroSubtitle', lang)}
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            variant="outline"
+            size="lg"
+            className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 transition-colors"
+            onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            {getTranslation('heroButton1', lang)}
+          </Button>
+          
+          <Button
+            size="lg"
+            className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white transition-colors"
+            onClick={openChat}
+          >
+            {getTranslation('heroButton2', lang)}
+          </Button>
         </div>
       </div>
       
-      <div className="animated-bg-light absolute inset-0 z-5"></div>
-      
-      <div className="container mx-auto px-4 relative z-10 w-full max-w-full overflow-hidden">
-        <div className="py-12 md:py-24 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto w-full">
-            <div className="reveal-on-scroll">
-              <div className="mb-6">
-                <TextShimmer 
-                  className="font-semibold [--base-color:theme(colors.connexi.orange)] [--base-gradient-color:theme(colors.connexi.pink)]" 
-                  duration={1.5}
-                  spread={3}
-                >
-                  {getTranslation('heroSubtitle', lang)}
-                </TextShimmer>
-              </div>
-
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900" style={{ animationDelay: "0.1s" }}>
-                <span className="text-gray-800">{getTranslation('heroTitle1', lang)} </span>
-                <br />
-                <span className="connexi-gradient-text font-extrabold parallax" data-speed="0.02">{getTranslation('heroTitle2', lang)}</span>
-                <span className="text-gray-800">{getTranslation('heroTitle3', lang)}</span>
-              </h1>
-
-              <div className="max-w-2xl" style={{ animationDelay: "0.2s" }}>
-                <p className="text-gray-700 mb-8">
-                  {getTranslation('heroDescription', lang)}
-                  <span className="connexi-gradient-text font-medium">{getTranslation('heroDescriptionHighlight', lang)}</span>
-                </p>
-
-                <a href="#services" className="inline-block">
-                  <Button 
-                    className="mt-4 contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
-                  >
-                    {getTranslation('ourServices', lang)}
-                  </Button>
-                </a>
-              </div>
-            </div>
-
-            <div className="hidden lg:block reveal-on-scroll">
-              <DisplayCards />
-            </div>
-          </div>
-
-          <div className="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="reveal-on-scroll parallax" data-speed="0.03" style={{ animationDelay: "0.3s" }}>
-              <div className="connexi-gradient-text font-medium mb-3">{getTranslation('certifiedSpecialists', lang)}</div>
-            </div>
-            <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
-              <div className="text-gray-700 mb-3">{getTranslation('chatbotsDescription', lang)}</div>
-              <div className="text-gray-700">{getTranslation('automationDescription', lang)}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <a href="#about" className="text-gray-600 opacity-60 hover:opacity-100 transition-opacity">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-          </svg>
-        </a>
+      <div className="absolute bottom-10 animate-bounce">
+        <button 
+          className="text-white/70 hover:text-white transition-colors"
+          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          <ChevronDown size={36} />
+        </button>
       </div>
     </section>
   );

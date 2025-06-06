@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { SiteChatProvider } from "./contexts/SiteChatContext";
 
 const queryClient = new QueryClient();
 
@@ -16,8 +17,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index lang="uk" />} />
-          <Route path="/en" element={<Index lang="en" />} />
+          <Route path="/" element={<SiteChatProvider language="uk"><Index lang="uk" /></SiteChatProvider>} />
+          <Route path="/en" element={<SiteChatProvider language="en"><Index lang="en" /></SiteChatProvider>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

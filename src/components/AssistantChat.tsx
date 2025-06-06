@@ -1,69 +1,16 @@
 
-import React, { useState, FormEvent, useEffect } from "react";
+import React from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  ChatBubble,
-  ChatBubbleAvatar,
-  ChatBubbleMessage,
-} from "@/components/ui/chat-bubble";
-import { ChatMessageList } from "@/components/ui/chat-message-list";
-import { ChatInput } from "@/components/ui/chat-input";
 import { Language } from "../lib/translations";
-import { useOpenAI } from "../hooks/useOpenAI";
+import { useSiteChat } from "../contexts/SiteChatContext";
 
 interface AssistantChatProps {
   lang: Language;
 }
 
-interface Message {
-  id: number;
-  content: string;
-  sender: "user" | "ai";
-}
-
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    content: "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
-    sender: "ai",
-  },
-];
-
 const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [input, setInput] = useState("");
-  const { sendMessage, isLoading } = useOpenAI(lang);
-
-  // Update initial message when language changes
-  useEffect(() => {
-    setMessages([{
-      id: 1,
-      content: lang === 'en' 
-        ? "Hello! I'm Connexi AI assistant. How can I help you today?"
-        : "Привіт! Я AI-помічник Connexi. Як я можу вам допомогти сьогодні?",
-      sender: "ai",
-    }]);
-  }, [lang]);
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    // Add user message
-    const userMessage = input.trim();
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        content: userMessage,
-        sender: "user",
-      },
-    ]);
-    setInput("");
-
-    await sendMessage(userMessage, messages, setMessages);
-  }
+  const { openChat } = useSiteChat();
 
   return (
     <div className="h-[500px] border border-gray-800 bg-gray-900/50 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden shadow-xl reveal-on-scroll">
@@ -81,63 +28,27 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
         </div>
       </div>
       
-      <div className="flex-1 overflow-hidden">
-        <ChatMessageList>
-          {messages.map((message) => (
-            <ChatBubble
-              key={message.id}
-              variant={message.sender === "user" ? "sent" : "received"}
-            >
-              <ChatBubbleAvatar
-                className="h-8 w-8 shrink-0"
-                src={message.sender === "user" ? "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png" : "/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"}
-                fallback={message.sender === "user" ? (lang === 'en' ? "You" : "Ви") : "AI"}
-              />
-              <ChatBubbleMessage
-                variant={message.sender === "user" ? "sent" : "received"}
-              >
-                {message.content}
-              </ChatBubbleMessage>
-            </ChatBubble>
-          ))}
-
-          {isLoading && (
-            <ChatBubble variant="received">
-              <ChatBubbleAvatar
-                className="h-8 w-8 shrink-0"
-                src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
-                fallback="AI"
-              />
-              <ChatBubbleMessage isLoading />
-            </ChatBubble>
-          )}
-        </ChatMessageList>
-      </div>
-
-      <div className="p-4 border-t border-gray-800">
-        <form
-          onSubmit={handleSubmit}
-          className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange p-1"
+      <div className="flex-1 p-6 flex flex-col items-center justify-center">
+        <img
+          src="/lovable-uploads/ad89a77e-e3fb-4b1e-adfa-7ab6b2d12421.png"
+          alt="AI Assistant"
+          className="w-24 h-24 mb-6"
+        />
+        <h3 className="text-xl font-bold mb-4 text-center">
+          {lang === 'uk' ? 'Спілкуйтеся з нашим AI-помічником' : 'Talk to our AI Assistant'}
+        </h3>
+        <p className="text-center text-gray-400 mb-6 max-w-sm">
+          {lang === 'uk' 
+            ? 'Отримайте миттєві відповіді на ваші питання про AI-рішення та як вони можуть допомогти вашому бізнесу'
+            : 'Get instant answers to your questions about AI solutions and how they can help your business'}
+        </p>
+        <Button 
+          onClick={openChat} 
+          className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 ml-auto gap-1.5 text-white"
         >
-          <ChatInput
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'}
-            className="min-h-12 resize-none rounded-lg bg-transparent border-0 p-3 shadow-none focus-visible:ring-0 text-white"
-          />
-          <div className="flex items-center p-3 pt-0 justify-between">
-            <div className="flex"></div>
-            <Button 
-              type="submit" 
-              size="sm" 
-              className="contact-button ml-auto gap-1.5"
-              disabled={isLoading}
-            >
-              {lang === 'en' ? 'Send' : 'Відправити'}
-              <CornerDownLeft className="size-3.5" />
-            </Button>
-          </div>
-        </form>
+          {lang === 'uk' ? 'Почати спілкування' : 'Start Chatting'}
+          <CornerDownLeft className="size-3.5" />
+        </Button>
       </div>
     </div>
   );
