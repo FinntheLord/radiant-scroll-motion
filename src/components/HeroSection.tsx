@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -10,7 +11,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
-  const { openChat } = useChat();
+  const { openSidebarChat } = useChat();
 
   useEffect(() => {
     // Mouse parallax effect
@@ -88,14 +89,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
-                    onClick={openChat}
+                    onClick={openSidebarChat}
                   >
                     {getTranslation('ourServices', lang)}
                   </Button>
                   <Button 
                     variant="outline"
                     className="px-10 py-6 rounded-full transition-all hover:bg-gray-100 font-semibold"
-                    onClick={openChat}
+                    onClick={openSidebarChat}
                   >
                     {lang === 'en' ? 'Learn More' : 'Дізнатися більше'}
                   </Button>

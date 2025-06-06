@@ -1,10 +1,13 @@
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ChatContextType {
   isChatOpen: boolean;
   openChat: () => void;
   closeChat: () => void;
+  openSidebarChat: () => void;
+  isSidebarChatOpen: boolean;
+  closeSidebarChat: () => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -14,6 +17,8 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
+  const [isSidebarChatOpen, setIsSidebarChatOpen] = useState(false);
+
   const openChat = () => {
     // Открываем Chatra чат
     if (window.Chatra) {
@@ -28,11 +33,22 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     }
   };
 
+  const openSidebarChat = () => {
+    setIsSidebarChatOpen(true);
+  };
+
+  const closeSidebarChat = () => {
+    setIsSidebarChatOpen(false);
+  };
+
   return (
     <ChatContext.Provider value={{ 
       isChatOpen: false, // Chatra управляет своим состоянием
       openChat, 
-      closeChat 
+      closeChat,
+      isSidebarChatOpen,
+      openSidebarChat,
+      closeSidebarChat
     }}>
       {children}
     </ChatContext.Provider>

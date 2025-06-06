@@ -10,7 +10,8 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { ChatProvider } from "../contexts/ChatContext";
+import ChatSidebar from "../components/ChatSidebar";
+import { ChatProvider, useChat } from "../contexts/ChatContext";
 import { Language } from "../lib/translations";
 
 interface IndexProps {
@@ -18,6 +19,8 @@ interface IndexProps {
 }
 
 const IndexContent: React.FC<IndexProps> = ({ lang = 'uk' }) => {
+  const { isSidebarChatOpen, closeSidebarChat } = useChat();
+  
   console.log('Index component rendering with lang:', lang);
 
   useEffect(() => {
@@ -46,6 +49,12 @@ const IndexContent: React.FC<IndexProps> = ({ lang = 'uk' }) => {
         <PartnersSection className="bg-gray-900 text-white" lang={lang} />
         <CasesSection className="bg-white text-gray-900" lang={lang} />
         <ContactsSection className="bg-gray-900 text-white" lang={lang} />
+        
+        <ChatSidebar 
+          isOpen={isSidebarChatOpen} 
+          onClose={closeSidebarChat}
+          lang={lang}
+        />
       </div>
     );
   } catch (error) {
