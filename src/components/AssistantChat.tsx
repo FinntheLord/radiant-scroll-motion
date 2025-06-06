@@ -1,3 +1,4 @@
+
 import React, { useState, FormEvent, useEffect } from "react";
 import { CornerDownLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -97,11 +98,12 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
   return (
     <div className="h-full border border-gray-800 bg-gray-900/50 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden shadow-xl">      
       <div className="flex-1 overflow-hidden">
-        <ChatMessageList>
+        <ChatMessageList className="h-full">
           {messages.map((message) => (
             <ChatBubble
               key={message.id}
               variant={message.sender === "user" ? "sent" : "received"}
+              className="mb-4"
             >
               <ChatBubbleAvatar
                 className="h-8 w-8 shrink-0"
@@ -110,6 +112,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
               />
               <ChatBubbleMessage
                 variant={message.sender === "user" ? "sent" : "received"}
+                className="text-sm md:text-base leading-relaxed"
               >
                 {message.content}
               </ChatBubbleMessage>
@@ -117,7 +120,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
           ))}
 
           {isLoading && (
-            <ChatBubble variant="received">
+            <ChatBubble variant="received" className="mb-4">
               <ChatBubbleAvatar
                 className="h-8 w-8 shrink-0"
                 src="/lovable-uploads/assistant-chat-icon.webp"
@@ -129,8 +132,8 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
         </ChatMessageList>
       </div>
 
-      {/* Improved mobile input area */}
-      <div className="p-3 md:p-4 border-t border-gray-800 bg-gray-900/80 backdrop-blur-sm">
+      {/* Optimized mobile input area */}
+      <div className="p-3 md:p-4 border-t border-gray-800 bg-gray-900/80 backdrop-blur-sm shrink-0">
         <form
           onSubmit={handleSubmit}
           className="relative rounded-lg border border-gray-700 bg-gray-800/50 focus-within:ring-1 focus-within:ring-connexi-orange"
@@ -139,7 +142,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={lang === 'en' ? 'Enter your message...' : 'Введіть ваше повідомлення...'}
-            className="min-h-12 max-h-32 resize-none rounded-lg bg-transparent border-0 p-3 pr-12 shadow-none focus-visible:ring-0 text-white text-base md:text-sm leading-relaxed"
+            className="min-h-12 max-h-32 resize-none rounded-lg bg-transparent border-0 p-3 pr-12 shadow-none focus-visible:ring-0 text-white text-base leading-relaxed"
             rows={1}
           />
           <div className="absolute right-2 bottom-2 top-2 flex items-end">

@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -49,8 +50,8 @@ export function ChatBubbleMessage({
     <div
       className={cn(
         "rounded-lg p-3 min-w-0 break-words",
-        // Remove max-height and overflow restrictions for mobile
-        "max-w-[85%] md:max-w-md",
+        // Full width adaptation for mobile, no height restrictions
+        "max-w-[85%] md:max-w-md w-auto",
         variant === "sent" ? "bg-connexi-gradient text-white" : "bg-white text-black",
         className
       )}
@@ -60,7 +61,7 @@ export function ChatBubbleMessage({
           <MessageLoading />
         </div>
       ) : (
-        <div className="whitespace-pre-wrap">
+        <div className="whitespace-pre-wrap leading-relaxed">
           {children}
         </div>
       )}
