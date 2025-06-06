@@ -1,11 +1,8 @@
-
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -15,13 +12,3 @@ Allow: /
 
 User-agent: *
 Allow: /
-Crawl-delay: 2
-
-# Sitemap
-Sitemap: https://connexi.ai/sitemap.xml
-
-# Disallow unnecessary files
-Disallow: /src/
-Disallow: /*.json
-Disallow: /*.ts
-Disallow: /*.tsx
