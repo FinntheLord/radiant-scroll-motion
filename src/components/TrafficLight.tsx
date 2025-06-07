@@ -10,7 +10,7 @@ interface TrafficLightProps {
 export const TrafficLight: React.FC<TrafficLightProps> = ({ isActive, className }) => {
   return (
     <div className={cn("flex items-center gap-1", className)}>
-      <div className="flex items-center gap-0.5 bg-gray-800 rounded-full px-1 py-0.5">
+      <div className="flex items-center gap-0.5">
         <div 
           className={cn(
             "w-2 h-2 rounded-full transition-all duration-300",
