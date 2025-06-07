@@ -31,39 +31,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
       });
     };
 
-    // Create floating elements animation
+    // Enhanced floating elements animation
     const createFloatingElements = () => {
       const heroSection = document.querySelector('.hero-section');
       if (!heroSection) return;
 
       // Remove existing floating elements
-      const existingElements = heroSection.querySelectorAll('.hero-floating-element');
+      const existingElements = heroSection.querySelectorAll('.hero-floating-element, .hero-dynamic-blob, .hero-wave-element');
       existingElements.forEach(el => el.remove());
 
-      // Create new floating elements
-      for (let i = 0; i < 6; i++) {
+      // Create floating circles
+      for (let i = 0; i < 4; i++) {
         const element = document.createElement('div');
         element.className = 'hero-floating-element';
         
-        // Random size between 60px and 200px
-        const size = Math.random() * 140 + 60;
-        
-        // Random position
+        const size = Math.random() * 120 + 80;
         const x = Math.random() * 100;
         const y = Math.random() * 100;
-        
-        // Random animation duration between 15-30 seconds
-        const duration = Math.random() * 15 + 15;
-        
-        // Random delay up to 5 seconds
-        const delay = Math.random() * 5;
+        const duration = Math.random() * 15 + 20;
+        const delay = Math.random() * 8;
         
         element.style.cssText = `
           position: absolute;
           width: ${size}px;
           height: ${size}px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(255,122,0,0.03) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.03) 100%);
+          background: radial-gradient(circle, rgba(255,122,0,0.04) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.02) 100%);
           left: ${x}%;
           top: ${y}%;
           z-index: 1;
@@ -74,6 +67,66 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
         `;
         
         heroSection.appendChild(element);
+      }
+
+      // Create morphing blobs
+      for (let i = 0; i < 3; i++) {
+        const blob = document.createElement('div');
+        blob.className = 'hero-dynamic-blob';
+        
+        const size = Math.random() * 150 + 100;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 20 + 25;
+        const delay = Math.random() * 10;
+        
+        blob.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          background: linear-gradient(45deg, rgba(255,122,0,0.02) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.02) 100%);
+          left: ${x}%;
+          top: ${y}%;
+          z-index: 1;
+          pointer-events: none;
+          animation: morphBlob ${duration}s ease-in-out infinite, pulseGlow ${duration * 0.7}s ease-in-out infinite;
+          animation-delay: ${delay}s, ${delay + 2}s;
+          will-change: transform, border-radius;
+          filter: blur(1px);
+        `;
+        
+        heroSection.appendChild(blob);
+      }
+
+      // Create wave elements
+      for (let i = 0; i < 2; i++) {
+        const wave = document.createElement('div');
+        wave.className = 'hero-wave-element';
+        
+        const width = Math.random() * 200 + 150;
+        const height = Math.random() * 60 + 40;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 25 + 30;
+        const delay = Math.random() * 15;
+        
+        wave.style.cssText = `
+          position: absolute;
+          width: ${width}px;
+          height: ${height}px;
+          background: linear-gradient(90deg, rgba(8,50,162,0.02) 0%, rgba(151,71,255,0.03) 50%, rgba(255,54,163,0.02) 100%);
+          border-radius: 50px;
+          left: ${x}%;
+          top: ${y}%;
+          z-index: 1;
+          pointer-events: none;
+          animation: waveFloat ${duration}s ease-in-out infinite, driftSlow ${duration * 1.2}s linear infinite;
+          animation-delay: ${delay}s, ${delay + 5}s;
+          will-change: transform;
+          filter: blur(0.5px);
+        `;
+        
+        heroSection.appendChild(wave);
       }
     };
 
@@ -89,8 +142,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
     <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        {/* Lighter gradient overlay to make video more visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/70 to-white/70 z-10"></div>
+        {/* Slightly more transparent overlay to show more background dynamics */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/60 to-white/60 z-10"></div>
         <div className="relative w-full h-full">
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
