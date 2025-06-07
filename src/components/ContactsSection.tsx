@@ -99,13 +99,6 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                 <span className="text-white">{getTranslation('contactsTitle3', lang)} </span>
                 <span className="connexi-gradient-text">{getTranslation('contactsTitle4', lang)}</span>
               </h2>
-              
-              <p className="text-white/70 text-xl leading-relaxed mb-12 max-w-2xl">
-                {lang === 'en' 
-                  ? 'Ready to transform your business with AI? Let\'s discuss your project and find the perfect solution.'
-                  : 'Готові трансформувати свій бізнес за допомогою AI? Давайте обговоримо ваш проект і знайдемо ідеальне рішення.'
-                }
-              </p>
             </div>
 
             {/* CTA Button */}
