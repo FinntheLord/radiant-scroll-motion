@@ -19,7 +19,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
         {/* Section title */}
         <div className="mb-20 text-left">
           <div className="text-orange-500 text-xl font-semibold mb-6 reveal-on-scroll tracking-wide">
-            {'{06}'} {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
+            {06} {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
           </div>
         </div>
 
@@ -90,6 +90,17 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
 
           {/* Right column - CTA Section */}
           <div className="space-y-12 reveal-on-scroll">
+            {/* Main heading */}
+            <div className="text-center lg:text-left">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
+                <span className="text-white">{getTranslation('contactsTitle1', lang)} </span>
+                <span className="connexi-gradient-text">{getTranslation('contactsTitle2', lang)}</span>
+                <br />
+                <span className="text-white">{getTranslation('contactsTitle3', lang)} </span>
+                <span className="connexi-gradient-text">{getTranslation('contactsTitle4', lang)}</span>
+              </h2>
+            </div>
+
             {/* CTA Button */}
             <div className="text-center lg:text-left">
               <Button 
