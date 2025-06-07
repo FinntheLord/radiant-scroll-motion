@@ -1,4 +1,3 @@
-
 import React from "react";
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,18 +41,15 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             <div className="grid md:grid-cols-3 gap-8 w-full max-w-4xl mt-8">
               <div className="flex flex-col items-center text-center space-y-3">
                 <div className="flex items-center justify-center w-16 h-16 rounded-full bg-orange-500/20 border border-orange-500/30">
-                  <Mail className="w-8 h-8 text-orange-500" />
+                  <MapPin className="w-8 h-8 text-orange-500" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">
-                    {lang === 'en' ? 'Email' : 'Email'}
+                    {lang === 'en' ? 'Address' : 'Адреса'}
                   </h3>
-                  <a 
-                    href="mailto:info@connexi.ai" 
-                    className="text-white/80 hover:text-orange-500 transition-colors"
-                  >
-                    info@connexi.ai
-                  </a>
+                  <p className="text-white/80">
+                    {lang === 'en' ? 'Dnipro, Rabochaya, 23K' : 'Дніпро, Рабочая, 23К'}
+                  </p>
                 </div>
               </div>
 
@@ -76,15 +72,18 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
 
               <div className="flex flex-col items-center text-center space-y-3">
                 <div className="flex items-center justify-center w-16 h-16 rounded-full bg-orange-500/20 border border-orange-500/30">
-                  <MapPin className="w-8 h-8 text-orange-500" />
+                  <Mail className="w-8 h-8 text-orange-500" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">
-                    {lang === 'en' ? 'Address' : 'Адреса'}
+                    {lang === 'en' ? 'Email' : 'Email'}
                   </h3>
-                  <p className="text-white/80">
-                    {lang === 'en' ? 'Dnipro, Rabochaya, 23K' : 'Дніпро, Рабочая, 23К'}
-                  </p>
+                  <a 
+                    href="mailto:info@connexi.ai" 
+                    className="text-white/80 hover:text-orange-500 transition-colors"
+                  >
+                    info@connexi.ai
+                  </a>
                 </div>
               </div>
             </div>
