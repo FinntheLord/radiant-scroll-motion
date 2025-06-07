@@ -20,7 +20,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
       <FloatingElements />
       <div className="container mx-auto px-4 relative z-10">
         <div className="connexi-gradient-text text-xl mb-6 reveal-on-scroll">
-          {getTranslation('about', lang)}
+          {lang === 'en' ? '{01} ABOUT US' : '{01} ПРО НАС'}
         </div>
         
         <div className="max-w-5xl mx-auto mb-20">
