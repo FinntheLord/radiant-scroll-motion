@@ -19,7 +19,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
         {/* Section title */}
         <div className="mb-16 text-left">
           <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
-            {06} {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
+            06 {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
           </div>
         </div>
 
@@ -35,6 +35,20 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                 className="h-16 w-auto object-contain"
               />
               <h3 className="text-2xl font-bold text-white mt-4">connexi</h3>
+            </div>
+
+            {/* Address */}
+            <div className="space-y-4">
+              <h4 className="text-xl font-semibold text-white">
+                {lang === 'en' ? 'Address:' : 'Адреса:'}
+              </h4>
+              
+              <div className="flex items-center gap-4">
+                <MapPin className="w-6 h-6 text-orange-500 flex-shrink-0" />
+                <p className="text-white/80 text-lg">
+                  {lang === 'en' ? 'Dnipro, Rabochaya, 23K' : 'Дніпро, Рабочая, 23К'}
+                </p>
+              </div>
             </div>
 
             {/* Contacts */}
@@ -61,20 +75,6 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                 >
                   +38 (067) 200-26-75
                 </a>
-              </div>
-            </div>
-
-            {/* Address */}
-            <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-white">
-                {lang === 'en' ? 'Address:' : 'Адреса:'}
-              </h4>
-              
-              <div className="flex items-center gap-4">
-                <MapPin className="w-6 h-6 text-orange-500 flex-shrink-0" />
-                <p className="text-white/80 text-lg">
-                  {lang === 'en' ? 'Dnipro, Rabochaya, 23K' : 'Дніпро, Рабочая, 23К'}
-                </p>
               </div>
             </div>
           </div>
