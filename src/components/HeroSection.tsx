@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -31,39 +30,108 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
       });
     };
 
-    // Create floating elements animation
+    // Enhanced floating elements animation with geometric diamonds
     const createFloatingElements = () => {
       const heroSection = document.querySelector('.hero-section');
       if (!heroSection) return;
 
       // Remove existing floating elements
-      const existingElements = heroSection.querySelectorAll('.hero-floating-element');
+      const existingElements = heroSection.querySelectorAll('.hero-floating-element, .hero-dynamic-blob, .hero-wave-element, .hero-geometric-diamond');
       existingElements.forEach(el => el.remove());
 
-      // Create new floating elements
+      // Create geometric diamond elements (like in the uploaded image)
       for (let i = 0; i < 6; i++) {
+        const diamond = document.createElement('div');
+        diamond.className = 'hero-geometric-diamond';
+        
+        const size = Math.random() * 80 + 60;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 20 + 15;
+        const delay = Math.random() * 10;
+        const rotation = Math.random() * 360;
+        
+        diamond.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          left: ${x}%;
+          top: ${y}%;
+          z-index: 1;
+          pointer-events: none;
+          animation: geometricFloat ${duration}s ease-in-out infinite, geometricRotate ${duration * 1.5}s linear infinite;
+          animation-delay: ${delay}s, ${delay + 2}s;
+          will-change: transform;
+          transform: rotate(${rotation}deg);
+        `;
+        
+        // Create the diamond shape with gradients
+        diamond.innerHTML = `
+          <div style="
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform: rotate(45deg);
+          ">
+            <div style="
+              position: absolute;
+              width: 50%;
+              height: 50%;
+              background: linear-gradient(135deg, rgba(8,50,162,0.15) 0%, rgba(151,71,255,0.1) 100%);
+              top: 0;
+              left: 0;
+              clip-path: polygon(0 0, 100% 0, 0 100%);
+            "></div>
+            <div style="
+              position: absolute;
+              width: 50%;
+              height: 50%;
+              background: linear-gradient(135deg, rgba(255,122,0,0.15) 0%, rgba(255,54,163,0.1) 100%);
+              top: 0;
+              right: 0;
+              clip-path: polygon(0 0, 100% 0, 100% 100%);
+            "></div>
+            <div style="
+              position: absolute;
+              width: 50%;
+              height: 50%;
+              background: linear-gradient(135deg, rgba(255,54,163,0.15) 0%, rgba(151,71,255,0.1) 100%);
+              bottom: 0;
+              left: 0;
+              clip-path: polygon(0 0, 0 100%, 100% 100%);
+            "></div>
+            <div style="
+              position: absolute;
+              width: 50%;
+              height: 50%;
+              background: linear-gradient(135deg, rgba(151,71,255,0.15) 0%, rgba(8,50,162,0.1) 100%);
+              bottom: 0;
+              right: 0;
+              clip-path: polygon(100% 0, 0 100%, 100% 100%);
+            "></div>
+          </div>
+        `;
+        
+        heroSection.appendChild(diamond);
+      }
+
+      // Create floating circles with reduced count
+      for (let i = 0; i < 3; i++) {
         const element = document.createElement('div');
         element.className = 'hero-floating-element';
         
-        // Random size between 60px and 200px
-        const size = Math.random() * 140 + 60;
-        
-        // Random position
+        const size = Math.random() * 100 + 60;
         const x = Math.random() * 100;
         const y = Math.random() * 100;
-        
-        // Random animation duration between 15-30 seconds
-        const duration = Math.random() * 15 + 15;
-        
-        // Random delay up to 5 seconds
-        const delay = Math.random() * 5;
+        const duration = Math.random() * 15 + 20;
+        const delay = Math.random() * 8;
         
         element.style.cssText = `
           position: absolute;
           width: ${size}px;
           height: ${size}px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(255,122,0,0.03) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.03) 100%);
+          background: radial-gradient(circle, rgba(255,122,0,0.04) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.02) 100%);
           left: ${x}%;
           top: ${y}%;
           z-index: 1;
@@ -74,6 +142,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
         `;
         
         heroSection.appendChild(element);
+      }
+
+      // Create morphing blobs with reduced count
+      for (let i = 0; i < 2; i++) {
+        const blob = document.createElement('div');
+        blob.className = 'hero-dynamic-blob';
+        
+        const size = Math.random() * 120 + 80;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 20 + 25;
+        const delay = Math.random() * 10;
+        
+        blob.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          background: linear-gradient(45deg, rgba(255,122,0,0.02) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.02) 100%);
+          left: ${x}%;
+          top: ${y}%;
+          z-index: 1;
+          pointer-events: none;
+          animation: morphBlob ${duration}s ease-in-out infinite, pulseGlow ${duration * 0.7}s ease-in-out infinite;
+          animation-delay: ${delay}s, ${delay + 2}s;
+          will-change: transform, border-radius;
+          filter: blur(1px);
+        `;
+        
+        heroSection.appendChild(blob);
       }
     };
 
@@ -89,8 +186,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
     <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        {/* Lighter gradient overlay to make video more visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/70 to-white/70 z-10"></div>
+        {/* Slightly more transparent overlay to show more background dynamics */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/60 to-white/60 z-10"></div>
         <div className="relative w-full h-full">
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?autoplay=1&mute=1&loop=1&playlist=Jox6R5-rIH0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"

@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from "react";
-import { X, Send, MessageCircle, Key } from "lucide-react";
+import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/ui/chat-input";
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
-import { Input } from "@/components/ui/input";
 import { TrafficLight } from "./TrafficLight";
 import { useChat } from "../contexts/ChatContext";
 import { useChatApi } from "../hooks/useChatApi";
@@ -20,37 +18,25 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
-  const { messages, addMessage, isLoading, setIsLoading, initializeChat } = useChat();
-  const { sendMessage, error, clearError, apiKey, updateApiKey } = useChatApi();
+  const { messages, addMessage, isLoading, setIsLoading } = useChat();
+  const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
-  const [tempApiKey, setTempApiKey] = useState('');
   const { isTyping, startTyping } = useTypingActivity(1500);
 
-  // Инициализация приветственного сообщения только один раз
+  // Инициализация приветственного сообщения
   useEffect(() => {
-    if (isOpen) {
-      initializeChat(lang);
+    if (messages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: '1',
+        content: lang === 'en' 
+          ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
+          : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      addMessage(welcomeMessage);
     }
-  }, [isOpen, initializeChat, lang]);
-
-  // Проверяем наличие API ключа при открытии
-  useEffect(() => {
-    if (isOpen && !apiKey) {
-      setShowApiKeyInput(true);
-      setTempApiKey('');
-    } else {
-      setShowApiKeyInput(false);
-    }
-  }, [isOpen, apiKey]);
-
-  const handleSaveApiKey = () => {
-    if (tempApiKey.trim()) {
-      updateApiKey(tempApiKey.trim());
-      setShowApiKeyInput(false);
-      setTempApiKey('');
-    }
-  };
+  }, [messages.length, addMessage, lang]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -67,7 +53,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(inputMessage.trim(), lang, messages);
+      const response = await sendMessage(inputMessage.trim(), lang);
       
       const botResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -154,14 +140,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setShowApiKeyInput(!showApiKeyInput)}
-              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
-            >
-              <Key className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
               onClick={onClose}
               className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
             >
@@ -169,35 +147,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             </Button>
           </div>
         </div>
-
-        {/* API Key Input */}
-        {showApiKeyInput && (
-          <div className="p-4 border-b border-gray-800 bg-gray-800/50 relative z-10">
-            <div className="mb-2">
-              <label className="text-sm text-white/80 block mb-2">
-                {lang === 'en' ? 'OpenAI API Key:' : 'OpenAI API ключ:'}
-              </label>
-              <div className="flex gap-2">
-                <Input
-                  type="password"
-                  placeholder={lang === 'en' ? 'Enter your OpenAI API key...' : 'Введіть ваш OpenAI API ключ...'}
-                  value={tempApiKey}
-                  onChange={(e) => setTempApiKey(e.target.value)}
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
-                <Button onClick={handleSaveApiKey} className="contact-button">
-                  {lang === 'en' ? 'Save' : 'Зберегти'}
-                </Button>
-              </div>
-            </div>
-            <p className="text-xs text-white/60">
-              {lang === 'en' 
-                ? 'Your API key is stored locally and used to communicate with OpenAI'
-                : 'Ваш API ключ зберігається локально та використовується для зв\'язку з OpenAI'
-              }
-            </p>
-          </div>
-        )}
 
         {/* Chat Content */}
         <div className="h-[calc(100vh-80px)] md:h-[calc(100%-80px)] flex flex-col relative z-10">
@@ -230,7 +179,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
               {isLoading && (
                 <ChatBubble variant="received">
                   <ChatBubbleAvatar 
-                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwaWYyOGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
                     fallback="AI"
                     className="border-none outline-none"
                   />
@@ -245,14 +194,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             {error && (
               <div className="mb-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm">
                 {error}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearError}
-                  className="ml-2 text-red-200 hover:text-white"
-                >
-                  ×
-                </Button>
               </div>
             )}
             <div className="flex gap-2">
@@ -263,27 +204,19 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   onChange={handleInputChange}
                   onSend={handleSendMessage}
                   onKeyDown={handleKeyPress}
-                  disabled={isLoading || !apiKey}
+                  disabled={isLoading}
                   className="text-white placeholder:text-gray-400"
                 />
               </div>
               <Button
                 onClick={handleSendMessage}
-                disabled={isLoading || !inputMessage.trim() || !apiKey}
+                disabled={isLoading || !inputMessage.trim()}
                 size="icon"
                 className="contact-button h-12 w-12 rounded-lg"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            {!apiKey && (
-              <p className="text-xs text-yellow-400 mt-2">
-                {lang === 'en' 
-                  ? 'Please enter your OpenAI API key to start chatting'
-                  : 'Будь ласка, введіть ваш OpenAI API ключ для початку спілкування'
-                }
-              </p>
-            )}
           </div>
         </div>
       </div>
