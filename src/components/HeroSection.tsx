@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
@@ -30,7 +31,54 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
       });
     };
 
+    // Create floating elements animation
+    const createFloatingElements = () => {
+      const heroSection = document.querySelector('.hero-section');
+      if (!heroSection) return;
+
+      // Remove existing floating elements
+      const existingElements = heroSection.querySelectorAll('.hero-floating-element');
+      existingElements.forEach(el => el.remove());
+
+      // Create new floating elements
+      for (let i = 0; i < 6; i++) {
+        const element = document.createElement('div');
+        element.className = 'hero-floating-element';
+        
+        // Random size between 60px and 200px
+        const size = Math.random() * 140 + 60;
+        
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        // Random animation duration between 15-30 seconds
+        const duration = Math.random() * 15 + 15;
+        
+        // Random delay up to 5 seconds
+        const delay = Math.random() * 5;
+        
+        element.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255,122,0,0.03) 0%, rgba(255,54,163,0.03) 50%, rgba(151,71,255,0.03) 100%);
+          left: ${x}%;
+          top: ${y}%;
+          z-index: 1;
+          pointer-events: none;
+          animation: heroFloat ${duration}s ease-in-out infinite;
+          animation-delay: ${delay}s;
+          will-change: transform;
+        `;
+        
+        heroSection.appendChild(element);
+      }
+    };
+
     document.addEventListener('mousemove', handleMouseMove);
+    createFloatingElements();
     
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
