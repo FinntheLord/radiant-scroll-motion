@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -88,12 +89,14 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
             <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
               {getTranslation('partnersTitle2', lang)}
             </h2>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              <span className="orange-highlight">{getTranslation('partnersTitle3', lang)}</span>
-            </h2>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              <span className="orange-highlight">{getTranslation('partnersTitle4', lang)}</span>
-            </h2>
+            <div className="text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                <span className="orange-highlight">{getTranslation('partnersTitle3', lang)}</span>
+              </h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                <span className="orange-highlight">{getTranslation('partnersTitle4', lang)}</span>
+              </h2>
+            </div>
           </div>
         </div>
       </div>
