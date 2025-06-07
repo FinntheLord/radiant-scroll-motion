@@ -46,27 +46,27 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             </div>
 
             {/* Contact information */}
-            <div className="space-y-10">
+            <div className="space-y-12">
               {/* Address */}
               <div className="group">
-                <h4 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+                <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-orange-500" />
                   {lang === 'en' ? 'Address' : 'Адреса'}
                 </h4>
-                <p className="text-white/80 text-lg ml-8 group-hover:text-white transition-colors">
+                <p className="text-white/80 text-lg ml-8 group-hover:text-white transition-colors leading-relaxed">
                   {lang === 'en' ? 'Dnipro, Rabochaya, 23K' : 'Дніпро, Рабочая, 23К'}
                 </p>
               </div>
 
               {/* Email */}
               <div className="group">
-                <h4 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+                <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-3">
                   <Mail className="w-5 h-5 text-orange-500" />
                   {lang === 'en' ? 'Email' : 'Електронна пошта'}
                 </h4>
                 <a 
                   href="mailto:info@connexi.ai" 
-                  className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300"
+                  className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300 leading-relaxed"
                 >
                   info@connexi.ai
                 </a>
@@ -74,13 +74,13 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
 
               {/* Phone */}
               <div className="group">
-                <h4 className="text-xl font-semibold text-white mb-4 flex items-center gap-3">
+                <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-3">
                   <Phone className="w-5 h-5 text-orange-500" />
                   {lang === 'en' ? 'Phone' : 'Телефон'}
                 </h4>
                 <a 
                   href="tel:+380672002675" 
-                  className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300"
+                  className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300 leading-relaxed"
                 >
                   +38 (067) 200-26-75
                 </a>
