@@ -119,7 +119,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
-                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
+                src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
                 alt="AI Assistant"
                 className="h-10 w-10 object-contain"
                 style={{ border: 'none', outline: 'none' }}
@@ -160,7 +160,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 >
                   {message.role === 'assistant' && (
                     <ChatBubbleAvatar 
-                      src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                      src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png"
                       fallback="AI"
                       className="border-none outline-none"
                     />
@@ -179,7 +179,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
               {isLoading && (
                 <ChatBubble variant="received">
                   <ChatBubbleAvatar 
-                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                    src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png"
                     fallback="AI"
                     className="border-none outline-none"
                   />
