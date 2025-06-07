@@ -72,7 +72,7 @@
   }
 }
 
-/* Arrow navigation styles */
+/* Arrow navigation styles - unified button design */
 .custom-carousel-button {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transform: translateY(0);
@@ -81,6 +81,7 @@
   border: none !important;
   background: linear-gradient(45deg, #FF7A00, #FF36A3);
   color: white !important;
+  border-radius: 9999px !important;
 }
 
 .custom-carousel-button:hover {
@@ -111,6 +112,7 @@
   .contact-button {
     min-height: 44px; /* iOS recommended touch target */
     touch-action: manipulation;
+    border-radius: 9999px !important;
   }
   
   /* Prevent horizontal scroll issues */
@@ -165,4 +167,19 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Unified button styling across the entire site */
+button:not(.no-style), 
+.btn,
+input[type="submit"],
+input[type="button"] {
+  border-radius: 9999px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Ensure outline buttons also have rounded corners */
+.btn-outline,
+button[variant="outline"] {
+  border-radius: 9999px !important;
 }
