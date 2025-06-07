@@ -19,7 +19,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
         {/* Section title */}
         <div className="mb-20 text-left">
           <div className="text-orange-500 text-xl font-semibold mb-6 reveal-on-scroll tracking-wide">
-            {06} {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
+            {'{ 06 }'} {lang === 'en' ? 'CONTACTS' : 'КОНТАКТИ'}
           </div>
         </div>
 
