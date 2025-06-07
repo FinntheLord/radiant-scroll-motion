@@ -81,9 +81,9 @@ export function ChatBubbleAvatar({
   className,
 }: ChatBubbleAvatarProps) {
   return (
-    <Avatar className={cn("h-8 w-8 shrink-0", className)}>
-      {src && <AvatarImage src={src} />}
-      <AvatarFallback className="text-xs bg-gray-600 text-gray-200">{fallback}</AvatarFallback>
+    <Avatar className={cn("h-8 w-8 shrink-0 border-none outline-none", className)} style={{ border: 'none', outline: 'none' }}>
+      {src && <AvatarImage src={src} className="border-none outline-none" style={{ border: 'none', outline: 'none' }} />}
+      <AvatarFallback className="text-xs bg-gray-600 text-gray-200 border-none outline-none" style={{ border: 'none', outline: 'none' }}>{fallback}</AvatarFallback>
     </Avatar>
   )
 }

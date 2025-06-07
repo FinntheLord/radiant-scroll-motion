@@ -110,11 +110,12 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
+            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
                 src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png" 
                 alt="AI Assistant"
-                className="h-8 w-8 object-contain"
+                className="h-10 w-10 object-contain"
+                style={{ border: 'none', outline: 'none' }}
               />
             </div>
             <div>
@@ -151,7 +152,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                     <ChatBubbleAvatar 
                       src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png"
                       fallback="AI"
-                      className="bg-gradient-to-br from-purple-500 to-pink-500"
+                      className="border-none outline-none"
                     />
                   )}
                   <ChatBubbleMessage variant={message.role === 'user' ? 'sent' : 'received'}>
@@ -160,7 +161,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   {message.role === 'user' && (
                     <ChatBubbleAvatar 
                       fallback={lang === 'en' ? 'You' : 'Ви'} 
-                      className="bg-blue-600"
+                      className="bg-blue-600 border-none outline-none"
                     />
                   )}
                 </ChatBubble>
@@ -170,7 +171,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   <ChatBubbleAvatar 
                     src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png"
                     fallback="AI"
-                    className="bg-gradient-to-br from-purple-500 to-pink-500"
+                    className="border-none outline-none"
                   />
                   <ChatBubbleMessage variant="received" isLoading />
                 </ChatBubble>
