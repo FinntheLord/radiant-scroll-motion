@@ -81,10 +81,12 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
     <section id="partners" className={`py-12 md:py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-12 md:mb-16 reveal-on-scroll">
-          <div className="text-center">
+          <div className="text-left mb-8">
             <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6 font-semibold tracking-wide">
               {"{04}"} {lang === 'en' ? 'PARTNERS' : 'ПАРТНЕРИ'}
             </div>
+          </div>
+          <div className="text-center">
             <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
               50 ТЕХНОЛОГІЙ
             </h2>
