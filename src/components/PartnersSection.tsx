@@ -80,10 +80,8 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
   return (
     <section id="partners" className={`py-12 md:py-20 overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-left mb-12 md:mb-16 reveal-on-scroll">
-          <div className="connexi-gradient-text text-xl mb-6">
-            {lang === 'en' ? '{04} PARTNERS' : '{04} ПАРТНЕРИ'}
-          </div>
+        <div className="text-center mb-12 md:mb-16 reveal-on-scroll">
+          <div className="text-orange-500 text-lg md:text-xl mb-4 md:mb-6">{getTranslation('partnersSubtitle', lang)}</div>
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
             {getTranslation('partnersTitle1', lang)}
           </h2>
