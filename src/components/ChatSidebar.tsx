@@ -110,12 +110,16 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-connexi-orange to-connexi-pink flex items-center justify-center">
-              <MessageCircle className="h-4 w-4 text-white" />
+            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
+              <img 
+                src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png" 
+                alt="AI Assistant"
+                className="h-8 w-8 object-contain"
+              />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-white">
-                {lang === 'en' ? 'AI Assistant' : 'AI-Помічник'}
+                AI-Помічник Connexi
               </h2>
               <p className="text-sm text-white/60">
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
@@ -145,8 +149,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 >
                   {message.role === 'assistant' && (
                     <ChatBubbleAvatar 
+                      src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png"
                       fallback="AI"
-                      className="bg-gradient-to-br from-connexi-orange to-connexi-pink"
+                      className="bg-gradient-to-br from-purple-500 to-pink-500"
                     />
                   )}
                   <ChatBubbleMessage variant={message.role === 'user' ? 'sent' : 'received'}>
@@ -163,8 +168,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
               {isLoading && (
                 <ChatBubble variant="received">
                   <ChatBubbleAvatar 
+                    src="/lovable-uploads/fc7bb35c-fbb7-4db5-9918-ed7f986961ec.png"
                     fallback="AI"
-                    className="bg-gradient-to-br from-connexi-orange to-connexi-pink"
+                    className="bg-gradient-to-br from-purple-500 to-pink-500"
                   />
                   <ChatBubbleMessage variant="received" isLoading />
                 </ChatBubble>
