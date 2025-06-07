@@ -1,12 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/ui/chat-input";
 import { ChatMessageList } from "@/components/ui/chat-message-list";
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui/chat-bubble";
+import { TrafficLight } from "./TrafficLight";
 import { useChat } from "../contexts/ChatContext";
 import { useChatApi } from "../hooks/useChatApi";
+import { useTypingActivity } from "../hooks/useTypingActivity";
 import { ChatMessage } from "../types/chat";
 import { Language } from "../lib/translations";
 
@@ -20,6 +21,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const { messages, addMessage, isLoading, setIsLoading } = useChat();
   const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
+  const { isTyping, startTyping } = useTypingActivity(1500);
 
   // Инициализация приветственного сообщения
   useEffect(() => {
@@ -86,6 +88,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMessage(e.target.value);
+    startTyping();
+  };
+
   return (
     <>
       {/* Overlay */}
@@ -112,7 +119,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
-                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
+                src="/lovable-uploads/assistant-chat-icon.webp" 
                 alt="AI Assistant"
                 className="h-10 w-10 object-contain"
                 style={{ border: 'none', outline: 'none' }}
@@ -128,14 +135,17 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
-          >
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-3">
+            <TrafficLight isActive={isTyping || isLoading} />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Chat Content */}
@@ -191,7 +201,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 <ChatInput
                   placeholder={lang === 'en' ? 'Ask about AI solutions...' : 'Запитайте про AI-рішення...'}
                   value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
+                  onChange={handleInputChange}
                   onSend={handleSendMessage}
                   onKeyDown={handleKeyPress}
                   disabled={isLoading}
