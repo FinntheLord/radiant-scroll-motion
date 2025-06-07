@@ -1,11 +1,10 @@
+
 import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
-import TrafficLight from "./TrafficLight";
-import { useTypingActivity } from "../hooks/useTypingActivity";
 
 interface NavbarProps {
   lang: Language;
@@ -16,7 +15,6 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { openSidebarChat } = useChat();
   const navigate = useNavigate();
-  const isTyping = useTypingActivity();
 
   const switchLanguage = useCallback(() => {
     const newLang = lang === 'uk' ? 'en' : 'uk';
@@ -59,28 +57,21 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
-            <img 
-              src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
-              alt="connexi.ai logo" 
-              className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
-            />
-            <div className="flex flex-col">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-                connexi
-              </div>
-              <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
-                Linking Ideas to Solutions
-              </div>
+        <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
+          <img 
+            src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
+            alt="connexi.ai logo" 
+            className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
+          />
+          <div className="flex flex-col">
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+              connexi
             </div>
-          </a>
-          
-          {/* Светофор */}
-          <div className="hidden sm:block">
-            <TrafficLight isActive={isTyping} />
+            <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
+              Linking Ideas to Solutions
+            </div>
           </div>
-        </div>
+        </a>
         
         <nav className="hidden md:flex items-center space-x-8">
           <a href="#about" className="text-gray-700 hover:text-black transition-colors">
@@ -124,11 +115,6 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
         
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center space-x-2">
-          {/* Mobile светофор */}
-          <div className="sm:hidden">
-            <TrafficLight isActive={isTyping} />
-          </div>
-          
           <Button 
             variant="ghost"
             size="sm"
