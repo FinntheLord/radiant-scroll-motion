@@ -1,4 +1,3 @@
-
 import React from "react";
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,18 +15,20 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
   return (
     <section id="contacts" className={`py-20 relative overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
-            {getTranslation('contactsSubtitle', lang)}
+        <div className="mb-16">
+          <div className="text-left">
+            <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">
+              {getTranslation('contactsSubtitle', lang)}
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white reveal-on-scroll">
+              <span className="text-orange-500">{"{06}"}</span> <span className="text-white">{getTranslation('contactsTitle1', lang)} </span>
+              <span className="connexi-gradient-text">{getTranslation('contactsTitle2', lang)}</span>
+              <br />
+              <span className="text-white">{getTranslation('contactsTitle3', lang)} </span>
+              <span className="connexi-gradient-text">{getTranslation('contactsTitle4', lang)}</span>
+            </h2>
           </div>
-          
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-white reveal-on-scroll">
-            <span className="text-white">{getTranslation('contactsTitle1', lang)} </span>
-            <span className="connexi-gradient-text">{getTranslation('contactsTitle2', lang)}</span>
-            <br />
-            <span className="text-white">{getTranslation('contactsTitle3', lang)} </span>
-            <span className="connexi-gradient-text">{getTranslation('contactsTitle4', lang)}</span>
-          </h2>
         </div>
 
         <div className="max-w-4xl mx-auto">
