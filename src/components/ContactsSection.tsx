@@ -14,7 +14,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
   const { openSidebarChat } = useChat();
 
   return (
-    <section id="contacts" className={`py-20 relative overflow-hidden animated-bg ${className}`}>
+    <section id="contacts" className={`py-20 bg-gray-900 text-white relative overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 relative z-10">
         {/* Section title */}
         <div className="mb-20 text-left">
