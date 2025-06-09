@@ -12,6 +12,7 @@ interface ChatContextType {
   clearMessages: () => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  initializeWelcomeMessage: (lang: Language) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [isSidebarChatOpen, setIsSidebarChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [welcomeMessageInitialized, setWelcomeMessageInitialized] = useState(false);
 
   const openSidebarChat = () => {
     setIsSidebarChatOpen(true);
@@ -39,6 +41,22 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
 
   const clearMessages = () => {
     setMessages([]);
+    setWelcomeMessageInitialized(false);
+  };
+
+  const initializeWelcomeMessage = (lang: Language) => {
+    if (!welcomeMessageInitialized && messages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: '1',
+        content: lang === 'en' 
+          ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
+          : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      addMessage(welcomeMessage);
+      setWelcomeMessageInitialized(true);
+    }
   };
 
   return (
@@ -50,7 +68,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       addMessage,
       clearMessages,
       isLoading,
-      setIsLoading
+      setIsLoading,
+      initializeWelcomeMessage
     }}>
       {children}
     </ChatContext.Provider>

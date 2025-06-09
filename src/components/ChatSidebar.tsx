@@ -18,25 +18,17 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
-  const { messages, addMessage, isLoading, setIsLoading } = useChat();
+  const { messages, addMessage, isLoading, setIsLoading, initializeWelcomeMessage } = useChat();
   const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
   const { isTyping, startTyping } = useTypingActivity(1500);
 
-  // Инициализация приветственного сообщения
+  // Инициализация приветственного сообщения только при открытии чата
   useEffect(() => {
-    if (messages.length === 0) {
-      const welcomeMessage: ChatMessage = {
-        id: '1',
-        content: lang === 'en' 
-          ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
-          : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
-        role: 'assistant',
-        timestamp: new Date()
-      };
-      addMessage(welcomeMessage);
+    if (isOpen) {
+      initializeWelcomeMessage(lang);
     }
-  }, [messages.length, addMessage, lang]);
+  }, [isOpen, initializeWelcomeMessage, lang]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
