@@ -56,8 +56,25 @@ serve(async (req) => {
   }
 
   try {
-    const { message, language, userId, chatId } = await req.json();
+    const { message, language, userId, chatId, isResponse, aiResponse } = await req.json();
 
+    // Обработка входящего ответа от n8n
+    if (isResponse && aiResponse) {
+      console.log('Processing AI response from n8n:', { userId, chatId, aiResponse });
+      
+      return new Response(JSON.stringify({ 
+        success: true,
+        message: aiResponse,
+        messageId: generateId(),
+        userId: userId,
+        chatId: chatId,
+        type: 'ai_response'
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Обработка исходящего сообщения пользователя
     if (!message) {
       throw new Error('Message is required');
     }
@@ -78,6 +95,7 @@ serve(async (req) => {
       language: language || 'uk',
       timestamp: Date.now(),
       source: 'connexi-chat',
+      responseUrl: `https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/receive-ai-response`,
       client: {
         id: currentUserId,
         chatId: currentChatId,
