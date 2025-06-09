@@ -1,10 +1,19 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export const useChatApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [websocket, setWebsocket] = useState<WebSocket | null>(null);
+
+  // Колбэк для получения ответов от AI в реальном времени
+  const [onAIResponse, setOnAIResponse] = useState<((message: string) => void) | null>(null);
+
+  const initializeWebSocket = useCallback((chatId: string) => {
+    // Здесь можно добавить WebSocket соединение для реального времени
+    console.log('WebSocket initialization for chatId:', chatId);
+  }, []);
 
   const sendMessage = useCallback(async (
     message: string, 
@@ -70,6 +79,8 @@ export const useChatApi = () => {
     sendMessage,
     isLoading,
     error,
-    clearError: () => setError(null)
+    clearError: () => setError(null),
+    initializeWebSocket,
+    setOnAIResponse
   };
 };
