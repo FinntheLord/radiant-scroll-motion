@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Language } from "../../lib/translations";
+import { useChat } from "../../contexts/ChatContext";
 
 interface AboutContentProps {
   lang: Language;
@@ -9,6 +10,12 @@ interface AboutContentProps {
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({ lang, className }) => {
+  const { openSidebarChat } = useChat();
+
+  const handleContactClick = () => {
+    openSidebarChat();
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
       <div className="reveal-on-scroll" style={{ animationDelay: "0.1s" }}>
@@ -29,7 +36,10 @@ const AboutContent: React.FC<AboutContentProps> = ({ lang, className }) => {
           }
         </p>
         
-        <Button className="contact-button px-6 py-2 rounded-full transition-all pulse-on-hover">
+        <Button 
+          onClick={handleContactClick}
+          className="contact-button px-6 py-2 rounded-full transition-all pulse-on-hover"
+        >
           {lang === 'en' ? 'CONTACT US' : 'ЗВ\'ЯЗАТИСЯ'}
         </Button>
       </div>
