@@ -32,17 +32,21 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
         return;
       }
 
-      if (data && data.type === 'ai_response' && data.message) {
+      console.log('Polling response:', data);
+
+      if (data && data.success && data.type === 'ai_response' && data.message) {
         console.log('Received new AI message from polling:', data.message);
         
         const newMessage: ChatMessage = {
-          id: `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
+          id: data.messageId || `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
           content: data.message,
           role: 'assistant',
           timestamp: new Date()
         };
         
         onNewMessage(newMessage);
+      } else {
+        console.log('No new messages found');
       }
     } catch (err) {
       console.error('Error in polling:', err);

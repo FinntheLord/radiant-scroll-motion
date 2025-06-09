@@ -11,6 +11,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Хранилище сообщений в памяти (в продакшене лучше использовать Redis или базу данных)
+const messageStore = new Map<string, any>();
+
 // Функция для генерации уникального ID
 function generateId(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -56,16 +59,70 @@ serve(async (req) => {
   }
 
   try {
-    const { message, language, userId, chatId, isResponse, aiResponse } = await req.json();
+    const { message, language, userId, chatId, checkMessages, isResponse, aiResponse } = await req.json();
 
-    // Обработка входящего ответа от n8n
+    // Обработка проверки новых сообщений (полинг)
+    if (checkMessages) {
+      console.log('Проверка новых сообщений для:', { userId, chatId });
+      
+      if (!userId || !chatId) {
+        return new Response(JSON.stringify({ 
+          error: 'userId и chatId обязательны для проверки сообщений'
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const messageKey = `${userId}_${chatId}`;
+      const storedMessage = messageStore.get(messageKey);
+      
+      if (storedMessage) {
+        console.log('Найдено сохраненное сообщение:', storedMessage);
+        // Удаляем сообщение после доставки
+        messageStore.delete(messageKey);
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          type: 'ai_response',
+          message: storedMessage.message,
+          messageId: storedMessage.messageId,
+          userId: userId,
+          chatId: chatId
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      } else {
+        console.log('Новых сообщений не найдено');
+        return new Response(JSON.stringify({ 
+          success: true,
+          type: 'no_messages'
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    // Обработка входящего ответа от n8n через receive-ai-response
     if (isResponse && aiResponse) {
-      console.log('Processing AI response from n8n:', { userId, chatId, aiResponse });
+      console.log('Сохранение AI ответа от n8n:', { userId, chatId, aiResponse });
+      
+      const messageKey = `${userId}_${chatId}`;
+      const messageId = generateId();
+      
+      // Сохраняем сообщение в хранилище
+      messageStore.set(messageKey, {
+        message: aiResponse,
+        messageId: messageId,
+        timestamp: Date.now()
+      });
+      
+      console.log('AI ответ сохранен в хранилище с ключом:', messageKey);
       
       return new Response(JSON.stringify({ 
         success: true,
         message: aiResponse,
-        messageId: generateId(),
+        messageId: messageId,
         userId: userId,
         chatId: chatId,
         type: 'ai_response'
