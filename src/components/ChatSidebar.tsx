@@ -7,6 +7,7 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui
 import { TrafficLight } from "./TrafficLight";
 import { useChat } from "../contexts/ChatContext";
 import { useChatApi } from "../hooks/useChatApi";
+import { useChatPolling } from "../hooks/useChatPolling";
 import { useTypingActivity } from "../hooks/useTypingActivity";
 import { ChatMessage } from "../types/chat";
 import { Language } from "../lib/translations";
@@ -31,6 +32,20 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const [inputMessage, setInputMessage] = useState('');
   const { isTyping, startTyping } = useTypingActivity(1500);
   const isProcessing = useRef(false);
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
+
+  // Механизм опроса для получения ответов от n8n
+  const { isPolling } = useChatPolling({
+    userId,
+    chatId,
+    onNewMessage: (message: ChatMessage) => {
+      console.log('Received new message from polling:', message);
+      addMessage(message);
+      setWaitingForResponse(false);
+      setIsLoading(false);
+    },
+    isEnabled: waitingForResponse && isOpen
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -59,6 +74,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     addMessage(userMessage);
     setInputMessage('');
     setIsLoading(true);
+    setWaitingForResponse(true);
 
     try {
       console.log('Calling n8n webhook with:', { 
@@ -70,17 +86,23 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       
       const response = await sendMessage(messageContent, lang, userId, chatId);
       
-      const botResponse: ChatMessage = {
-        id: `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
+      // Показываем временное сообщение
+      const tempResponse: ChatMessage = {
+        id: `assistant-temp-${Date.now()}-${Math.random().toString(36).substring(2)}`,
         content: response,
         role: 'assistant',
         timestamp: new Date()
       };
       
-      console.log('Received bot response:', botResponse);
-      addMessage(botResponse);
+      console.log('Received temporary response:', tempResponse);
+      addMessage(tempResponse);
+      
+      // Продолжаем ждать реального ответа через polling
+      console.log('Waiting for real response from n8n...');
+      
     } catch (err) {
       console.error('Error sending message to n8n:', err);
+      setWaitingForResponse(false);
       
       const errorResponse: ChatMessage = {
         id: `error-${Date.now()}-${Math.random().toString(36).substring(2)}`,
@@ -150,13 +172,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 8)}...
+                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(ожидание ответа)'}
               </p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
-            <TrafficLight isActive={isTyping || isLoading} />
+            <TrafficLight isActive={isTyping || isLoading || waitingForResponse} />
             <Button
               variant="ghost"
               size="icon"
@@ -196,7 +218,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   )}
                 </ChatBubble>
               ))}
-              {isLoading && (
+              {(isLoading || waitingForResponse) && (
                 <ChatBubble variant="received">
                   <ChatBubbleAvatar 
                     src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
@@ -224,13 +246,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                   onChange={handleInputChange}
                   onSend={handleSendMessage}
                   onKeyDown={handleKeyPress}
-                  disabled={isLoading}
+                  disabled={isLoading || waitingForResponse}
                   className="text-white placeholder:text-gray-400"
                 />
               </div>
               <Button
                 onClick={handleSendMessage}
-                disabled={isLoading || !inputMessage.trim() || isProcessing.current}
+                disabled={isLoading || !inputMessage.trim() || isProcessing.current || waitingForResponse}
                 size="icon"
                 className="contact-button h-12 w-12 rounded-lg"
               >
