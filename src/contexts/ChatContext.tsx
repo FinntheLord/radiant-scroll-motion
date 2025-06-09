@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
 import { ChatMessage } from '../types/chat';
 import { Language } from '../lib/translations';
 
@@ -25,7 +25,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [isSidebarChatOpen, setIsSidebarChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [welcomeMessageInitialized, setWelcomeMessageInitialized] = useState(false);
+  const welcomeMessageInitialized = useRef(false);
 
   const openSidebarChat = () => {
     setIsSidebarChatOpen(true);
@@ -36,18 +36,31 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   };
 
   const addMessage = (message: ChatMessage) => {
-    setMessages(prev => [...prev, message]);
+    setMessages(prev => {
+      // Проверяем, нет ли уже сообщения с таким же содержимым и ролью
+      const isDuplicate = prev.some(existingMessage => 
+        existingMessage.content === message.content && 
+        existingMessage.role === message.role &&
+        Math.abs(existingMessage.timestamp.getTime() - message.timestamp.getTime()) < 1000
+      );
+      
+      if (isDuplicate) {
+        return prev;
+      }
+      
+      return [...prev, message];
+    });
   };
 
   const clearMessages = () => {
     setMessages([]);
-    setWelcomeMessageInitialized(false);
+    welcomeMessageInitialized.current = false;
   };
 
   const initializeWelcomeMessage = (lang: Language) => {
-    if (!welcomeMessageInitialized && messages.length === 0) {
+    if (!welcomeMessageInitialized.current && messages.length === 0) {
       const welcomeMessage: ChatMessage = {
-        id: '1',
+        id: 'welcome-message',
         content: lang === 'en' 
           ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
           : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?',
@@ -55,7 +68,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         timestamp: new Date()
       };
       addMessage(welcomeMessage);
-      setWelcomeMessageInitialized(true);
+      welcomeMessageInitialized.current = true;
     }
   };
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "@/components/ui/chat-input";
@@ -22,8 +23,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
   const { isTyping, startTyping } = useTypingActivity(1500);
+  const isProcessing = useRef(false);
 
-  // Инициализация приветственного сообщения только при открытии чата
   useEffect(() => {
     if (isOpen) {
       initializeWelcomeMessage(lang);
@@ -31,11 +32,14 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   }, [isOpen, initializeWelcomeMessage, lang]);
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isLoading) return;
+    if (!inputMessage.trim() || isLoading || isProcessing.current) return;
 
+    isProcessing.current = true;
+    const messageContent = inputMessage.trim();
+    
     const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content: inputMessage.trim(),
+      id: `user-${Date.now()}`,
+      content: messageContent,
       role: 'user',
       timestamp: new Date()
     };
@@ -45,10 +49,10 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(inputMessage.trim(), lang);
+      const response = await sendMessage(messageContent, lang);
       
       const botResponse: ChatMessage = {
-        id: (Date.now() + 1).toString(),
+        id: `assistant-${Date.now()}`,
         content: response,
         role: 'assistant',
         timestamp: new Date()
@@ -59,7 +63,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       console.error('Error sending message:', err);
       
       const errorResponse: ChatMessage = {
-        id: (Date.now() + 1).toString(),
+        id: `error-${Date.now()}`,
         content: lang === 'en' 
           ? 'Sorry, I encountered an error. Please try again later.'
           : 'Вибачте, сталася помилка. Спробуйте пізніше.',
@@ -70,6 +74,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       addMessage(errorResponse);
     } finally {
       setIsLoading(false);
+      isProcessing.current = false;
     }
   };
 
@@ -202,7 +207,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
               </div>
               <Button
                 onClick={handleSendMessage}
-                disabled={isLoading || !inputMessage.trim()}
+                disabled={isLoading || !inputMessage.trim() || isProcessing.current}
                 size="icon"
                 className="contact-button h-12 w-12 rounded-lg"
               >
