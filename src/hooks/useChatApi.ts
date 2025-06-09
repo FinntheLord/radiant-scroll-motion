@@ -55,6 +55,7 @@ export const useChatApi = () => {
         throw new Error('Invalid response format from n8n service');
       }
 
+      // Теперь возвращаем временное сообщение, реальный ответ придет через webhook
       return data.message;
     } catch (err) {
       console.error('Error in sendMessage:', err);

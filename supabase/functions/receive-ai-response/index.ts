@@ -26,18 +26,34 @@ serve(async (req) => {
       message: message.substring(0, 100) + '...' 
     });
 
-    // Здесь можно добавить логику для:
-    // 1. Сохранения ответа в базу данных
-    // 2. Отправки уведомления пользователю через WebSocket
-    // 3. Обновления статуса сообщения
-    
-    // Для демонстрации просто логируем полученный ответ
-    console.log('AI response processed successfully');
+    // Пересылаем ответ обратно в chat-with-openai как готовый ответ
+    const chatResponse = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/chat-with-openai`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': req.headers.get('Authorization') || `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+      },
+      body: JSON.stringify({
+        isResponse: true,
+        aiResponse: message,
+        userId: userId,
+        chatId: chatId,
+        messageId: messageId,
+        language: language
+      })
+    });
+
+    if (!chatResponse.ok) {
+      console.error('Failed to forward response to chat function:', await chatResponse.text());
+      throw new Error('Failed to forward response to chat function');
+    }
+
+    console.log('Successfully forwarded AI response to chat function');
 
     return new Response(JSON.stringify({ 
       success: true,
       messageId: messageId,
-      status: 'response_received',
+      status: 'response_delivered',
       timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
