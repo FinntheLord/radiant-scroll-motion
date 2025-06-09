@@ -16,6 +16,40 @@ function generateId(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 }
 
+// Функция для отправки на webhook
+async function sendToWebhook(url: string, payload: any): Promise<any> {
+  console.log(`Отправка на webhook: ${url}`);
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  console.log(`Статус ответа от ${url}:`, response.status);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Ошибка webhook ${url}:`, response.status, errorText);
+    throw new Error(`Webhook error: ${response.status} - ${errorText}`);
+  }
+
+  let responseData;
+  try {
+    responseData = await response.json();
+    console.log(`Данные ответа от ${url}:`, responseData);
+  } catch (e) {
+    const responseText = await response.text();
+    console.log(`Текстовый ответ от ${url}:`, responseText);
+    responseData = { message: responseText || 'Спасибо за сообщение! Мы обработаем ваш запрос.' };
+  }
+
+  return responseData;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -76,33 +110,25 @@ serve(async (req) => {
 
     console.log('Sending to n8n webhook:', JSON.stringify(n8nPayload, null, 2));
 
-    // Отправляем данные в n8n webhook
-    const response = await fetch(N8N_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(n8nPayload),
-    });
-
-    console.log('N8N response status:', response.status);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('N8N webhook error:', response.status, errorText);
-      throw new Error(`N8N webhook error: ${response.status}`);
-    }
-
     let responseData;
+    let usedTestWebhook = false;
+
     try {
-      responseData = await response.json();
-      console.log('N8N response data:', responseData);
-    } catch (e) {
-      // Если ответ не в формате JSON, используем текст
-      const responseText = await response.text();
-      console.log('N8N response text:', responseText);
-      responseData = { message: responseText || 'Спасибо за сообщение! Мы обработаем ваш запрос.' };
+      // Сначала пробуем основной webhook
+      responseData = await sendToWebhook(N8N_WEBHOOK_URL, n8nPayload);
+      console.log('Успешно отправлено на основной webhook');
+    } catch (error) {
+      console.warn('Основной webhook недоступен, пробуем тестовый:', error.message);
+      
+      try {
+        // Если основной не работает, пробуем тестовый
+        responseData = await sendToWebhook(N8N_WEBHOOK_TEST_URL, n8nPayload);
+        usedTestWebhook = true;
+        console.log('Успешно отправлено на тестовый webhook');
+      } catch (testError) {
+        console.error('Оба webhook недоступны:', testError.message);
+        throw new Error('Все n8n webhooks недоступны');
+      }
     }
 
     // Извлекаем сообщение из ответа n8n
@@ -123,12 +149,14 @@ serve(async (req) => {
     }
 
     console.log('Final AI message:', aiMessage);
+    console.log('Used test webhook:', usedTestWebhook);
 
     return new Response(JSON.stringify({ 
       message: aiMessage,
       messageId: messageId,
       userId: currentUserId,
-      chatId: currentChatId
+      chatId: currentChatId,
+      usedTestWebhook: usedTestWebhook
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
