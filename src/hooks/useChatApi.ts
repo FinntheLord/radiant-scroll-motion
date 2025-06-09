@@ -6,17 +6,33 @@ export const useChatApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sendMessage = useCallback(async (message: string, lang: 'en' | 'uk'): Promise<string> => {
+  const sendMessage = useCallback(async (
+    message: string, 
+    lang: 'en' | 'uk',
+    userId?: string,
+    chatId?: string
+  ): Promise<string> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('Sending message to chat-with-openai function:', { message, language: lang });
+      // Генерируем ID если не переданы
+      const currentUserId = userId || `user_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+      const currentChatId = chatId || `chat_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+
+      console.log('Sending message to n8n via Edge Function:', { 
+        message, 
+        language: lang, 
+        userId: currentUserId, 
+        chatId: currentChatId 
+      });
 
       const { data, error: supabaseError } = await supabase.functions.invoke('chat-with-openai', {
         body: { 
           message: message,
-          language: lang 
+          language: lang,
+          userId: currentUserId,
+          chatId: currentChatId
         }
       });
 
@@ -28,7 +44,7 @@ export const useChatApi = () => {
       }
 
       if (!data) {
-        throw new Error('No response received from AI service');
+        throw new Error('No response received from n8n service');
       }
 
       if (data.error) {
@@ -36,7 +52,7 @@ export const useChatApi = () => {
       }
 
       if (!data.message) {
-        throw new Error('Invalid response format from AI service');
+        throw new Error('Invalid response format from n8n service');
       }
 
       return data.message;

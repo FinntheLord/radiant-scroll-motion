@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,15 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
-  const { messages, addMessage, isLoading, setIsLoading, initializeWelcomeMessage } = useChat();
+  const { 
+    messages, 
+    addMessage, 
+    isLoading, 
+    setIsLoading, 
+    initializeWelcomeMessage,
+    userId,
+    chatId
+  } = useChat();
   const { sendMessage, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
   const { isTyping, startTyping } = useTypingActivity(1500);
@@ -31,6 +38,10 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     }
   }, [isOpen, initializeWelcomeMessage, lang]);
 
+  useEffect(() => {
+    console.log('Current chat session:', { userId, chatId });
+  }, [userId, chatId]);
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading || isProcessing.current) return;
 
@@ -38,32 +49,41 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     const messageContent = inputMessage.trim();
     
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()}`,
+      id: `user-${Date.now()}-${Math.random().toString(36).substring(2)}`,
       content: messageContent,
       role: 'user',
       timestamp: new Date()
     };
 
+    console.log('Sending user message:', userMessage);
     addMessage(userMessage);
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(messageContent, lang);
+      console.log('Calling n8n webhook with:', { 
+        message: messageContent, 
+        lang, 
+        userId, 
+        chatId 
+      });
+      
+      const response = await sendMessage(messageContent, lang, userId, chatId);
       
       const botResponse: ChatMessage = {
-        id: `assistant-${Date.now()}`,
+        id: `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
         content: response,
         role: 'assistant',
         timestamp: new Date()
       };
       
+      console.log('Received bot response:', botResponse);
       addMessage(botResponse);
     } catch (err) {
-      console.error('Error sending message:', err);
+      console.error('Error sending message to n8n:', err);
       
       const errorResponse: ChatMessage = {
-        id: `error-${Date.now()}`,
+        id: `error-${Date.now()}-${Math.random().toString(36).substring(2)}`,
         content: lang === 'en' 
           ? 'Sorry, I encountered an error. Please try again later.'
           : 'Вибачте, сталася помилка. Спробуйте пізніше.',
@@ -124,10 +144,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-white">
-                AI-Помічник Connexi
+                AI-Помічник Connexi (n8n)
               </h2>
               <p className="text-sm text-white/60">
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
+              </p>
+              <p className="text-xs text-white/40">
+                Chat ID: {chatId.substring(0, 8)}...
               </p>
             </div>
           </div>
