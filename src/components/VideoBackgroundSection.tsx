@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import ConsultationChat from "./ConsultationChat";
 import { Language, getTranslation } from "../lib/translations";
+import { useChat } from "../contexts/ChatContext";
 
 interface VideoBackgroundSectionProps {
   lang: Language;
@@ -11,6 +11,7 @@ interface VideoBackgroundSectionProps {
 
 const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { openSidebarChat } = useChat();
 
   useEffect(() => {
     // Add floating elements to the section
@@ -28,6 +29,10 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
       }
     }
   }, []);
+
+  const handleLearnMoreClick = () => {
+    openSidebarChat();
+  };
 
   return (
     <>
@@ -77,7 +82,7 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
               <div className="flex items-center justify-center gap-4">
                 <Button 
                   className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
-                  onClick={() => setIsChatOpen(true)}
+                  onClick={handleLearnMoreClick}
                 >
                   {getTranslation('learnMore', lang)}
                 </Button>
