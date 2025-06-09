@@ -140,12 +140,30 @@ serve(async (req) => {
                  responseData.response || 
                  responseData.text || 
                  responseData.output ||
+                 responseData.reply ||
+                 responseData.content ||
                  (responseData.data && responseData.data.message) ||
-                 'Спасибо за сообщение! Мы обработаем ваш запрос.';
+                 (responseData.result && responseData.result.message);
+                 
+      // Проверяем, не является ли это служебным сообщением о запуске
+      if (aiMessage === 'Workflow was started' || aiMessage === 'Workflow started' || !aiMessage) {
+        console.log('Получено служебное сообщение, ждем реального ответа...');
+        aiMessage = language === 'en' 
+          ? 'I\'m processing your message. Please wait for the response...'
+          : 'Обробляю ваше повідомлення. Зачекайте на відповідь...';
+      }
     } else if (typeof responseData === 'string') {
       aiMessage = responseData;
+      // Проверяем служебные сообщения
+      if (aiMessage === 'Workflow was started' || aiMessage === 'Workflow started') {
+        aiMessage = language === 'en' 
+          ? 'I\'m processing your message. Please wait for the response...'
+          : 'Обробляю ваше повідомлення. Зачекайте на відповідь...';
+      }
     } else {
-      aiMessage = 'Спасибо за сообщение! Мы обработаем ваш запрос.';
+      aiMessage = language === 'en' 
+        ? 'Thank you for your message! We will process your request.'
+        : 'Спасибо за сообщение! Мы обработаем ваш запрос.';
     }
 
     console.log('Final AI message:', aiMessage);
