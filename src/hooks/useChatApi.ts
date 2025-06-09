@@ -11,6 +11,8 @@ export const useChatApi = () => {
     setError(null);
 
     try {
+      console.log('Sending message to chat-with-openai function:', { message, language: lang });
+
       const { data, error: supabaseError } = await supabase.functions.invoke('chat-with-openai', {
         body: { 
           message: message,
@@ -18,16 +20,28 @@ export const useChatApi = () => {
         }
       });
 
+      console.log('Supabase function response:', { data, error: supabaseError });
+
       if (supabaseError) {
+        console.error('Supabase error:', supabaseError);
         throw new Error(supabaseError.message);
       }
 
-      if (!data || !data.message) {
-        throw new Error('Invalid response from AI service');
+      if (!data) {
+        throw new Error('No response received from AI service');
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data.message) {
+        throw new Error('Invalid response format from AI service');
       }
 
       return data.message;
     } catch (err) {
+      console.error('Error in sendMessage:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       throw new Error(errorMessage);

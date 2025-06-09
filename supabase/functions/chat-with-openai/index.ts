@@ -15,7 +15,18 @@ serve(async (req) => {
   }
 
   try {
+    if (!openAIApiKey) {
+      console.error('OPENAI_API_KEY not found in environment variables');
+      throw new Error('OpenAI API key not configured');
+    }
+
     const { message, language } = await req.json();
+
+    if (!message) {
+      throw new Error('Message is required');
+    }
+
+    console.log('Received message:', message, 'Language:', language);
 
     const systemPrompt = language === 'uk' 
       ? 'Ви - AI-помічник компанії Connexi, яка спеціалізується на впровадженні рішень штучного інтелекту для бізнесу. Відповідайте українською мовою. Ваша мета - допомогти клієнтам зрозуміти, як AI може покращити їхній бізнес, та запропонувати консультацію з нашими спеціалістами.'
@@ -39,18 +50,30 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', response.status, errorData);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response:', data);
+      throw new Error('Invalid response from OpenAI');
+    }
+
     const generatedText = data.choices[0].message.content;
+    console.log('Generated response:', generatedText);
 
     return new Response(JSON.stringify({ message: generatedText }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.error('Error in chat-with-openai function:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ 
+      error: error.message || 'Internal server error',
+      details: 'Please check the function logs for more information'
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
