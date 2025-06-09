@@ -7,9 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Хранилище активных WebSocket соединений по chatId
-const activeChatSessions = new Map<string, WebSocket>();
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -29,58 +26,19 @@ serve(async (req) => {
       message: message.substring(0, 100) + '...' 
     });
 
-    // Попытка доставить сообщение через WebSocket (если есть активное соединение)
-    const chatSession = activeChatSessions.get(chatId);
-    if (chatSession && chatSession.readyState === WebSocket.OPEN) {
-      console.log('Sending message via WebSocket to chatId:', chatId);
-      chatSession.send(JSON.stringify({
-        type: 'ai_response',
-        messageId: messageId || `ai-${Date.now()}`,
-        userId: userId,
-        chatId: chatId,
-        message: message,
-        timestamp: new Date().toISOString()
-      }));
-    } else {
-      console.log('No active WebSocket connection for chatId:', chatId);
-    }
-
-    // Дополнительно: отправляем HTTP запрос обратно в основную функцию для обработки
-    try {
-      const chatResponse = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/chat-with-openai`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
-        },
-        body: JSON.stringify({
-          isResponse: true,
-          aiResponse: message,
-          messageId: messageId,
-          userId: userId,
-          chatId: chatId,
-          language: language
-        })
-      });
-
-      if (chatResponse.ok) {
-        console.log('Successfully forwarded AI response to chat function');
-      } else {
-        console.error('Failed to forward AI response to chat function:', chatResponse.status);
-      }
-    } catch (forwardError) {
-      console.error('Error forwarding AI response:', forwardError);
-    }
-
+    // Здесь можно добавить логику для:
+    // 1. Сохранения ответа в базу данных
+    // 2. Отправки уведомления пользователю через WebSocket
+    // 3. Обновления статуса сообщения
+    
+    // Для демонстрации просто логируем полученный ответ
     console.log('AI response processed successfully');
 
     return new Response(JSON.stringify({ 
       success: true,
       messageId: messageId,
-      status: 'response_delivered',
-      timestamp: new Date().toISOString(),
-      chatId: chatId,
-      userId: userId
+      status: 'response_received',
+      timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -96,13 +54,3 @@ serve(async (req) => {
     });
   }
 });
-
-// Функция для регистрации WebSocket соединения
-export function registerChatSession(chatId: string, websocket: WebSocket) {
-  activeChatSessions.set(chatId, websocket);
-  
-  websocket.addEventListener('close', () => {
-    activeChatSessions.delete(chatId);
-    console.log('Chat session closed for chatId:', chatId);
-  });
-}
