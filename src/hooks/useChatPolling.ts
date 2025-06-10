@@ -12,7 +12,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
   const [isPolling, setIsPolling] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pollCountRef = useRef<number>(0);
-  const maxPollsRef = useRef<number>(12); // Максимум 12 попыток (60 секунд)
+  const maxPollsRef = useRef<number>(15); // Максимум 15 попыток (45 секунд)
 
   const checkForResponse = useCallback(async () => {
     if (!isEnabled || !chatId) return;
@@ -45,6 +45,9 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
         console.error('=== ОШИБКА ПРИ ПРОВЕРКЕ ОТВЕТА ===');
         console.error('Полная ошибка:', error);
         console.error('Сообщение ошибки:', error.message);
+        
+        // Планируем следующую попытку даже при ошибке
+        timeoutRef.current = setTimeout(checkForResponse, 3000);
         return;
       }
 
@@ -59,20 +62,16 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
         return;
       }
 
-      console.log('Ответ еще не готов, планируем следующую проверку через 5 секунд');
-      // Планируем следующую проверку через 5 секунд
-      timeoutRef.current = setTimeout(checkForResponse, 5000);
+      console.log('Ответ еще не готов, планируем следующую проверку через 3 секунды');
+      // Планируем следующую проверку через 3 секунды
+      timeoutRef.current = setTimeout(checkForResponse, 3000);
       
     } catch (err) {
       console.error('=== КРИТИЧЕСКАЯ ОШИБКА ПРИ ОПРОСЕ ===');
       console.error('Полная ошибка:', err);
-      console.error('Тип ошибки:', typeof err);
-      console.error('Имя ошибки:', err instanceof Error ? err.name : 'Unknown');
-      console.error('Сообщение ошибки:', err instanceof Error ? err.message : String(err));
-      console.error('Stack trace:', err instanceof Error ? err.stack : 'No stack');
       
       // В случае ошибки тоже планируем следующую попытку
-      timeoutRef.current = setTimeout(checkForResponse, 5000);
+      timeoutRef.current = setTimeout(checkForResponse, 3000);
     }
   }, [chatId, onNewMessage, isEnabled]);
 
