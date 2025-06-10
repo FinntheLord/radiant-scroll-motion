@@ -28,7 +28,7 @@ export const useChatApi = () => {
 
       console.log('Тело запроса к n8n:', JSON.stringify(requestBody, null, 2));
 
-      const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook-test/84ac1eaf-efe6-4517-bc28-5b239286b274', {
+      const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook/84ac1eaf-efe6-4517-bc28-5b239286b274', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
