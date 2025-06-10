@@ -18,7 +18,8 @@ export const usePerformanceMode = (): PerformanceMode => {
     const checkPerformanceMode = () => {
       const isMobile = window.innerWidth <= 768;
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isLowPowerMode = navigator.hardwareConcurrency <= 2 || isMobile;
+      // Более строгая проверка для определения слабых устройств
+      const isLowPowerMode = navigator.hardwareConcurrency <= 2 && isMobile;
       
       setPerformanceMode({
         isLowPowerMode,

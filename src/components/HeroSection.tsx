@@ -1,9 +1,11 @@
+
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import DisplayCards from "@/components/ui/display-cards";
 import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
+import { usePerformanceMode } from "../hooks/usePerformanceMode";
 
 interface HeroSectionProps {
   lang: Language;
@@ -11,10 +13,13 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
   const { openSidebarChat } = useChat();
+  const { shouldReduceAnimations, isMobile } = usePerformanceMode();
 
   useEffect(() => {
-    // Mouse parallax effect
+    // Mouse parallax effect - только для десктопа при хорошей производительности
     const handleMouseMove = (e: MouseEvent) => {
+      if (shouldReduceAnimations || isMobile) return;
+      
       const parallaxElements = document.querySelectorAll('.parallax');
       const mouseX = e.clientX;
       const mouseY = e.clientY;
@@ -32,6 +37,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
 
     // Enhanced floating elements animation with geometric diamonds
     const createFloatingElements = () => {
+      if (shouldReduceAnimations) return;
+      
       const heroSection = document.querySelector('.hero-section');
       if (!heroSection) return;
 
@@ -39,12 +46,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
       const existingElements = heroSection.querySelectorAll('.hero-floating-element, .hero-dynamic-blob, .hero-wave-element, .hero-geometric-diamond');
       existingElements.forEach(el => el.remove());
 
-      // Create geometric diamond elements (like in the uploaded image)
-      for (let i = 0; i < 6; i++) {
+      // Создаем меньше элементов для мобильных устройств
+      const diamondCount = isMobile ? 3 : 6;
+      const circleCount = isMobile ? 2 : 3;
+      const blobCount = isMobile ? 1 : 2;
+
+      // Create geometric diamond elements
+      for (let i = 0; i < diamondCount; i++) {
         const diamond = document.createElement('div');
         diamond.className = 'hero-geometric-diamond';
         
-        const size = Math.random() * 80 + 60;
+        const size = Math.random() * (isMobile ? 60 : 80) + (isMobile ? 40 : 60);
         const x = Math.random() * 100;
         const y = Math.random() * 100;
         const duration = Math.random() * 20 + 15;
@@ -115,12 +127,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
         heroSection.appendChild(diamond);
       }
 
-      // Create floating circles with reduced count
-      for (let i = 0; i < 3; i++) {
+      // Create floating circles
+      for (let i = 0; i < circleCount; i++) {
         const element = document.createElement('div');
         element.className = 'hero-floating-element';
         
-        const size = Math.random() * 100 + 60;
+        const size = Math.random() * (isMobile ? 80 : 100) + (isMobile ? 40 : 60);
         const x = Math.random() * 100;
         const y = Math.random() * 100;
         const duration = Math.random() * 15 + 20;
@@ -144,12 +156,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
         heroSection.appendChild(element);
       }
 
-      // Create morphing blobs with reduced count
-      for (let i = 0; i < 2; i++) {
+      // Create morphing blobs
+      for (let i = 0; i < blobCount; i++) {
         const blob = document.createElement('div');
         blob.className = 'hero-dynamic-blob';
         
-        const size = Math.random() * 120 + 80;
+        const size = Math.random() * (isMobile ? 100 : 120) + (isMobile ? 60 : 80);
         const x = Math.random() * 100;
         const y = Math.random() * 100;
         const duration = Math.random() * 20 + 25;
@@ -174,19 +186,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
       }
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    if (!shouldReduceAnimations) {
+      document.addEventListener('mousemove', handleMouseMove);
+    }
     createFloatingElements();
     
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
+      if (!shouldReduceAnimations) {
+        document.removeEventListener('mousemove', handleMouseMove);
+      }
     };
-  }, []);
+  }, [shouldReduceAnimations, isMobile]);
 
   return (
     <section className="relative min-h-screen pt-20 flex items-center bg-white hero-section overflow-hidden">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        {/* Slightly more transparent overlay to show more background dynamics */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/60 to-white/60 z-10"></div>
         <div className="relative w-full h-full">
           <iframe
@@ -220,7 +235,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900" style={{ animationDelay: "0.1s" }}>
                 <span className="text-gray-800">{getTranslation('heroTitle1', lang)} </span>
                 <br />
-                <span className="connexi-gradient-text font-extrabold parallax" data-speed="0.02">{getTranslation('heroTitle2', lang)}</span>
+                <span className={`connexi-gradient-text font-extrabold ${!shouldReduceAnimations ? 'parallax' : ''}`} data-speed="0.02">{getTranslation('heroTitle2', lang)}</span>
                 <span className="text-gray-800">{getTranslation('heroTitle3', lang)}</span>
               </h1>
 
@@ -247,10 +262,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           </div>
 
           <div className="mt-20 md:mt-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="reveal-on-scroll parallax" data-speed="0.03" style={{ animationDelay: "0.3s" }}>
+            <div className={`reveal-on-scroll ${!shouldReduceAnimations ? 'parallax' : ''}`} data-speed="0.03" style={{ animationDelay: "0.3s" }}>
               <div className="connexi-gradient-text font-medium mb-3">{getTranslation('certifiedSpecialists', lang)}</div>
             </div>
-            <div className="text-right reveal-on-scroll parallax" data-speed="0.01" style={{ animationDelay: "0.4s" }}>
+            <div className={`text-right reveal-on-scroll ${!shouldReduceAnimations ? 'parallax' : ''}`} data-speed="0.01" style={{ animationDelay: "0.4s" }}>
               <div className="text-gray-700 mb-3">{getTranslation('chatbotsDescription', lang)}</div>
               <div className="text-gray-700">{getTranslation('automationDescription', lang)}</div>
             </div>

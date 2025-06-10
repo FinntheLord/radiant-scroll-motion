@@ -1,8 +1,10 @@
 
 import React, { useEffect, useRef } from "react";
+import { usePerformanceMode } from "../hooks/usePerformanceMode";
 
 const ScrollAnimation: React.FC = () => {
   const isInitialized = useRef(false);
+  const { shouldReduceAnimations, isMobile } = usePerformanceMode();
 
   useEffect(() => {
     if (isInitialized.current) return;
@@ -10,7 +12,7 @@ const ScrollAnimation: React.FC = () => {
 
     let ticking = false;
     
-    // Упрощенная функция reveal с дебаунсингом
+    // Функция reveal с дебаунсингом
     const handleReveal = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -31,11 +33,8 @@ const ScrollAnimation: React.FC = () => {
       }
     };
 
-    // Убираем тяжелые анимации на мобильных устройствах
-    const isMobile = window.innerWidth <= 768;
-    
-    if (!isMobile) {
-      // Упрощенная анимация floating элементов только для десктопа
+    // Анимация floating элементов - только для десктопа и при хорошей производительности
+    if (!isMobile && !shouldReduceAnimations) {
       const animateFloatingElements = () => {
         const floatingElements = document.querySelectorAll('.floating');
         
@@ -99,7 +98,7 @@ const ScrollAnimation: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleReveal);
     };
-  }, []);
+  }, [shouldReduceAnimations, isMobile]);
 
   return null;
 };
