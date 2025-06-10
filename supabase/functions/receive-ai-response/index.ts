@@ -7,29 +7,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Улучшенное глобальное хранилище
-const responseStore = new Map<string, { 
-  message: string; 
-  timestamp: number;
-  userId?: string;
-}>();
-
-const TTL = 120000; // 2 минуты
-
-// Функция очистки старых записей
-const cleanupOldEntries = () => {
-  const now = Date.now();
-  let cleanedCount = 0;
-  for (const [key, value] of responseStore.entries()) {
-    if (now - value.timestamp > TTL) {
-      responseStore.delete(key);
-      cleanedCount++;
-    }
-  }
-  if (cleanedCount > 0) {
-    console.log(`🧹 Очищено старых записей: ${cleanedCount}`);
-  }
-};
+// Простое глобальное хранилище
+const responseStore = new Map();
+const TTL = 90000; // 1.5 минуты
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -38,38 +18,38 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    console.log('=== RECEIVE-AI-RESPONSE ===');
-    
-    const { message, chatId, chat_id, userId, action } = body;
+    const { message, chatId, chat_id, action } = body;
     const finalChatId = chatId || chat_id;
 
-    // Очистка при каждом запросе
-    cleanupOldEntries();
+    console.log('=== RECEIVE-AI-RESPONSE ===');
 
-    // Запрос на получение ответа
+    // Очистка старых записей
+    const now = Date.now();
+    for (const [key, value] of responseStore.entries()) {
+      if (now - value.timestamp > TTL) {
+        responseStore.delete(key);
+      }
+    }
+
+    // Получение ответа
     if (action === 'get_response' && finalChatId) {
-      console.log('🔍 ПОИСК ОТВЕТА для:', finalChatId);
-      console.log('📦 Размер хранилища:', responseStore.size);
+      console.log('🔍 Looking for response:', finalChatId);
       
       const storedData = responseStore.get(finalChatId);
       
       if (storedData) {
-        const age = Math.round((Date.now() - storedData.timestamp) / 1000);
-        console.log('✅ ОТВЕТ НАЙДЕН, возраст:', age, 'сек');
-        
-        // Удаляем ответ после получения
-        responseStore.delete(finalChatId);
+        console.log('✅ Response found');
+        responseStore.delete(finalChatId); // Удаляем после получения
         
         return new Response(JSON.stringify({ 
           success: true,
-          message: storedData.message,
-          retrievedAt: new Date().toISOString()
+          message: storedData.message
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
-      console.log('❌ ОТВЕТ НЕ НАЙДЕН');
+      console.log('❌ Response not found');
       return new Response(JSON.stringify({ 
         success: false,
         message: null
@@ -80,29 +60,24 @@ serve(async (req) => {
 
     // Сохранение ответа от n8n
     if (message && finalChatId) {
-      console.log('💾 СОХРАНЕНИЕ ОТВЕТА ОТ N8N');
+      console.log('💾 Storing response from n8n');
       console.log('Chat ID:', finalChatId);
-      console.log('Длина сообщения:', message.length);
 
       responseStore.set(finalChatId, {
         message: message,
-        timestamp: Date.now(),
-        userId: userId
+        timestamp: now
       });
 
-      console.log('✅ ОТВЕТ СОХРАНЕН');
-      console.log('📊 Размер хранилища:', responseStore.size);
+      console.log('✅ Response stored, store size:', responseStore.size);
 
       return new Response(JSON.stringify({ 
         success: true,
-        chatId: finalChatId,
         status: 'response_stored'
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    console.log('❌ НЕДОСТАТОЧНО ДАННЫХ');
     return new Response(JSON.stringify({
       error: 'Missing required fields',
       success: false
@@ -112,10 +87,10 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('💥 ОШИБКА:', error);
+    console.error('💥 Error:', error.message);
     
     return new Response(JSON.stringify({ 
-      error: error.message || 'Internal server error',
+      error: 'Internal server error',
       success: false
     }), {
       status: 500,
