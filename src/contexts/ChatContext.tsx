@@ -13,9 +13,7 @@ interface ChatContextType {
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   initializeWelcomeMessage: (lang: Language) => void;
-  userId: string;
   chatId: string;
-  setUserId: (id: string) => void;
   setChatId: (id: string) => void;
 }
 
@@ -32,7 +30,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [isSidebarChatOpen, setIsSidebarChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [userId, setUserId] = useState(() => `user_${generateId()}`);
   const [chatId, setChatId] = useState(() => `chat_${generateId()}`);
   const welcomeMessageInitialized = useRef(false);
 
@@ -66,8 +63,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const clearMessages = () => {
     setMessages([]);
     welcomeMessageInitialized.current = false;
-    // Генерируем новые ID для нового чата
-    setUserId(`user_${generateId()}`);
+    // Генерируем новый ID для нового чата
     setChatId(`chat_${generateId()}`);
   };
 
@@ -97,9 +93,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       isLoading,
       setIsLoading,
       initializeWelcomeMessage,
-      userId,
       chatId,
-      setUserId,
       setChatId
     }}>
       {children}

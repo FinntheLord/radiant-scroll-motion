@@ -1,6 +1,5 @@
 
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useChatApi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,57 +7,33 @@ export const useChatApi = () => {
 
   const sendMessage = useCallback(async (
     message: string, 
-    lang: 'en' | 'uk',
-    userId?: string,
-    chatId?: string
-  ): Promise<string> => {
+    chatId: string
+  ): Promise<void> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Генерируем ID если не переданы
-      const currentUserId = userId || `user_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-      const currentChatId = chatId || `chat_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+      console.log('Sending message to n8n webhook:', { message, chatId });
 
-      console.log('Sending message to n8n via Edge Function:', { 
-        message, 
-        language: lang, 
-        userId: currentUserId, 
-        chatId: currentChatId 
+      const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook-test/84ac1eaf-efe6-4517-bc28-5b239286b274', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: message,
+          chatId: chatId,
+          timestamp: Date.now()
+        }),
       });
 
-      const { data, error: supabaseError } = await supabase.functions.invoke('chat-with-openai', {
-        body: { 
-          message: message,
-          language: lang,
-          userId: currentUserId,
-          chatId: currentChatId
-        }
-      });
-
-      console.log('Supabase function response:', { data, error: supabaseError });
-
-      if (supabaseError) {
-        console.error('Supabase error:', supabaseError);
-        throw new Error(supabaseError.message);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (!data) {
-        throw new Error('No response received from n8n service');
-      }
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      if (!data.message) {
-        throw new Error('Invalid response format from n8n service');
-      }
-
-      // Теперь возвращаем временное сообщение, реальный ответ придет через webhook
-      return data.message;
+      console.log('Message sent successfully to n8n');
     } catch (err) {
-      console.error('Error in sendMessage:', err);
+      console.error('Error sending message to n8n:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
       throw new Error(errorMessage);

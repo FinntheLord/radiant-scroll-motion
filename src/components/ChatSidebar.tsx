@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     isLoading, 
     setIsLoading, 
     initializeWelcomeMessage,
-    userId,
     chatId
   } = useChat();
   const { sendMessage, error, clearError } = useChatApi();
@@ -36,13 +34,18 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const responseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Оптимизированный механизм опроса
+  // Простой механизм опроса ответов
   const { isPolling } = useChatPolling({
-    userId,
     chatId,
-    onNewMessage: (message: ChatMessage) => {
-      console.log('Получено новое сообщение:', message);
-      addMessage(message);
+    onNewMessage: (message: string) => {
+      console.log('Получен новый ответ:', message);
+      const newMessage: ChatMessage = {
+        id: `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
+        content: message,
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      addMessage(newMessage);
       setWaitingForResponse(false);
       setIsLoading(false);
       
@@ -61,11 +64,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     }
   }, [isOpen, initializeWelcomeMessage, lang]);
 
-  useEffect(() => {
-    console.log('Текущая сессия чата:', { userId, chatId });
-  }, [userId, chatId]);
-
-  // Таймаут для ответа (30 секунд)
+  // Таймаут для ответа (60 секунд)
   useEffect(() => {
     if (waitingForResponse) {
       responseTimeoutRef.current = setTimeout(() => {
@@ -83,7 +82,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
         };
         
         addMessage(timeoutMessage);
-      }, 30000); // 30 секунд
+      }, 60000); // 60 секунд
       
       return () => {
         if (responseTimeoutRef.current) {
@@ -114,32 +113,11 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     setWaitingForResponse(true);
 
     try {
-      console.log('Вызов n8n webhook:', { 
-        message: messageContent, 
-        lang, 
-        userId, 
-        chatId 
-      });
-      
-      const response = await sendMessage(messageContent, lang, userId, chatId);
-      
-      // Показываем временное сообщение только если это сообщение о обработке
-      if (response && (response.includes('обработа') || response.includes('processing'))) {
-        const tempResponse: ChatMessage = {
-          id: `assistant-temp-${Date.now()}-${Math.random().toString(36).substring(2)}`,
-          content: response,
-          role: 'assistant',
-          timestamp: new Date()
-        };
-        
-        console.log('Получен временный ответ:', tempResponse);
-        addMessage(tempResponse);
-      }
-      
-      console.log('Ожидание реального ответа от n8n...');
+      await sendMessage(messageContent, chatId);
+      console.log('Сообщение отправлено, ожидание ответа...');
       
     } catch (err) {
-      console.error('Ошибка отправки сообщения в n8n:', err);
+      console.error('Ошибка отправки сообщения:', err);
       setWaitingForResponse(false);
       
       const errorResponse: ChatMessage = {
@@ -204,7 +182,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-white">
-                AI-Помічник Connexi (n8n)
+                AI-Помічник Connexi
               </h2>
               <p className="text-sm text-white/60">
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
