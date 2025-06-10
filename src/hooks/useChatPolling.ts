@@ -19,7 +19,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
 
     // Ограничиваем количество попыток
     if (pollCountRef.current >= maxPollsRef.current) {
-      console.log('Достигнут лимит попыток опроса, останавливаем');
+      console.log('=== ДОСТИГНУТ ЛИМИТ ПОПЫТОК ОПРОСА ===');
       setIsPolling(false);
       return;
     }
@@ -27,21 +27,30 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
     pollCountRef.current++;
 
     try {
-      console.log(`Проверка ответа (попытка ${pollCountRef.current}/${maxPollsRef.current})`);
+      console.log(`=== ПРОВЕРКА ОТВЕТА (попытка ${pollCountRef.current}/${maxPollsRef.current}) ===`);
+      console.log('Chat ID для проверки:', chatId);
       
+      const requestBody = { chatId: chatId };
+      console.log('Тело запроса к Supabase:', JSON.stringify(requestBody, null, 2));
+
       const { data, error } = await supabase.functions.invoke('receive-chat-response', {
-        body: { 
-          chatId: chatId
-        }
+        body: requestBody
       });
 
+      console.log('Ответ от Supabase функции:');
+      console.log('- data:', data);
+      console.log('- error:', error);
+
       if (error) {
-        console.error('Ошибка при проверке ответа:', error);
+        console.error('=== ОШИБКА ПРИ ПРОВЕРКЕ ОТВЕТА ===');
+        console.error('Полная ошибка:', error);
+        console.error('Сообщение ошибки:', error.message);
         return;
       }
 
       if (data && data.success && data.message) {
-        console.log('Получен ответ от AI');
+        console.log('=== ПОЛУЧЕН ОТВЕТ ОТ AI ===');
+        console.log('Сообщение от AI:', data.message);
         onNewMessage(data.message);
         
         // Останавливаем опрос после получения ответа
@@ -50,11 +59,18 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
         return;
       }
 
+      console.log('Ответ еще не готов, планируем следующую проверку через 5 секунд');
       // Планируем следующую проверку через 5 секунд
       timeoutRef.current = setTimeout(checkForResponse, 5000);
       
     } catch (err) {
-      console.error('Ошибка при опросе:', err);
+      console.error('=== КРИТИЧЕСКАЯ ОШИБКА ПРИ ОПРОСЕ ===');
+      console.error('Полная ошибка:', err);
+      console.error('Тип ошибки:', typeof err);
+      console.error('Имя ошибки:', err instanceof Error ? err.name : 'Unknown');
+      console.error('Сообщение ошибки:', err instanceof Error ? err.message : String(err));
+      console.error('Stack trace:', err instanceof Error ? err.stack : 'No stack');
+      
       // В случае ошибки тоже планируем следующую попытку
       timeoutRef.current = setTimeout(checkForResponse, 5000);
     }
@@ -62,6 +78,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
 
   useEffect(() => {
     if (!isEnabled) {
+      console.log('=== ОСТАНОВКА ОПРОСА ===');
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -71,6 +88,8 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
       return;
     }
 
+    console.log('=== НАЧАЛО ОПРОСА ===');
+    console.log('Chat ID:', chatId);
     setIsPolling(true);
     pollCountRef.current = 0;
     
