@@ -12,18 +12,32 @@ interface UseChatPollingProps {
 
 export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseChatPollingProps) => {
   const [isPolling, setIsPolling] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCheckRef = useRef<number>(0);
+  const pollCountRef = useRef<number>(0);
+  const maxPollsRef = useRef<number>(6); // Максимум 6 попыток (30 секунд)
 
   const checkForNewMessages = useCallback(async () => {
     if (!isEnabled || !userId || !chatId) return;
 
-    // Throttle requests - minimum 3 seconds between checks
+    // Ограничиваем количество попыток
+    if (pollCountRef.current >= maxPollsRef.current) {
+      console.log('Достигнут лимит попыток опроса, останавливаем');
+      setIsPolling(false);
+      return;
+    }
+
+    // Увеличиваем интервал между запросами с каждой попыткой
     const now = Date.now();
-    if (now - lastCheckRef.current < 3000) return;
+    const minInterval = Math.min(5000 + (pollCountRef.current * 2000), 15000); // От 5 до 15 секунд
+    
+    if (now - lastCheckRef.current < minInterval) return;
     lastCheckRef.current = now;
+    pollCountRef.current++;
 
     try {
+      console.log(`Проверка сообщений (попытка ${pollCountRef.current}/${maxPollsRef.current})`);
+      
       const { data, error } = await supabase.functions.invoke('chat-with-openai', {
         body: { 
           checkMessages: true,
@@ -33,7 +47,7 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
       });
 
       if (error) {
-        console.error('Error checking for messages:', error);
+        console.error('Ошибка при проверке сообщений:', error);
         return;
       }
 
@@ -45,37 +59,51 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
           timestamp: new Date()
         };
         
+        console.log('Получено новое сообщение от AI');
         onNewMessage(newMessage);
+        
+        // Останавливаем опрос после получения сообщения
+        setIsPolling(false);
+        pollCountRef.current = 0;
+        return;
       }
+
+      // Планируем следующую проверку с увеличивающимся интервалом
+      const nextInterval = Math.min(5000 + (pollCountRef.current * 2000), 15000);
+      timeoutRef.current = setTimeout(checkForNewMessages, nextInterval);
+      
     } catch (err) {
-      console.error('Error in polling:', err);
+      console.error('Ошибка при опросе:', err);
+      // В случае ошибки тоже увеличиваем интервал
+      const nextInterval = Math.min(8000 + (pollCountRef.current * 2000), 20000);
+      timeoutRef.current = setTimeout(checkForNewMessages, nextInterval);
     }
   }, [userId, chatId, onNewMessage, isEnabled]);
 
   useEffect(() => {
     if (!isEnabled) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
       setIsPolling(false);
+      pollCountRef.current = 0;
       return;
     }
 
     setIsPolling(true);
+    pollCountRef.current = 0;
     
-    // Check immediately
-    checkForNewMessages();
-    
-    // Then check every 5 seconds (reduced from 2 seconds)
-    intervalRef.current = setInterval(checkForNewMessages, 5000);
+    // Начинаем с первой проверки через 3 секунды
+    timeoutRef.current = setTimeout(checkForNewMessages, 3000);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
       setIsPolling(false);
+      pollCountRef.current = 0;
     };
   }, [checkForNewMessages, isEnabled]);
 
