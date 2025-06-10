@@ -7,53 +7,66 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Временное хранилище ответов от n8n
+const responseStore = new Map<string, string>();
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { messageId, userId, chatId, message, language } = await req.json();
+    const body = await req.json();
+    const { message, chatId, userId, action } = body;
 
-    if (!message || !userId || !chatId) {
-      throw new Error('Missing required fields: message, userId, chatId');
+    // Если это запрос на получение ответа
+    if (action === 'get_response' && chatId) {
+      console.log('Запрос на получение ответа для chat ID:', chatId);
+      
+      const storedResponse = responseStore.get(chatId);
+      
+      if (storedResponse) {
+        console.log('Найден ответ для чата:', chatId);
+        
+        // Удаляем ответ после получения
+        responseStore.delete(chatId);
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          message: storedResponse
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ 
+        success: false,
+        message: null
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Если это сохранение ответа от n8n
+    if (!message || !chatId) {
+      throw new Error('Missing required fields: message, chatId');
     }
 
     console.log('Received AI response from n8n:', { 
-      messageId, 
-      userId, 
       chatId, 
+      userId,
       message: message.substring(0, 100) + '...' 
     });
 
-    // Пересылаем ответ обратно в chat-with-openai как готовый ответ
-    const chatResponse = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/chat-with-openai`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': req.headers.get('Authorization') || `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
-      },
-      body: JSON.stringify({
-        isResponse: true,
-        aiResponse: message,
-        userId: userId,
-        chatId: chatId,
-        messageId: messageId,
-        language: language
-      })
-    });
+    // Сохраняем ответ в временное хранилище
+    responseStore.set(chatId, message);
 
-    if (!chatResponse.ok) {
-      console.error('Failed to forward response to chat function:', await chatResponse.text());
-      throw new Error('Failed to forward response to chat function');
-    }
-
-    console.log('Successfully forwarded AI response to chat function');
+    console.log('Successfully stored AI response for chat:', chatId);
 
     return new Response(JSON.stringify({ 
       success: true,
-      messageId: messageId,
-      status: 'response_delivered',
+      chatId: chatId,
+      status: 'response_stored',
       timestamp: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

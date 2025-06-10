@@ -7,9 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Временное хранилище ответов от n8n
-const responseStore = new Map<string, string>();
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -20,21 +17,32 @@ serve(async (req) => {
 
     console.log('Проверка ответа для chat ID:', chatId);
     
-    // Проверяем, есть ли ответ для данного chatId
-    const storedResponse = responseStore.get(chatId);
-    
-    if (storedResponse) {
-      console.log('Найден ответ для чата:', chatId);
+    // Делаем запрос к receive-ai-response для получения сохраненного ответа
+    const response = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/receive-ai-response`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+      },
+      body: JSON.stringify({ 
+        action: 'get_response',
+        chatId: chatId 
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
       
-      // Удаляем ответ после получения
-      responseStore.delete(chatId);
-      
-      return new Response(JSON.stringify({ 
-        success: true,
-        message: storedResponse
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      if (data.success && data.message) {
+        console.log('Найден ответ для чата:', chatId);
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          message: data.message
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     // Если ответа нет, возвращаем success: false
