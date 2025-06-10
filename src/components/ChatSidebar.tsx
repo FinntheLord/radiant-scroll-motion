@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,9 +33,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const { isTyping, startTyping } = useTypingActivity(1500);
   const isProcessing = useRef(false);
   const [waitingForResponse, setWaitingForResponse] = useState(false);
-  const responseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Простой механизм опроса ответов
+  // Простой механизм опроса ответов без ограничений по времени
   const { isPolling } = useChatPolling({
     chatId,
     onNewMessage: (message: string) => {
@@ -48,12 +48,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       addMessage(newMessage);
       setWaitingForResponse(false);
       setIsLoading(false);
-      
-      // Очищаем таймаут
-      if (responseTimeoutRef.current) {
-        clearTimeout(responseTimeoutRef.current);
-        responseTimeoutRef.current = null;
-      }
     },
     isEnabled: waitingForResponse && isOpen
   });
@@ -63,35 +57,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       initializeWelcomeMessage(lang);
     }
   }, [isOpen, initializeWelcomeMessage, lang]);
-
-  // Таймаут для ответа (60 секунд)
-  useEffect(() => {
-    if (waitingForResponse) {
-      responseTimeoutRef.current = setTimeout(() => {
-        console.log('Таймаут ожидания ответа');
-        setWaitingForResponse(false);
-        setIsLoading(false);
-        
-        const timeoutMessage: ChatMessage = {
-          id: `timeout-${Date.now()}-${Math.random().toString(36).substring(2)}`,
-          content: lang === 'en' 
-            ? 'Response timeout. Please try asking your question again.'
-            : 'Час очікування відповіді вичерпано. Спробуйте поставити запитання ще раз.',
-          role: 'assistant',
-          timestamp: new Date()
-        };
-        
-        addMessage(timeoutMessage);
-      }, 60000); // 60 секунд
-      
-      return () => {
-        if (responseTimeoutRef.current) {
-          clearTimeout(responseTimeoutRef.current);
-          responseTimeoutRef.current = null;
-        }
-      };
-    }
-  }, [waitingForResponse, lang, addMessage, setIsLoading]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading || isProcessing.current) return;

@@ -12,22 +12,14 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
   const [isPolling, setIsPolling] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pollCountRef = useRef<number>(0);
-  const maxPollsRef = useRef<number>(15); // Максимум 15 попыток (45 секунд)
 
   const checkForResponse = useCallback(async () => {
     if (!isEnabled || !chatId) return;
 
-    // Ограничиваем количество попыток
-    if (pollCountRef.current >= maxPollsRef.current) {
-      console.log('=== ДОСТИГНУТ ЛИМИТ ПОПЫТОК ОПРОСА ===');
-      setIsPolling(false);
-      return;
-    }
-
     pollCountRef.current++;
 
     try {
-      console.log(`=== ПРОВЕРКА ОТВЕТА (попытка ${pollCountRef.current}/${maxPollsRef.current}) ===`);
+      console.log(`=== ПРОВЕРКА ОТВЕТА (попытка ${pollCountRef.current}) ===`);
       console.log('Chat ID для проверки:', chatId);
       
       const requestBody = { chatId: chatId };
