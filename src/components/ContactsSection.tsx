@@ -120,7 +120,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
               
               <div className="flex items-center justify-center lg:justify-start gap-6">
                 <a 
-                  href="https://t.me/connexi_ai" 
+                  href="https://t.me/ConnexiBot" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-blue-500/25"
