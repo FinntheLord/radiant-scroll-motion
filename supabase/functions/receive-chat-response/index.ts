@@ -37,9 +37,9 @@ serve(async (req) => {
       throw new Error('Missing Supabase configuration');
     }
     
-    console.log('📡 ВЫЗОВ receive-ai-response функции...');
+    console.log('📡 ПРЯМОЙ ВЫЗОВ receive-ai-response функции...');
     
-    // Делаем запрос к receive-ai-response для получения сохраненного ответа
+    // Делаем запрос напрямую к receive-ai-response
     const response = await fetch(`${supabaseUrl}/functions/v1/receive-ai-response`, {
       method: 'POST',
       headers: {
@@ -56,12 +56,13 @@ serve(async (req) => {
       console.log('❌ ОШИБКА при запросе к receive-ai-response:', response.status, response.statusText);
       const errorText = await response.text();
       console.log('Текст ошибки:', errorText);
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}, text: ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('📥 ОТВЕТ ОТ receive-ai-response:', data);
+    console.log('📥 ОТВЕТ ОТ receive-ai-response:', JSON.stringify(data, null, 2));
     
+    // Передаем ответ клиенту как есть
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -72,7 +73,8 @@ serve(async (req) => {
     
     return new Response(JSON.stringify({ 
       error: error.message || 'Internal server error',
-      success: false
+      success: false,
+      timestamp: new Date().toISOString()
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
