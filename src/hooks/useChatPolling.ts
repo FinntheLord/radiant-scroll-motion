@@ -14,7 +14,7 @@ export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: U
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pollCountRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
-  const TIMEOUT_DURATION = 60000; // 1 минута в миллисекундах
+  const TIMEOUT_DURATION = 120000; // Увеличиваем до 2 минут
 
   const checkForResponse = useCallback(async () => {
     if (!isEnabled || !chatId) return;
@@ -22,7 +22,7 @@ export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: U
     // Проверяем, не истекло ли время ожидания
     const currentTime = Date.now();
     if (currentTime - startTimeRef.current >= TIMEOUT_DURATION) {
-      console.log('=== TIMEOUT: ПРЕВЫШЕН ЛИМИТ ОЖИДАНИЯ (60 секунд) ===');
+      console.log('=== TIMEOUT: ПРЕВЫШЕН ЛИМИТ ОЖИДАНИЯ (120 секунд) ===');
       setIsPolling(false);
       pollCountRef.current = 0;
       onTimeout();
@@ -53,7 +53,7 @@ export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: U
         console.error('Сообщение ошибки:', error.message);
         
         // Планируем следующую попытку даже при ошибке (если не истек timeout)
-        timeoutRef.current = setTimeout(checkForResponse, 3000);
+        timeoutRef.current = setTimeout(checkForResponse, 4000); // Увеличиваем интервал до 4 секунд
         return;
       }
 
@@ -68,16 +68,16 @@ export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: U
         return;
       }
 
-      console.log('Ответ еще не готов, планируем следующую проверку через 3 секунды');
-      // Планируем следующую проверку через 3 секунды
-      timeoutRef.current = setTimeout(checkForResponse, 3000);
+      console.log('Ответ еще не готов, планируем следующую проверку через 4 секунды');
+      // Планируем следующую проверку через 4 секунды
+      timeoutRef.current = setTimeout(checkForResponse, 4000);
       
     } catch (err) {
       console.error('=== КРИТИЧЕСКАЯ ОШИБКА ПРИ ОПРОСЕ ===');
       console.error('Полная ошибка:', err);
       
       // В случае ошибки тоже планируем следующую попытку
-      timeoutRef.current = setTimeout(checkForResponse, 3000);
+      timeoutRef.current = setTimeout(checkForResponse, 4000);
     }
   }, [chatId, onNewMessage, onTimeout, isEnabled]);
 
@@ -99,8 +99,8 @@ export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: U
     pollCountRef.current = 0;
     startTimeRef.current = Date.now();
     
-    // Начинаем с первой проверки через 3 секунды
-    timeoutRef.current = setTimeout(checkForResponse, 3000);
+    // Начинаем с первой проверки через 4 секунды
+    timeoutRef.current = setTimeout(checkForResponse, 4000);
 
     return () => {
       if (timeoutRef.current) {

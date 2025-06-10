@@ -62,24 +62,7 @@ serve(async (req) => {
     const data = await response.json();
     console.log('📥 ОТВЕТ ОТ receive-ai-response:', data);
     
-    if (data.success && data.message) {
-      console.log('✅ НАЙДЕН ОТВЕТ для чата:', chatId);
-      console.log('Длина ответа:', data.message.length, 'символов');
-      
-      return new Response(JSON.stringify({ 
-        success: true,
-        message: data.message
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Если ответа нет, возвращаем success: false
-    console.log('❌ ОТВЕТ НЕ НАЙДЕН для чата:', chatId);
-    return new Response(JSON.stringify({ 
-      success: false,
-      message: null
-    }), {
+    return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 

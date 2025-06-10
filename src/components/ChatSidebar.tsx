@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
     addMessage(timeoutMessage);
   };
 
-  // Опрос ответов с лимитом в 1 минуту
+  // Опрос ответов с лимитом в 2 минуты
   const { isPolling } = useChatPolling({
     chatId,
     onNewMessage: (message: string) => {
@@ -171,7 +170,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді до 60 сек)'}
+                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді до 120 сек)'}
               </p>
             </div>
           </div>

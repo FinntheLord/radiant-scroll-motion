@@ -7,27 +7,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Единое хранилище ответов с TTL
+// Простое глобальное хранилище ответов
 const responseStore = new Map<string, { message: string; timestamp: number }>();
-const TTL = 300000; // 5 минут
-
-// Очистка старых записей каждую минуту
-setInterval(() => {
-  const now = Date.now();
-  let cleanedCount = 0;
-  for (const [key, value] of responseStore.entries()) {
-    if (now - value.timestamp > TTL) {
-      responseStore.delete(key);
-      cleanedCount++;
-    }
-  }
-  if (cleanedCount > 0) {
-    console.log(`Очищено ${cleanedCount} устаревших записей`);
-  }
-}, 60000);
+const TTL = 120000; // 2 минуты
 
 serve(async (req) => {
-  // Обработка CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -35,24 +19,27 @@ serve(async (req) => {
   try {
     const body = await req.json();
     console.log('=== RECEIVE-AI-RESPONSE ===');
-    console.log('Получен запрос:', JSON.stringify(body, null, 2));
+    console.log('Запрос:', JSON.stringify(body, null, 2));
     
-    const { message, chatId, userId, action } = body;
+    const { message, chatId, chat_id, action } = body;
+    const finalChatId = chatId || chat_id;
 
     // Если это запрос на получение ответа
-    if (action === 'get_response' && chatId) {
-      console.log('Запрос на получение ответа для chat ID:', chatId);
-      console.log('Текущий размер хранилища:', responseStore.size);
+    if (action === 'get_response' && finalChatId) {
+      console.log('🔍 Поиск ответа для chat ID:', finalChatId);
+      console.log('📦 Размер хранилища:', responseStore.size);
+      console.log('🔑 Доступные ключи:', Array.from(responseStore.keys()));
       
-      const storedData = responseStore.get(chatId);
+      const storedData = responseStore.get(finalChatId);
       
       if (storedData) {
-        console.log('✅ НАЙДЕН ОТВЕТ для чата:', chatId);
-        console.log('Время хранения:', Math.round((Date.now() - storedData.timestamp) / 1000), 'секунд');
+        const age = Math.round((Date.now() - storedData.timestamp) / 1000);
+        console.log('✅ НАЙДЕН ОТВЕТ для чата:', finalChatId);
+        console.log('⏰ Возраст ответа:', age, 'секунд');
         
         // Удаляем ответ после получения
-        responseStore.delete(chatId);
-        console.log('Ответ удален из хранилища');
+        responseStore.delete(finalChatId);
+        console.log('🗑️ Ответ удален из хранилища');
         
         return new Response(JSON.stringify({ 
           success: true,
@@ -62,9 +49,7 @@ serve(async (req) => {
         });
       }
 
-      console.log('❌ ОТВЕТ НЕ НАЙДЕН для чата:', chatId);
-      console.log('Доступные ключи в хранилище:', Array.from(responseStore.keys()));
-      
+      console.log('❌ ОТВЕТ НЕ НАЙДЕН для чата:', finalChatId);
       return new Response(JSON.stringify({ 
         success: false,
         message: null
@@ -74,9 +59,9 @@ serve(async (req) => {
     }
 
     // Если это сохранение ответа от n8n
-    if (!message || !chatId) {
+    if (!message || !finalChatId) {
       console.log('❌ ОТСУТСТВУЮТ ОБЯЗАТЕЛЬНЫЕ ПОЛЯ');
-      console.log('message:', !!message, 'chatId:', !!chatId);
+      console.log('message:', !!message, 'chatId/chat_id:', !!finalChatId);
       
       return new Response(JSON.stringify({
         error: 'Missing required fields: message, chatId',
@@ -88,24 +73,36 @@ serve(async (req) => {
     }
 
     console.log('💾 СОХРАНЕНИЕ ОТВЕТА ОТ N8N');
-    console.log('Chat ID:', chatId);
-    console.log('User ID:', userId);
-    console.log('Длина сообщения:', message.length, 'символов');
-    console.log('Сообщение (первые 200 символов):', message.substring(0, 200) + '...');
+    console.log('Chat ID:', finalChatId);
+    console.log('Длина сообщения:', message.length);
+    console.log('Первые 100 символов:', message.substring(0, 100));
 
-    // Сохраняем ответ с timestamp
-    responseStore.set(chatId, {
+    // Очищаем старые записи перед добавлением новой
+    const now = Date.now();
+    let cleanedCount = 0;
+    for (const [key, value] of responseStore.entries()) {
+      if (now - value.timestamp > TTL) {
+        responseStore.delete(key);
+        cleanedCount++;
+      }
+    }
+    if (cleanedCount > 0) {
+      console.log('🧹 Очищено старых записей:', cleanedCount);
+    }
+
+    // Сохраняем новый ответ
+    responseStore.set(finalChatId, {
       message: message,
-      timestamp: Date.now()
+      timestamp: now
     });
 
     console.log('✅ ОТВЕТ УСПЕШНО СОХРАНЕН');
-    console.log('Новый размер хранилища:', responseStore.size);
-    console.log('Все ключи в хранилище:', Array.from(responseStore.keys()));
+    console.log('📊 Размер хранилища:', responseStore.size);
+    console.log('🔑 Все ключи:', Array.from(responseStore.keys()));
 
     return new Response(JSON.stringify({ 
       success: true,
-      chatId: chatId,
+      chatId: finalChatId,
       status: 'response_stored',
       timestamp: new Date().toISOString(),
       storageSize: responseStore.size
@@ -114,7 +111,7 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('💥 КРИТИЧЕСКАЯ ОШИБКА в receive-ai-response:', error);
+    console.error('💥 КРИТИЧЕСКАЯ ОШИБКА:', error);
     console.error('Stack trace:', error.stack);
     
     return new Response(JSON.stringify({ 
