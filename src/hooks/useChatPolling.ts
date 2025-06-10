@@ -5,22 +5,36 @@ import { supabase } from '@/integrations/supabase/client';
 interface UseChatPollingProps {
   chatId: string;
   onNewMessage: (message: string) => void;
+  onTimeout: () => void;
   isEnabled: boolean;
 }
 
-export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPollingProps) => {
+export const useChatPolling = ({ chatId, onNewMessage, onTimeout, isEnabled }: UseChatPollingProps) => {
   const [isPolling, setIsPolling] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pollCountRef = useRef<number>(0);
+  const startTimeRef = useRef<number>(0);
+  const TIMEOUT_DURATION = 60000; // 1 минута в миллисекундах
 
   const checkForResponse = useCallback(async () => {
     if (!isEnabled || !chatId) return;
+
+    // Проверяем, не истекло ли время ожидания
+    const currentTime = Date.now();
+    if (currentTime - startTimeRef.current >= TIMEOUT_DURATION) {
+      console.log('=== TIMEOUT: ПРЕВЫШЕН ЛИМИТ ОЖИДАНИЯ (60 секунд) ===');
+      setIsPolling(false);
+      pollCountRef.current = 0;
+      onTimeout();
+      return;
+    }
 
     pollCountRef.current++;
 
     try {
       console.log(`=== ПРОВЕРКА ОТВЕТА (попытка ${pollCountRef.current}) ===`);
       console.log('Chat ID для проверки:', chatId);
+      console.log('Время ожидания:', Math.round((currentTime - startTimeRef.current) / 1000), 'секунд');
       
       const requestBody = { chatId: chatId };
       console.log('Тело запроса к Supabase:', JSON.stringify(requestBody, null, 2));
@@ -38,7 +52,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
         console.error('Полная ошибка:', error);
         console.error('Сообщение ошибки:', error.message);
         
-        // Планируем следующую попытку даже при ошибке
+        // Планируем следующую попытку даже при ошибке (если не истек timeout)
         timeoutRef.current = setTimeout(checkForResponse, 3000);
         return;
       }
@@ -65,7 +79,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
       // В случае ошибки тоже планируем следующую попытку
       timeoutRef.current = setTimeout(checkForResponse, 3000);
     }
-  }, [chatId, onNewMessage, isEnabled]);
+  }, [chatId, onNewMessage, onTimeout, isEnabled]);
 
   useEffect(() => {
     if (!isEnabled) {
@@ -83,6 +97,7 @@ export const useChatPolling = ({ chatId, onNewMessage, isEnabled }: UseChatPolli
     console.log('Chat ID:', chatId);
     setIsPolling(true);
     pollCountRef.current = 0;
+    startTimeRef.current = Date.now();
     
     // Начинаем с первой проверки через 3 секунды
     timeoutRef.current = setTimeout(checkForResponse, 3000);

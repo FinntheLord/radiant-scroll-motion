@@ -34,7 +34,24 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const isProcessing = useRef(false);
   const [waitingForResponse, setWaitingForResponse] = useState(false);
 
-  // Простой механизм опроса ответов без ограничений по времени
+  const handleTimeout = () => {
+    console.log('Timeout при ожидании ответа от AI');
+    setWaitingForResponse(false);
+    setIsLoading(false);
+    
+    const timeoutMessage: ChatMessage = {
+      id: `timeout-${Date.now()}-${Math.random().toString(36).substring(2)}`,
+      content: lang === 'en' 
+        ? 'Sorry, the response took too long. Please try asking your question again.'
+        : 'Вибачте, відповідь займає занадто багато часу. Спробуйте поставити запитання знову.',
+      role: 'assistant',
+      timestamp: new Date()
+    };
+    
+    addMessage(timeoutMessage);
+  };
+
+  // Опрос ответов с лимитом в 1 минуту
   const { isPolling } = useChatPolling({
     chatId,
     onNewMessage: (message: string) => {
@@ -49,6 +66,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
       setWaitingForResponse(false);
       setIsLoading(false);
     },
+    onTimeout: handleTimeout,
     isEnabled: waitingForResponse && isOpen
   });
 
@@ -153,7 +171,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді)'}
+                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді до 60 сек)'}
               </p>
             </div>
           </div>
