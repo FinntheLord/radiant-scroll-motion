@@ -15,14 +15,32 @@ serve(async (req) => {
   try {
     const { chatId } = await req.json();
 
+    if (!chatId) {
+      console.log('Отсутствует chat ID в запросе');
+      return new Response(JSON.stringify({ 
+        error: 'Missing chatId',
+        success: false
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     console.log('Проверка ответа для chat ID:', chatId);
     
     // Делаем запрос к receive-ai-response для получения сохраненного ответа
-    const response = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/receive-ai-response`, {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY');
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Missing Supabase configuration');
+    }
+    
+    const response = await fetch(`${supabaseUrl}/functions/v1/receive-ai-response`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+        'Authorization': `Bearer ${supabaseKey}`,
       },
       body: JSON.stringify({ 
         action: 'get_response',
@@ -30,19 +48,23 @@ serve(async (req) => {
       })
     });
 
-    if (response.ok) {
-      const data = await response.json();
+    if (!response.ok) {
+      console.log('Ошибка при запросе к receive-ai-response:', response.status, response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Ответ от receive-ai-response:', data);
+    
+    if (data.success && data.message) {
+      console.log('Найден ответ для чата:', chatId);
       
-      if (data.success && data.message) {
-        console.log('Найден ответ для чата:', chatId);
-        
-        return new Response(JSON.stringify({ 
-          success: true,
-          message: data.message
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
+      return new Response(JSON.stringify({ 
+        success: true,
+        message: data.message
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Если ответа нет, возвращаем success: false
@@ -55,9 +77,12 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('Error in receive-chat-response function:', error);
+    console.error('Ошибка в receive-chat-response функции:', error);
+    console.error('Stack trace:', error.stack);
+    
     return new Response(JSON.stringify({ 
-      error: error.message
+      error: error.message || 'Internal server error',
+      success: false
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
