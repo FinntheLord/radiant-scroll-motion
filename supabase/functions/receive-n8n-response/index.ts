@@ -7,7 +7,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Временное хранилище ответов от n8n
+// Глобальное хранилище ответов (в реальном проекте используйте базу данных)
 const responseStore = new Map<string, string>();
 
 serve(async (req) => {
@@ -16,38 +16,35 @@ serve(async (req) => {
   }
 
   try {
-    const { chatId } = await req.json();
+    const { chat_id, message, user_id } = await req.json();
 
-    console.log('Проверка ответа для chat ID:', chatId);
-    
-    // Проверяем, есть ли ответ для данного chatId
-    const storedResponse = responseStore.get(chatId);
-    
-    if (storedResponse) {
-      console.log('Найден ответ для чата:', chatId);
-      
-      // Удаляем ответ после получения
-      responseStore.delete(chatId);
-      
+    console.log('Получен ответ от n8n:');
+    console.log('Chat ID:', chat_id);
+    console.log('User ID:', user_id);
+    console.log('Message:', message);
+
+    if (!chat_id || !message) {
       return new Response(JSON.stringify({ 
-        success: true,
-        message: storedResponse
+        error: 'Missing chat_id or message'
       }), {
+        status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Если ответа нет, возвращаем success: false
-    console.log('Ответ не найден для чата:', chatId);
+    // Сохраняем ответ для данного chat_id
+    responseStore.set(chat_id, message);
+    console.log('Ответ сохранен для чата:', chat_id);
+
     return new Response(JSON.stringify({ 
-      success: false,
-      message: null
+      success: true,
+      message: 'Response stored successfully'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error('Error in receive-chat-response function:', error);
+    console.error('Error in receive-n8n-response function:', error);
     return new Response(JSON.stringify({ 
       error: error.message
     }), {

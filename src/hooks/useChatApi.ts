@@ -1,6 +1,5 @@
 
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useChatApi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,32 +13,39 @@ export const useChatApi = () => {
     setError(null);
 
     try {
-      console.log('=== ОТПРАВКА СООБЩЕНИЯ ===');
+      console.log('=== ОТПРАВКА СООБЩЕНИЯ НА N8N ===');
       console.log('Сообщение:', message);
       console.log('Chat ID:', chatId);
 
+      // Генерируем user id (можно заменить на реальный ID пользователя)
+      const userId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+      
       const requestBody = {
         message: message,
-        chatId: chatId,
-        timestamp: Date.now()
+        chat_id: chatId,
+        user_id: userId
       };
 
-      console.log('Тело запроса:', JSON.stringify(requestBody, null, 2));
+      console.log('Тело запроса к n8n:', JSON.stringify(requestBody, null, 2));
 
-      const { data, error: supabaseError } = await supabase.functions.invoke('chat-with-ai', {
-        body: requestBody
+      const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook-test/84ac1eaf-efe6-4517-bc28-5b239286b274', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
       });
 
-      if (supabaseError) {
-        console.error('Supabase function error:', supabaseError);
-        throw new Error(supabaseError.message);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      console.log('Ответ от функции:', data);
+      const data = await response.json();
+      console.log('Ответ от n8n:', data);
       console.log('=== СООБЩЕНИЕ ОТПРАВЛЕНО УСПЕШНО ===');
 
     } catch (err) {
-      console.error('=== ОШИБКА ОТПРАВКИ ===');
+      console.error('=== ОШИБКА ОТПРАВКИ НА N8N ===');
       console.error('Полная ошибка:', err);
       
       const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка при отправке сообщения';

@@ -1,1 +1,5 @@
+
 project_id = "mdlyglpbdqvgwnayumhh"
+
+[functions.receive-n8n-response]
+verify_jwt = false
