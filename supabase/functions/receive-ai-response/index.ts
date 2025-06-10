@@ -7,20 +7,24 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Более надежное хранилище с TTL
+// Единое хранилище ответов с TTL
 const responseStore = new Map<string, { message: string; timestamp: number }>();
 const TTL = 300000; // 5 минут
 
-// Очистка старых записей
+// Очистка старых записей каждую минуту
 setInterval(() => {
   const now = Date.now();
+  let cleanedCount = 0;
   for (const [key, value] of responseStore.entries()) {
     if (now - value.timestamp > TTL) {
       responseStore.delete(key);
-      console.log('Удален устаревший ответ для chat:', key);
+      cleanedCount++;
     }
   }
-}, 60000); // Очистка каждую минуту
+  if (cleanedCount > 0) {
+    console.log(`Очищено ${cleanedCount} устаревших записей`);
+  }
+}, 60000);
 
 serve(async (req) => {
   // Обработка CORS
@@ -30,6 +34,7 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
+    console.log('=== RECEIVE-AI-RESPONSE ===');
     console.log('Получен запрос:', JSON.stringify(body, null, 2));
     
     const { message, chatId, userId, action } = body;
@@ -37,14 +42,17 @@ serve(async (req) => {
     // Если это запрос на получение ответа
     if (action === 'get_response' && chatId) {
       console.log('Запрос на получение ответа для chat ID:', chatId);
+      console.log('Текущий размер хранилища:', responseStore.size);
       
       const storedData = responseStore.get(chatId);
       
       if (storedData) {
-        console.log('Найден ответ для чата:', chatId);
+        console.log('✅ НАЙДЕН ОТВЕТ для чата:', chatId);
+        console.log('Время хранения:', Math.round((Date.now() - storedData.timestamp) / 1000), 'секунд');
         
         // Удаляем ответ после получения
         responseStore.delete(chatId);
+        console.log('Ответ удален из хранилища');
         
         return new Response(JSON.stringify({ 
           success: true,
@@ -54,7 +62,9 @@ serve(async (req) => {
         });
       }
 
-      console.log('Ответ не найден для чата:', chatId);
+      console.log('❌ ОТВЕТ НЕ НАЙДЕН для чата:', chatId);
+      console.log('Доступные ключи в хранилище:', Array.from(responseStore.keys()));
+      
       return new Response(JSON.stringify({ 
         success: false,
         message: null
@@ -65,7 +75,9 @@ serve(async (req) => {
 
     // Если это сохранение ответа от n8n
     if (!message || !chatId) {
-      console.log('Отсутствуют обязательные поля:', { message: !!message, chatId: !!chatId });
+      console.log('❌ ОТСУТСТВУЮТ ОБЯЗАТЕЛЬНЫЕ ПОЛЯ');
+      console.log('message:', !!message, 'chatId:', !!chatId);
+      
       return new Response(JSON.stringify({
         error: 'Missing required fields: message, chatId',
         success: false
@@ -75,8 +87,11 @@ serve(async (req) => {
       });
     }
 
-    console.log('Сохранение ответа от n8n для чата:', chatId);
-    console.log('Сообщение (первые 100 символов):', message.substring(0, 100) + '...');
+    console.log('💾 СОХРАНЕНИЕ ОТВЕТА ОТ N8N');
+    console.log('Chat ID:', chatId);
+    console.log('User ID:', userId);
+    console.log('Длина сообщения:', message.length, 'символов');
+    console.log('Сообщение (первые 200 символов):', message.substring(0, 200) + '...');
 
     // Сохраняем ответ с timestamp
     responseStore.set(chatId, {
@@ -84,20 +99,22 @@ serve(async (req) => {
       timestamp: Date.now()
     });
 
-    console.log('Ответ успешно сохранен для чата:', chatId);
-    console.log('Текущий размер хранилища:', responseStore.size);
+    console.log('✅ ОТВЕТ УСПЕШНО СОХРАНЕН');
+    console.log('Новый размер хранилища:', responseStore.size);
+    console.log('Все ключи в хранилище:', Array.from(responseStore.keys()));
 
     return new Response(JSON.stringify({ 
       success: true,
       chatId: chatId,
       status: 'response_stored',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      storageSize: responseStore.size
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error('Ошибка в receive-ai-response функции:', error);
+    console.error('💥 КРИТИЧЕСКАЯ ОШИБКА в receive-ai-response:', error);
     console.error('Stack trace:', error.stack);
     
     return new Response(JSON.stringify({ 

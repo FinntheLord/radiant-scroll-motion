@@ -16,7 +16,7 @@ serve(async (req) => {
     const { chatId } = await req.json();
 
     if (!chatId) {
-      console.log('Отсутствует chat ID в запросе');
+      console.log('❌ ОТСУТСТВУЕТ CHAT ID в запросе');
       return new Response(JSON.stringify({ 
         error: 'Missing chatId',
         success: false
@@ -26,9 +26,10 @@ serve(async (req) => {
       });
     }
 
-    console.log('Проверка ответа для chat ID:', chatId);
+    console.log('=== RECEIVE-CHAT-RESPONSE ===');
+    console.log('🔍 ПРОВЕРКА ОТВЕТА для chat ID:', chatId);
     
-    // Делаем запрос к receive-ai-response для получения сохраненного ответа
+    // Получаем конфигурацию Supabase
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY');
     
@@ -36,6 +37,9 @@ serve(async (req) => {
       throw new Error('Missing Supabase configuration');
     }
     
+    console.log('📡 ВЫЗОВ receive-ai-response функции...');
+    
+    // Делаем запрос к receive-ai-response для получения сохраненного ответа
     const response = await fetch(`${supabaseUrl}/functions/v1/receive-ai-response`, {
       method: 'POST',
       headers: {
@@ -49,15 +53,18 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      console.log('Ошибка при запросе к receive-ai-response:', response.status, response.statusText);
+      console.log('❌ ОШИБКА при запросе к receive-ai-response:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.log('Текст ошибки:', errorText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('Ответ от receive-ai-response:', data);
+    console.log('📥 ОТВЕТ ОТ receive-ai-response:', data);
     
     if (data.success && data.message) {
-      console.log('Найден ответ для чата:', chatId);
+      console.log('✅ НАЙДЕН ОТВЕТ для чата:', chatId);
+      console.log('Длина ответа:', data.message.length, 'символов');
       
       return new Response(JSON.stringify({ 
         success: true,
@@ -68,7 +75,7 @@ serve(async (req) => {
     }
 
     // Если ответа нет, возвращаем success: false
-    console.log('Ответ не найден для чата:', chatId);
+    console.log('❌ ОТВЕТ НЕ НАЙДЕН для чата:', chatId);
     return new Response(JSON.stringify({ 
       success: false,
       message: null
@@ -77,7 +84,7 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('Ошибка в receive-chat-response функции:', error);
+    console.error('💥 КРИТИЧЕСКАЯ ОШИБКА в receive-chat-response:', error);
     console.error('Stack trace:', error.stack);
     
     return new Response(JSON.stringify({ 
