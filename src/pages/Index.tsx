@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
@@ -18,19 +18,15 @@ interface IndexProps {
   lang: Language;
 }
 
-const IndexContent: React.FC<IndexProps> = ({ lang = 'uk' }) => {
+const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
   const { isSidebarChatOpen, closeSidebarChat } = useChat();
   
-  console.log('Index component rendering with lang:', lang);
-
   useEffect(() => {
-    console.log('Index component mounted with lang:', lang);
     try {
       const title = lang === 'en' 
         ? "connexi.ai | AI solutions for business in Ukraine"
         : "connexi.ai | AI-рішення для бізнесу в Україні";
       document.title = title;
-      console.log('Page title set successfully');
     } catch (error) {
       console.error('Error setting page title:', error);
     }
@@ -65,7 +61,9 @@ const IndexContent: React.FC<IndexProps> = ({ lang = 'uk' }) => {
       </div>
     );
   }
-};
+});
+
+IndexContent.displayName = 'IndexContent';
 
 const Index: React.FC<IndexProps> = ({ lang }) => {
   return (

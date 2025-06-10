@@ -32,7 +32,7 @@
     position: relative;
   }
 
-  /* Mobile-specific overflow fixes */
+  /* Optimized mobile styles */
   @media (max-width: 768px) {
     html, body {
       overflow-x: hidden !important;
@@ -48,6 +48,20 @@
     .container {
       overflow-x: hidden !important;
       max-width: 100vw !important;
+    }
+
+    /* Disable heavy animations on mobile */
+    .floating {
+      animation: none !important;
+    }
+  }
+
+  /* Performance optimizations */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 }
@@ -66,4 +80,26 @@
   color: transparent;
   background-clip: text;
   text-fill-color: transparent;
+}
+
+/* Optimized reveal animations */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Simplified floating animation */
+.floating {
+  animation: gentle-float 8s ease-in-out infinite;
+}
+
+@keyframes gentle-float {
+  0%, 100% { transform: translate(0px, 0px); }
+  50% { transform: translate(2px, -2px); }
 }
