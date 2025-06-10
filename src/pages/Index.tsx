@@ -1,5 +1,5 @@
 
-import React, { useEffect, memo } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
@@ -18,26 +18,19 @@ interface IndexProps {
   lang: Language;
 }
 
-// Мемоизированные компоненты для предотвращения лишних ререндеров
-const MemoizedNavbar = memo(Navbar);
-const MemoizedHeroSection = memo(HeroSection);
-const MemoizedAboutSection = memo(AboutSection);
-const MemoizedVideoBackgroundSection = memo(VideoBackgroundSection);
-const MemoizedAssistantSection = memo(AssistantSection);
-const MemoizedServicesSection = memo(ServicesSection);
-const MemoizedPartnersSection = memo(PartnersSection);
-const MemoizedCasesSection = memo(CasesSection);
-const MemoizedContactsSection = memo(ContactsSection);
-
-const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
+const IndexContent: React.FC<IndexProps> = ({ lang = 'uk' }) => {
   const { isSidebarChatOpen, closeSidebarChat } = useChat();
+  
+  console.log('Index component rendering with lang:', lang);
 
   useEffect(() => {
+    console.log('Index component mounted with lang:', lang);
     try {
       const title = lang === 'en' 
         ? "connexi.ai | AI solutions for business in Ukraine"
         : "connexi.ai | AI-рішення для бізнесу в Україні";
       document.title = title;
+      console.log('Page title set successfully');
     } catch (error) {
       console.error('Error setting page title:', error);
     }
@@ -47,15 +40,15 @@ const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
     return (
       <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden w-full">
         <ScrollAnimation />
-        <MemoizedNavbar lang={lang} />
-        <MemoizedHeroSection lang={lang} />
-        <MemoizedAboutSection className="bg-gray-900 text-white" lang={lang} />
-        <MemoizedVideoBackgroundSection lang={lang} />
-        <MemoizedAssistantSection className="bg-gray-900 text-white" lang={lang} />
-        <MemoizedServicesSection className="bg-white text-gray-900" lang={lang} />
-        <MemoizedPartnersSection className="bg-gray-900 text-white" lang={lang} />
-        <MemoizedCasesSection className="bg-white text-gray-900" lang={lang} />
-        <MemoizedContactsSection className="bg-gray-900 text-white" lang={lang} />
+        <Navbar lang={lang} />
+        <HeroSection lang={lang} />
+        <AboutSection className="bg-gray-900 text-white" lang={lang} />
+        <VideoBackgroundSection lang={lang} />
+        <AssistantSection className="bg-gray-900 text-white" lang={lang} />
+        <ServicesSection className="bg-white text-gray-900" lang={lang} />
+        <PartnersSection className="bg-gray-900 text-white" lang={lang} />
+        <CasesSection className="bg-white text-gray-900" lang={lang} />
+        <ContactsSection className="bg-gray-900 text-white" lang={lang} />
         
         <ChatSidebar 
           isOpen={isSidebarChatOpen} 
@@ -72,18 +65,14 @@ const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
       </div>
     );
   }
-});
+};
 
-IndexContent.displayName = 'IndexContent';
-
-const Index: React.FC<IndexProps> = memo(({ lang }) => {
+const Index: React.FC<IndexProps> = ({ lang }) => {
   return (
     <ChatProvider>
       <IndexContent lang={lang} />
     </ChatProvider>
   );
-});
-
-Index.displayName = 'Index';
+};
 
 export default Index;

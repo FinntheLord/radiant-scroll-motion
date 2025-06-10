@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { ChatMessage } from '../types/chat';
 
@@ -12,16 +12,9 @@ interface UseChatPollingProps {
 
 export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseChatPollingProps) => {
   const [isPolling, setIsPolling] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const lastCheckRef = useRef<number>(0);
 
   const checkForNewMessages = useCallback(async () => {
     if (!isEnabled || !userId || !chatId) return;
-
-    // Throttle requests - минимум 3 секунды между запросами
-    const now = Date.now();
-    if (now - lastCheckRef.current < 3000) return;
-    lastCheckRef.current = now;
 
     try {
       console.log('Checking for new messages for chat:', chatId);
@@ -39,6 +32,8 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
         return;
       }
 
+      console.log('Polling response:', data);
+
       if (data && data.success && data.type === 'ai_response' && data.message) {
         console.log('Received new AI message from polling:', data.message);
         
@@ -50,13 +45,8 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
         };
         
         onNewMessage(newMessage);
-        
-        // Останавливаем полинг после получения сообщения
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-          setIsPolling(false);
-        }
+      } else {
+        console.log('No new messages found');
       }
     } catch (err) {
       console.error('Error in polling:', err);
@@ -65,10 +55,6 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
 
   useEffect(() => {
     if (!isEnabled) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
       setIsPolling(false);
       return;
     }
@@ -78,14 +64,11 @@ export const useChatPolling = ({ userId, chatId, onNewMessage, isEnabled }: UseC
     // Проверяем сразу
     checkForNewMessages();
     
-    // Увеличиваем интервал до 5 секунд для снижения нагрузки
-    intervalRef.current = setInterval(checkForNewMessages, 5000);
+    // Затем проверяем каждые 2 секунды
+    const interval = setInterval(checkForNewMessages, 2000);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+      clearInterval(interval);
       setIsPolling(false);
     };
   }, [checkForNewMessages, isEnabled]);
