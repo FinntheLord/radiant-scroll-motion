@@ -31,17 +31,17 @@ export const useSimpleChat = () => {
     setError(null);
 
     try {
-      console.log('📤 Отправка сообщения на n8n:', { message, chatId });
+      console.log('📤 Отправка сообщения на n8n:', { message, chat_id: chatId });
 
-      // Отправляем на n8n webhook
+      // Отправляем на n8n webhook с новым форматом тела
       const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook/84ac1eaf-efe6-4517-bc28-5b239286b274', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: message,
-          chatId: chatId
+          chat_id: chatId,
+          message: message
         })
       });
 
