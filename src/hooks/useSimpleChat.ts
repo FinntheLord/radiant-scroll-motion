@@ -1,7 +1,8 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-export interface ChatMessage {
+interface ChatMessage {
   id: string;
   content: string;
   role: 'user' | 'assistant';
@@ -27,26 +28,73 @@ export const useSimpleChat = () => {
   const sendMessage = useCallback(async (message: string, chatId: string) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
-      // Здесь будет новая логика отправки сообщений
-      console.log('Отправка сообщения:', { message, chatId });
-      
-      // Временная заглушка - просто добавляем ответ через секунду
-      setTimeout(() => {
-        addMessage('Временный ответ - функционал будет переделан', 'assistant');
-        setIsLoading(false);
-      }, 1000);
-      
+      // Сохраняем сообщение пользователя в БД
+      const { error: insertError } = await supabase
+        .from('chat_messages')
+        .insert({
+          chat_id: chatId,
+          message: message,
+          role: 'user'
+        });
+
+      if (insertError) {
+        throw new Error('Ошибка сохранения сообщения пользователя');
+      }
+
+      // Отправляем сообщение в n8n через edge function
+      const { error: functionError } = await supabase.functions.invoke('send-to-n8n', {
+        body: { message, chatId }
+      });
+
+      if (functionError) {
+        throw new Error(functionError.message || 'Ошибка отправки в n8n');
+      }
+
     } catch (err) {
       console.error('Ошибка отправки сообщения:', err);
-      setError('Ошибка отправки сообщения');
+      const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
+      setError(errorMessage);
+    } finally {
       setIsLoading(false);
     }
-  }, [addMessage]);
+  }, []);
 
-  const clearMessages = useCallback(() => {
-    setMessages([]);
+  // Подписка на новые сообщения через Realtime
+  useEffect(() => {
+    const channel = supabase
+      .channel('chat-messages')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        (payload) => {
+          console.log('Новое сообщение получено:', payload.new);
+          const newMessage: ChatMessage = {
+            id: payload.new.id,
+            content: payload.new.message,
+            role: payload.new.role as 'user' | 'assistant',
+            timestamp: new Date(payload.new.created_at)
+          };
+          
+          setMessages(prev => {
+            // Проверяем, нет ли уже такого сообщения
+            const exists = prev.some(msg => msg.id === newMessage.id);
+            if (exists) return prev;
+            
+            return [...prev, newMessage];
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const clearError = useCallback(() => {
@@ -59,7 +107,6 @@ export const useSimpleChat = () => {
     error,
     sendMessage,
     addMessage,
-    clearMessages,
     clearError
   };
 };

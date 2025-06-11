@@ -1,5 +1,6 @@
 
 import { useState, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useChatApi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,12 +14,19 @@ export const useChatApi = () => {
     setError(null);
 
     try {
-      console.log('Отправка сообщения (заглушка):', { message, chatId });
+      console.log('Отправка сообщения через edge function:', { message, chatId });
       
-      // Временная заглушка - все API вызовы удалены
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      console.log('Сообщение отправлено (заглушка)');
+      // Отправляем сообщение через edge function в n8n
+      const { data, error } = await supabase.functions.invoke('send-to-n8n', {
+        body: { message, chatId }
+      });
+
+      if (error) {
+        console.error('Ошибка отправки через edge function:', error);
+        throw new Error(error.message || 'Ошибка отправки сообщения');
+      }
+
+      console.log('Сообщение успешно отправлено:', data);
 
     } catch (err) {
       console.error('Ошибка отправки:', err);
