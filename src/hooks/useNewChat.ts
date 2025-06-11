@@ -62,8 +62,8 @@ export const useNewChat = () => {
         const response = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/chat-api?chatId=${chatId}`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${supabase.supabaseKey}`,
-            'apikey': supabase.supabaseKey,
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E`,
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E',
             'Content-Type': 'application/json'
           }
         });
