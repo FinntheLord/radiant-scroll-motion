@@ -76,11 +76,13 @@ serve(async (req) => {
 
       console.log('✅ Ответ сохранен для chatId:', chatId);
       console.log('📊 Текущее содержимое хранилища:', responseStore.size, 'элементов');
+      console.log('🔍 Все chatId в хранилище:', Array.from(responseStore.keys()));
 
       return new Response(JSON.stringify({ 
         success: true,
         message: 'Response stored successfully',
-        chatId: chatId
+        chatId: chatId,
+        storedMessage: message.substring(0, 100) + '...'
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -112,6 +114,7 @@ serve(async (req) => {
         
         // Удаляем сообщение после получения
         responseStore.delete(chatId);
+        console.log('🗑️ Сообщение удалено из хранилища после получения');
         
         return new Response(JSON.stringify({ 
           success: true,

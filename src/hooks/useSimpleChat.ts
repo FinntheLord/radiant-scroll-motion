@@ -65,7 +65,7 @@ export const useSimpleChat = () => {
             console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ для chatId: ${chatId}`);
             console.log(`⏱️ Время ожидания: ${elapsedTime} секунд`);
             
-            // Используем правильный формат для вызова Edge Function с параметрами
+            // Вызываем Edge Function через Supabase client
             const { data, error } = await supabase.functions.invoke('n8n-webhook', {
               method: 'GET',
               body: { chatId: chatId }
@@ -78,7 +78,7 @@ export const useSimpleChat = () => {
             if (error) {
               console.log('❌ Ошибка Supabase:', error);
             } else if (data?.success && data?.message) {
-              console.log('✅ Получен ответ от n8n');
+              console.log('✅ Получен ответ от n8n:', data.message.substring(0, 100) + '...');
               return data.message;
             } else {
               console.log('❌ Ответ еще не готов, ждем 4 секунды');
