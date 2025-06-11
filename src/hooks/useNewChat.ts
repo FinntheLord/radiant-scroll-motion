@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
@@ -33,7 +33,20 @@ export const useNewChat = () => {
     try {
       console.log('🚀 Отправка сообщения:', { message, chatId });
 
-      // Отправляем сообщение
+      // Сохраняем сообщение пользователя в базу данных
+      const { error: insertError } = await supabase
+        .from('chat_messages')
+        .insert({
+          chat_id: chatId,
+          message: message,
+          role: 'user'
+        });
+
+      if (insertError) {
+        throw new Error(`Ошибка сохранения сообщения: ${insertError.message}`);
+      }
+
+      // Отправляем сообщение на n8n
       const { data: sendData, error: sendError } = await supabase.functions.invoke('chat-api', {
         body: {
           action: 'send',
@@ -47,43 +60,6 @@ export const useNewChat = () => {
       }
 
       console.log('✅ Сообщение отправлено:', sendData);
-
-      // Начинаем опрос ответа
-      const maxAttempts = 30; // 2 минуты
-      let attempts = 0;
-
-      while (attempts < maxAttempts) {
-        attempts++;
-        console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ`);
-        
-        await new Promise(resolve => setTimeout(resolve, 4000)); // Ждем 4 секунды
-        
-        // Делаем GET запрос
-        const response = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/chat-api?chatId=${chatId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E`,
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E',
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          console.log('❌ Ошибка GET запроса:', response.status);
-          continue;
-        }
-
-        const responseData = await response.json();
-        console.log('📥 Ответ от API:', responseData);
-
-        if (responseData?.success && responseData?.message) {
-          console.log('🎉 Получен ответ AI!');
-          addMessage(responseData.message, 'assistant');
-          return;
-        }
-      }
-
-      throw new Error('Превышено время ожидания ответа');
 
     } catch (err) {
       console.error('💥 Ошибка:', err);
@@ -99,6 +75,40 @@ export const useNewChat = () => {
     setMessages([]);
     setError(null);
   }, []);
+
+  // Подписка на realtime обновления для получения ответов от AI
+  useEffect(() => {
+    const channel = supabase
+      .channel('chat-messages-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        (payload) => {
+          console.log('📥 Получено новое сообщение через realtime:', payload);
+          
+          const newMessage = payload.new as any;
+          if (newMessage.role === 'assistant') {
+            // Добавляем сообщение от AI в чат
+            addMessage(newMessage.message, 'assistant');
+          } else if (newMessage.role === 'user') {
+            // Добавляем сообщение пользователя в чат
+            addMessage(newMessage.message, 'user');
+          }
+        }
+      )
+      .subscribe();
+
+    console.log('🔔 Подписка на realtime активирована');
+
+    return () => {
+      console.log('🔕 Отписка от realtime');
+      supabase.removeChannel(channel);
+    };
+  }, [addMessage]);
 
   return {
     messages,

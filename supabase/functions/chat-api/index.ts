@@ -1,14 +1,12 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-// Простое хранилище для сообщений
-const messageStore = new Map<string, string>();
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -18,6 +16,11 @@ serve(async (req) => {
   console.log('🚀 Chat API вызван:', req.method, req.url);
 
   try {
+    // Инициализируем Supabase клиент
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     if (req.method === 'POST') {
       const body = await req.json();
       console.log('📨 POST данные:', body);
@@ -56,51 +59,25 @@ serve(async (req) => {
         console.log('🔄 Webhook от n8n - сохранение ответа для chatId:', chatId);
         console.log('📝 Сообщение от AI:', message);
         
-        messageStore.set(chatId, message);
-        console.log('✅ Ответ от n8n сохранен');
+        // Сохраняем ответ от AI в базу данных через Supabase
+        const { error: insertError } = await supabase
+          .from('chat_messages')
+          .insert({
+            chat_id: chatId,
+            message: message,
+            role: 'assistant'
+          });
+
+        if (insertError) {
+          console.error('❌ Ошибка сохранения в базу:', insertError);
+          throw new Error(`Database error: ${insertError.message}`);
+        }
+        
+        console.log('✅ Ответ от n8n сохранен в базу данных');
         
         return new Response(JSON.stringify({ 
           success: true, 
           message: 'Ответ от n8n сохранен' 
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-    }
-    
-    if (req.method === 'GET') {
-      const url = new URL(req.url);
-      const chatId = url.searchParams.get('chatId');
-      
-      console.log('🔍 GET запрос для chatId:', chatId);
-      
-      if (!chatId) {
-        return new Response(JSON.stringify({ 
-          success: false, 
-          error: 'Missing chatId' 
-        }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      
-      const message = messageStore.get(chatId);
-      
-      if (message) {
-        console.log('✅ Найдено сообщение:', message.substring(0, 50) + '...');
-        messageStore.delete(chatId); // Удаляем после получения
-        
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: message 
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      } else {
-        console.log('❌ Сообщение не найдено');
-        return new Response(JSON.stringify({ 
-          success: false, 
-          message: null 
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
