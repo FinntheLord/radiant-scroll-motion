@@ -1,6 +1,5 @@
 
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -51,8 +50,8 @@ export const useSimpleChat = () => {
 
       console.log('✅ Сообщение отправлено на n8n');
 
-      // Начинаем опрос ответа
-      const maxAttempts = 24; // 2 минуты (24 * 5 секунд)
+      // Начинаем опрос ответа через n8n-webhook функцию
+      const maxAttempts = 30; // 2.5 минуты (30 * 5 секунд)
       let attempts = 0;
 
       const pollForResponse = async (): Promise<string | null> => {
@@ -62,23 +61,24 @@ export const useSimpleChat = () => {
           try {
             console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ`);
             
-            const { data, error } = await supabase.functions.invoke('n8n-webhook', {
+            // Используем прямой fetch к n8n-webhook функции с GET параметром
+            const pollResponse = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/n8n-webhook?chatId=${chatId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ chatId })
+                'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+                'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
+              }
             });
 
-            if (error) {
-              console.log('❌ Ошибка при получении ответа:', error);
-              await new Promise(resolve => setTimeout(resolve, 5000));
-              continue;
-            }
+            if (pollResponse.ok) {
+              const data = await pollResponse.json();
+              console.log('📥 Ответ от n8n-webhook:', data);
 
-            if (data?.success && data?.message) {
-              console.log('✅ Получен ответ от n8n');
-              return data.message;
+              if (data.success && data.message) {
+                console.log('✅ Получен ответ от n8n');
+                return data.message;
+              }
             }
 
             // Ждем 5 секунд перед следующей попыткой
@@ -97,7 +97,7 @@ export const useSimpleChat = () => {
       if (aiResponse) {
         addMessage(aiResponse, 'assistant');
       } else {
-        throw new Error('Не удалось получить ответ от AI в течение 2 минут');
+        throw new Error('Не удалось получить ответ от AI в течение 2.5 минут');
       }
 
     } catch (err) {
