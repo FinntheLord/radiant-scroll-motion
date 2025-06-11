@@ -33,7 +33,7 @@ export const useSimpleChat = () => {
     try {
       console.log('📤 Отправка сообщения на n8n:', { message, chat_id: chatId });
 
-      // Отправляем на n8n webhook с новым форматом тела
+      // Отправляем на n8n webhook
       const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook/84ac1eaf-efe6-4517-bc28-5b239286b274', {
         method: 'POST',
         headers: {
@@ -51,8 +51,8 @@ export const useSimpleChat = () => {
 
       console.log('✅ Сообщение отправлено на n8n');
 
-      // Начинаем опрос ответа с использованием Supabase клиента
-      const maxAttempts = 30; // 2.5 минуты (30 * 5 секунд)
+      // Начинаем опрос ответа
+      const maxAttempts = 30; // 2 минуты (30 * 4 секунды)
       let attempts = 0;
       const startTime = Date.now();
 
@@ -65,9 +65,10 @@ export const useSimpleChat = () => {
             console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ для chatId: ${chatId}`);
             console.log(`⏱️ Время ожидания: ${elapsedTime} секунд`);
             
-            // Используем Supabase клиент для правильной авторизации
+            // Используем правильный формат для вызова Edge Function с параметрами
             const { data, error } = await supabase.functions.invoke('n8n-webhook', {
-              method: 'GET'
+              method: 'GET',
+              body: { chatId: chatId }
             });
 
             console.log('📥 Ответ от Supabase функции:');
@@ -80,7 +81,7 @@ export const useSimpleChat = () => {
               console.log('✅ Получен ответ от n8n');
               return data.message;
             } else {
-              console.log('❌ Ответ еще не готов, планируем следующую проверку через 4 секунды');
+              console.log('❌ Ответ еще не готов, ждем 4 секунды');
             }
 
             // Ждем 4 секунды перед следующей попыткой
@@ -100,7 +101,7 @@ export const useSimpleChat = () => {
         console.log('🎉 Добавляем ответ в чат:', aiResponse.substring(0, 100) + '...');
         addMessage(aiResponse, 'assistant');
       } else {
-        throw new Error('Не удалось получить ответ от AI в течение 2.5 минут');
+        throw new Error('Не удалось получить ответ от AI в течение 2 минут');
       }
 
     } catch (err) {

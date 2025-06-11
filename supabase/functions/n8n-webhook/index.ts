@@ -7,9 +7,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Простое глобальное хранилище для ответов
+// Глобальное хранилище для ответов
 const responseStore = new Map<string, { message: string; timestamp: number }>();
-const TTL = 300000; // 5 минут для отладки
+const TTL = 300000; // 5 минут
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -32,18 +32,22 @@ serve(async (req) => {
 
     if (req.method === 'POST') {
       const body = await req.json();
-      const { chatId, message, chat_id } = body;
-      const finalChatId = chatId || chat_id;
+      console.log('📨 Получено тело запроса:', JSON.stringify(body, null, 2));
+      
+      // Извлекаем данные из разных возможных форматов
+      const chatId = body.chatId || body.chat_id || body.id;
+      const message = body.message || body.text || body.content;
 
-      console.log('📨 Получен ответ от n8n:');
-      console.log('Chat ID:', finalChatId);
-      console.log('Message:', message?.substring(0, 100) + '...');
+      console.log('📝 Извлеченные данные:');
+      console.log('- Chat ID:', chatId);
+      console.log('- Message:', message?.substring(0, 100) + '...');
 
-      if (!finalChatId || !message) {
+      if (!chatId || !message) {
         console.log('❌ Отсутствуют обязательные поля');
         return new Response(JSON.stringify({ 
           error: 'Missing chatId or message',
-          success: false
+          success: false,
+          received: body
         }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -51,30 +55,61 @@ serve(async (req) => {
       }
 
       // Сохраняем ответ
-      responseStore.set(finalChatId, {
+      responseStore.set(chatId, {
         message: message,
         timestamp: now
       });
 
-      console.log('✅ Ответ сохранен для chatId:', finalChatId);
-      console.log('📊 Размер хранилища:', responseStore.size);
-      console.log('📋 Все chatId в хранилище:', Array.from(responseStore.keys()));
+      console.log('✅ Ответ сохранен для chatId:', chatId);
+      console.log('📊 Текущее содержимое хранилища:');
+      for (const [key, value] of responseStore.entries()) {
+        console.log(`- ${key}: ${value.message.substring(0, 50)}...`);
+      }
 
       return new Response(JSON.stringify({ 
         success: true,
-        message: 'Response stored successfully'
+        message: 'Response stored successfully',
+        chatId: chatId
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     if (req.method === 'GET') {
-      console.log('🔍 GET запрос получен');
+      const url = new URL(req.url);
+      const chatId = url.searchParams.get('chatId');
+      
+      console.log('🔍 GET запрос для chatId:', chatId);
       console.log('📋 Все chatId в хранилище:', Array.from(responseStore.keys()));
       
-      // Проверяем, есть ли хоть какие-то сообщения
-      if (responseStore.size === 0) {
-        console.log('📪 Хранилище пустое');
+      if (!chatId) {
+        console.log('❌ Отсутствует chatId в параметрах');
+        return new Response(JSON.stringify({ 
+          success: false,
+          error: 'Missing chatId parameter'
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const storedData = responseStore.get(chatId);
+      
+      if (storedData) {
+        console.log('✅ Найдено сообщение для chatId:', chatId);
+        console.log('📤 Возвращаем сообщение:', storedData.message.substring(0, 100) + '...');
+        
+        // Удаляем сообщение после получения
+        responseStore.delete(chatId);
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          message: storedData.message
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      } else {
+        console.log('❌ Сообщение не найдено для chatId:', chatId);
         return new Response(JSON.stringify({ 
           success: false,
           message: null
@@ -82,19 +117,6 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-
-      // Получаем первое доступное сообщение (для отладки)
-      const [firstChatId, firstData] = Array.from(responseStore.entries())[0];
-      console.log('🎯 Возвращаем первое доступное сообщение для:', firstChatId);
-      
-      responseStore.delete(firstChatId); // Удаляем после получения
-      
-      return new Response(JSON.stringify({ 
-        success: true,
-        message: firstData.message
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
     }
 
     return new Response(JSON.stringify({
@@ -110,7 +132,8 @@ serve(async (req) => {
     
     return new Response(JSON.stringify({ 
       error: 'Internal server error',
-      success: false
+      success: false,
+      details: error.message
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
