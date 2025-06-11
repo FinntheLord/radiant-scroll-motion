@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Language } from '../lib/translations';
 
 interface SimpleChatContextType {
   isChatOpen: boolean;
@@ -18,10 +17,12 @@ export const SimpleChatProvider: React.FC<SimpleChatProviderProps> = ({ children
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const openChat = () => {
+    console.log('Открытие чата');
     setIsChatOpen(true);
   };
 
   const closeChat = () => {
+    console.log('Закрытие чата');
     setIsChatOpen(false);
   };
 

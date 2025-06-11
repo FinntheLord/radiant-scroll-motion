@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { X, Send, MessageCircle } from 'lucide-react';
+import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
 import { ChatMessageList } from '@/components/ui/chat-message-list';
@@ -18,7 +17,7 @@ interface SimpleChatProps {
 const generateChatId = () => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
 export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang }) => {
-  const { messages, isLoading, error, sendMessage, addMessage, clearMessages, clearError } = useSimpleChat();
+  const { messages, isLoading, error, sendMessage, addMessage, clearError } = useSimpleChat();
   const [inputMessage, setInputMessage] = useState('');
   const [chatId] = useState(() => generateChatId());
 
@@ -26,8 +25,8 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const welcomeMessage = lang === 'en' 
-        ? 'Hello! I\'m here to help you with AI solutions for your business. What questions do you have?'
-        : 'Привіт! Я тут, щоб допомогти вам з AI-рішеннями для вашого бізнесу. Які у вас питання?';
+        ? 'Hello! Chat functionality is being rebuilt. This is a temporary message.'
+        : 'Привіт! Функціонал чату переробляється. Це тимчасове повідомлення.';
       
       addMessage(welcomeMessage, 'assistant');
     }
@@ -93,7 +92,7 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
                 AI-Помічник Connexi
               </h2>
               <p className="text-sm text-white/60">
-                {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
+                {lang === 'en' ? 'Chat is being rebuilt' : 'Чат переробляється'}
               </p>
               <p className="text-xs text-white/40">
                 Chat ID: {chatId.substring(0, 12)}...
@@ -102,7 +101,7 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
           </div>
           
           <div className="flex items-center gap-3">
-            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'}`} />
             <Button
               variant="ghost"
               size="icon"
@@ -173,7 +172,7 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
             <div className="flex gap-2">
               <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors">
                 <ChatInput
-                  placeholder={lang === 'en' ? 'Ask about AI solutions...' : 'Запитайте про AI-рішення...'}
+                  placeholder={lang === 'en' ? 'Chat is being rebuilt...' : 'Чат переробляється...'}
                   value={inputMessage}
                   onChange={handleInputChange}
                   onSend={handleSendMessage}

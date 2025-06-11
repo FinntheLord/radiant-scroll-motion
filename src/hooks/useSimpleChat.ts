@@ -1,8 +1,7 @@
 
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
-interface Message {
+export interface ChatMessage {
   id: string;
   content: string;
   role: 'user' | 'assistant';
@@ -10,12 +9,12 @@ interface Message {
 }
 
 export const useSimpleChat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const addMessage = useCallback((content: string, role: 'user' | 'assistant') => {
-    const newMessage: Message = {
+    const newMessage: ChatMessage = {
       id: `${role}-${Date.now()}-${Math.random().toString(36).substring(2)}`,
       content,
       role,
@@ -23,97 +22,34 @@ export const useSimpleChat = () => {
     };
     
     setMessages(prev => [...prev, newMessage]);
-    return newMessage.id;
   }, []);
 
   const sendMessage = useCallback(async (message: string, chatId: string) => {
     setIsLoading(true);
     setError(null);
-
+    
     try {
-      console.log('📤 Отправка сообщения на n8n:', { message, chatId });
-
-      // Отправляем на n8n webhook
-      const response = await fetch('https://n8n.srv838454.hstgr.cloud/webhook/84ac1eaf-efe6-4517-bc28-5b239286b274', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: message,
-          chatId: chatId
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`N8N webhook error: ${response.status}`);
-      }
-
-      console.log('✅ Сообщение отправлено на n8n');
-
-      // Начинаем опрос ответа
-      const maxAttempts = 24; // 2 минуты (24 * 5 секунд)
-      let attempts = 0;
-
-      const pollForResponse = async (): Promise<string | null> => {
-        while (attempts < maxAttempts) {
-          attempts++;
-          
-          try {
-            console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ`);
-            
-            const { data, error } = await supabase.functions.invoke('n8n-webhook', {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ chatId })
-            });
-
-            if (error) {
-              console.log('❌ Ошибка при получении ответа:', error);
-              await new Promise(resolve => setTimeout(resolve, 5000));
-              continue;
-            }
-
-            if (data?.success && data?.message) {
-              console.log('✅ Получен ответ от n8n');
-              return data.message;
-            }
-
-            // Ждем 5 секунд перед следующей попыткой
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          } catch (err) {
-            console.log('❌ Ошибка опроса:', err);
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          }
-        }
-
-        return null;
-      };
-
-      const aiResponse = await pollForResponse();
-
-      if (aiResponse) {
-        addMessage(aiResponse, 'assistant');
-      } else {
-        throw new Error('Не удалось получить ответ от AI в течение 2 минут');
-      }
-
-    } catch (err) {
-      console.error('💥 Ошибка отправки сообщения:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
-      setError(errorMessage);
+      // Здесь будет новая логика отправки сообщений
+      console.log('Отправка сообщения:', { message, chatId });
       
-      // Добавляем сообщение об ошибке
-      addMessage(`Извините, произошла ошибка: ${errorMessage}`, 'assistant');
-    } finally {
+      // Временная заглушка - просто добавляем ответ через секунду
+      setTimeout(() => {
+        addMessage('Временный ответ - функционал будет переделан', 'assistant');
+        setIsLoading(false);
+      }, 1000);
+      
+    } catch (err) {
+      console.error('Ошибка отправки сообщения:', err);
+      setError('Ошибка отправки сообщения');
       setIsLoading(false);
     }
   }, [addMessage]);
 
   const clearMessages = useCallback(() => {
     setMessages([]);
+  }, []);
+
+  const clearError = useCallback(() => {
     setError(null);
   }, []);
 
@@ -124,6 +60,6 @@ export const useSimpleChat = () => {
     sendMessage,
     addMessage,
     clearMessages,
-    clearError: () => setError(null)
+    clearError
   };
 };
