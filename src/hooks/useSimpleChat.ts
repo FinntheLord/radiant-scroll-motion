@@ -64,7 +64,12 @@ export const useSimpleChat = () => {
 
   // Создаем подписку только один раз при монтировании
   useEffect(() => {
-    if (channelRef.current) return; // Предотвращаем дублирование подписок
+    console.log('Trying to establish connection');
+    if (channelRef.current)
+    {
+      console.log('connection duplicated');
+      return; 
+    } // Предотвращаем дублирование подписок
 
     const channel = supabase
       .channel('chat-messages-optimized')
