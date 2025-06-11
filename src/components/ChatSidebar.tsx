@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,6 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "@/components/ui
 import { TrafficLight } from "./TrafficLight";
 import { useChat } from "../contexts/ChatContext";
 import { useChatApi } from "../hooks/useChatApi";
-import { useChatPolling } from "../hooks/useChatPolling";
 import { useTypingActivity } from "../hooks/useTypingActivity";
 import { ChatMessage } from "../types/chat";
 import { Language } from "../lib/translations";
@@ -32,42 +32,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
   const { isTyping, startTyping } = useTypingActivity(1500);
   const isProcessing = useRef(false);
   const [waitingForResponse, setWaitingForResponse] = useState(false);
-
-  const handleTimeout = () => {
-    console.log('Timeout при ожидании ответа от AI');
-    setWaitingForResponse(false);
-    setIsLoading(false);
-    
-    const timeoutMessage: ChatMessage = {
-      id: `timeout-${Date.now()}-${Math.random().toString(36).substring(2)}`,
-      content: lang === 'en' 
-        ? 'Sorry, the response took too long. Please try asking your question again.'
-        : 'Вибачте, відповідь займає занадто багато часу. Спробуйте поставити запитання знову.',
-      role: 'assistant',
-      timestamp: new Date()
-    };
-    
-    addMessage(timeoutMessage);
-  };
-
-  // Опрос ответов с лимитом в 2 минуты
-  const { isPolling } = useChatPolling({
-    chatId,
-    onNewMessage: (message: string) => {
-      console.log('Получен новый ответ:', message);
-      const newMessage: ChatMessage = {
-        id: `assistant-${Date.now()}-${Math.random().toString(36).substring(2)}`,
-        content: message,
-        role: 'assistant',
-        timestamp: new Date()
-      };
-      addMessage(newMessage);
-      setWaitingForResponse(false);
-      setIsLoading(false);
-    },
-    onTimeout: handleTimeout,
-    isEnabled: waitingForResponse && isOpen
-  });
 
   useEffect(() => {
     if (isOpen) {
@@ -170,7 +134,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ isOpen, onClose, lang }) => {
                 {lang === 'en' ? 'Ask questions about our AI solutions' : 'Запитайте про наші AI-рішення'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді до 120 сек)'}
+                Chat ID: {chatId.substring(0, 8)}... {waitingForResponse && '(очікування відповіді)'}
               </p>
             </div>
           </div>
