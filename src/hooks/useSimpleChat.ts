@@ -1,5 +1,7 @@
 
+
 import { useState, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -50,7 +52,7 @@ export const useSimpleChat = () => {
 
       console.log('✅ Сообщение отправлено на n8n');
 
-      // Начинаем опрос ответа через n8n-webhook функцию
+      // Начинаем опрос ответа через n8n-webhook функцию с использованием Supabase клиента
       const maxAttempts = 30; // 2.5 минуты (30 * 5 секунд)
       let attempts = 0;
 
@@ -61,24 +63,23 @@ export const useSimpleChat = () => {
           try {
             console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ`);
             
-            // Используем прямой fetch к n8n-webhook функции с GET параметром
-            const pollResponse = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/n8n-webhook?chatId=${chatId}`, {
+            // Используем Supabase клиент для правильной авторизации
+            const { data, error } = await supabase.functions.invoke('n8n-webhook', {
               method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-                'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
-              }
+              body: JSON.stringify({ chatId })
             });
 
-            if (pollResponse.ok) {
-              const data = await pollResponse.json();
-              console.log('📥 Ответ от n8n-webhook:', data);
+            if (error) {
+              console.log('❌ Ошибка при получении ответа:', error);
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              continue;
+            }
 
-              if (data.success && data.message) {
-                console.log('✅ Получен ответ от n8n');
-                return data.message;
-              }
+            console.log('📥 Ответ от n8n-webhook:', data);
+
+            if (data?.success && data?.message) {
+              console.log('✅ Получен ответ от n8n');
+              return data.message;
             }
 
             // Ждем 5 секунд перед следующей попыткой
@@ -127,3 +128,4 @@ export const useSimpleChat = () => {
     clearError: () => setError(null)
   };
 };
+
