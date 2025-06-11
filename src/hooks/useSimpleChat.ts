@@ -1,5 +1,4 @@
 
-
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -52,7 +51,7 @@ export const useSimpleChat = () => {
 
       console.log('✅ Сообщение отправлено на n8n');
 
-      // Начинаем опрос ответа через n8n-webhook функцию с использованием Supabase клиента
+      // Начинаем опрос ответа через n8n-webhook функцию
       const maxAttempts = 30; // 2.5 минуты (30 * 5 секунд)
       let attempts = 0;
 
@@ -61,25 +60,31 @@ export const useSimpleChat = () => {
           attempts++;
           
           try {
-            console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ`);
+            console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ для chatId: ${chatId}`);
             
-            // Используем Supabase клиент для правильной авторизации
-            const { data, error } = await supabase.functions.invoke('n8n-webhook', {
+            // Используем прямой fetch к n8n-webhook функции с правильными параметрами
+            const pollResponse = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/n8n-webhook?chatId=${encodeURIComponent(chatId)}`, {
               method: 'GET',
-              body: JSON.stringify({ chatId })
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E`,
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E'
+              }
             });
 
-            if (error) {
-              console.log('❌ Ошибка при получении ответа:', error);
-              await new Promise(resolve => setTimeout(resolve, 5000));
-              continue;
-            }
+            console.log('📥 Статус ответа от n8n-webhook:', pollResponse.status);
 
-            console.log('📥 Ответ от n8n-webhook:', data);
+            if (pollResponse.ok) {
+              const data = await pollResponse.json();
+              console.log('📥 Данные от n8n-webhook:', data);
 
-            if (data?.success && data?.message) {
-              console.log('✅ Получен ответ от n8n');
-              return data.message;
+              if (data?.success && data?.message) {
+                console.log('✅ Получен ответ от n8n');
+                return data.message;
+              }
+            } else {
+              const errorText = await pollResponse.text();
+              console.log('❌ Ошибка ответа:', errorText);
             }
 
             // Ждем 5 секунд перед следующей попыткой
@@ -128,4 +133,3 @@ export const useSimpleChat = () => {
     clearError: () => setError(null)
   };
 };
-
