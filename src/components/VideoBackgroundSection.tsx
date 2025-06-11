@@ -12,38 +12,24 @@ interface VideoBackgroundSectionProps {
 
 const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const { openSidebarChat } = useChat();
 
   useEffect(() => {
-    // Проверяем, является ли устройство мобильным
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent));
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    // Добавляем floating элементы только на десктопе
-    if (isMobile) return;
-    
+    // Добавляем floating элементы для анимации
     const section = document.querySelector('.video-background-section');
     if (section) {
-      for (let i = 0; i < 3; i++) { // Уменьшаем количество с 5 до 3
+      for (let i = 0; i < 8; i++) {
         const element = document.createElement('div');
         element.className = 'floating-element floating';
         element.style.left = `${Math.random() * 100}%`;
         element.style.top = `${Math.random() * 100}%`;
-        element.style.width = `${Math.random() * 50 + 25}px`; // Уменьшаем размер
-        element.style.height = `${Math.random() * 50 + 25}px`;
-        element.style.opacity = `${Math.random() * 0.1 + 0.02}`; // Делаем менее заметными
+        element.style.width = `${Math.random() * 80 + 40}px`;
+        element.style.height = `${Math.random() * 80 + 40}px`;
+        element.style.opacity = `${Math.random() * 0.2 + 0.05}`;
         section.appendChild(element);
       }
     }
-  }, [isMobile]);
+  }, []);
 
   const handleLearnMoreClick = () => {
     openSidebarChat();
@@ -51,36 +37,7 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
 
   return (
     <>
-      <section className="relative min-h-screen py-20 flex items-center video-background-section overflow-hidden">
-        {/* Оптимизированный фон для видео */}
-        <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent z-10"></div>
-          <div className="relative w-full h-full">
-            {!isMobile ? (
-              <iframe
-                src="https://www.youtube.com/embed/Hgg7M3kSqyE?autoplay=1&mute=1&loop=1&playlist=Hgg7M3kSqyE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-                title="Blueprint Background Video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
-                style={{ mixBlendMode: 'normal' }}
-                loading="lazy"
-              ></iframe>
-            ) : (
-              // На мобильных показываем статичное изображение вместо видео
-              <div 
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                }}
-              />
-            )}
-          </div>
-        </div>
-        
-        {!isMobile && <div className="animated-bg-light absolute inset-0 z-5"></div>}
-        
+      <section className="relative min-h-screen py-20 flex items-center video-background-section overflow-hidden animated-bg-light">
         <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-5xl mx-auto text-center">
             <div className="mb-6 reveal-on-scroll">
