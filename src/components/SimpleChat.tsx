@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
@@ -16,7 +17,7 @@ interface SimpleChatProps {
 // Функция для генерации уникального ID чата
 const generateChatId = () => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
-export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang }) => {
+const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) => {
   const { messages, isLoading, error, sendMessage, addMessage, clearError } = useSimpleChat();
   const [inputMessage, setInputMessage] = useState('');
   const [chatId] = useState(() => generateChatId());
@@ -70,8 +71,8 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
       <div className={`fixed right-0 top-0 h-full w-full md:w-[600px] lg:w-[700px] bg-gray-900 border-l border-gray-800 z-50 transform transition-all duration-700 ease-in-out ${
         isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}>
-        {/* Decorative circles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Decorative circles - только на десктопе */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
           <div className="absolute top-10 right-10 w-32 h-32 rounded-full bg-gradient-to-br from-connexi-orange/20 to-connexi-pink/20 blur-xl animate-pulse"></div>
           <div className="absolute top-40 right-32 w-24 h-24 rounded-full bg-gradient-to-br from-connexi-pink/15 to-connexi-orange/15 blur-lg animate-pulse" style={{ animationDelay: '1s' }}></div>
           <div className="absolute top-72 right-16 w-16 h-16 rounded-full bg-gradient-to-br from-connexi-orange/25 to-connexi-pink/25 blur-md animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -85,6 +86,7 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
                 src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
                 alt="AI Assistant"
                 className="h-10 w-10 object-contain"
+                loading="lazy"
               />
             </div>
             <div>
@@ -195,4 +197,8 @@ export const SimpleChat: React.FC<SimpleChatProps> = ({ isOpen, onClose, lang })
       </div>
     </>
   );
-};
+});
+
+SimpleChat.displayName = 'SimpleChat';
+
+export { SimpleChat };

@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface ChatMessage {
@@ -13,6 +13,7 @@ export const useSimpleChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const channelRef = useRef<any>(null);
 
   const addMessage = useCallback((content: string, role: 'user' | 'assistant') => {
     const newMessage: ChatMessage = {
@@ -61,10 +62,12 @@ export const useSimpleChat = () => {
     }
   }, []);
 
-  // Подписка на новые сообщения через Realtime
+  // Создаем подписку только один раз при монтировании
   useEffect(() => {
+    if (channelRef.current) return; // Предотвращаем дублирование подписок
+
     const channel = supabase
-      .channel('chat-messages')
+      .channel('chat-messages-optimized')
       .on(
         'postgres_changes',
         {
@@ -92,10 +95,15 @@ export const useSimpleChat = () => {
       )
       .subscribe();
 
+    channelRef.current = channel;
+
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     };
-  }, []);
+  }, []); // Пустой массив зависимостей - подписка создается только один раз
 
   const clearError = useCallback(() => {
     setError(null);
