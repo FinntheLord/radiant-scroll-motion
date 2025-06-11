@@ -7,11 +7,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Глобальное хранилище для ответов
+// Глобальне хранилище для ответов
 const responseStore = new Map<string, { message: string; timestamp: number }>();
 const TTL = 300000; // 5 минут
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -31,7 +32,20 @@ serve(async (req) => {
     }
 
     if (req.method === 'POST') {
-      const body = await req.json();
+      let body;
+      try {
+        body = await req.json();
+      } catch (e) {
+        console.log('❌ Ошибка парсинга JSON:', e);
+        return new Response(JSON.stringify({ 
+          error: 'Invalid JSON',
+          success: false
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
       console.log('📨 Получено тело запроса:', JSON.stringify(body, null, 2));
       
       // Извлекаем данные из разных возможных форматов
@@ -61,10 +75,7 @@ serve(async (req) => {
       });
 
       console.log('✅ Ответ сохранен для chatId:', chatId);
-      console.log('📊 Текущее содержимое хранилища:');
-      for (const [key, value] of responseStore.entries()) {
-        console.log(`- ${key}: ${value.message.substring(0, 50)}...`);
-      }
+      console.log('📊 Текущее содержимое хранилища:', responseStore.size, 'элементов');
 
       return new Response(JSON.stringify({ 
         success: true,
@@ -119,6 +130,8 @@ serve(async (req) => {
       }
     }
 
+    // Если метод не поддерживается
+    console.log('❌ Неподдерживаемый метод:', req.method);
     return new Response(JSON.stringify({
       error: 'Method not allowed',
       success: false
