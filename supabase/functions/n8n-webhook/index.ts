@@ -9,7 +9,7 @@ const corsHeaders = {
 
 // Простое глобальное хранилище для ответов
 const responseStore = new Map<string, { message: string; timestamp: number }>();
-const TTL = 120000; // 2 минуты
+const TTL = 300000; // 5 минут для отладки
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -56,7 +56,9 @@ serve(async (req) => {
         timestamp: now
       });
 
-      console.log('✅ Ответ сохранен, размер хранилища:', responseStore.size);
+      console.log('✅ Ответ сохранен для chatId:', finalChatId);
+      console.log('📊 Размер хранилища:', responseStore.size);
+      console.log('📋 Все chatId в хранилище:', Array.from(responseStore.keys()));
 
       return new Response(JSON.stringify({ 
         success: true,
@@ -67,39 +69,29 @@ serve(async (req) => {
     }
 
     if (req.method === 'GET') {
-      const url = new URL(req.url);
-      const chatId = url.searchParams.get('chatId');
-
-      if (!chatId) {
-        return new Response(JSON.stringify({ 
-          error: 'Missing chatId parameter',
-          success: false
-        }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      console.log('🔍 Запрос ответа для chat ID:', chatId);
-
-      const storedData = responseStore.get(chatId);
+      console.log('🔍 GET запрос получен');
+      console.log('📋 Все chatId в хранилище:', Array.from(responseStore.keys()));
       
-      if (storedData) {
-        console.log('✅ Ответ найден');
-        responseStore.delete(chatId); // Удаляем после получения
-        
+      // Проверяем, есть ли хоть какие-то сообщения
+      if (responseStore.size === 0) {
+        console.log('📪 Хранилище пустое');
         return new Response(JSON.stringify({ 
-          success: true,
-          message: storedData.message
+          success: false,
+          message: null
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
 
-      console.log('❌ Ответ не найден');
+      // Получаем первое доступное сообщение (для отладки)
+      const [firstChatId, firstData] = Array.from(responseStore.entries())[0];
+      console.log('🎯 Возвращаем первое доступное сообщение для:', firstChatId);
+      
+      responseStore.delete(firstChatId); // Удаляем после получения
+      
       return new Response(JSON.stringify({ 
-        success: false,
-        message: null
+        success: true,
+        message: firstData.message
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });

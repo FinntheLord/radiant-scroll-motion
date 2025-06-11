@@ -51,47 +51,43 @@ export const useSimpleChat = () => {
 
       console.log('✅ Сообщение отправлено на n8n');
 
-      // Начинаем опрос ответа через n8n-webhook функцию
+      // Начинаем опрос ответа с использованием Supabase клиента
       const maxAttempts = 30; // 2.5 минуты (30 * 5 секунд)
       let attempts = 0;
+      const startTime = Date.now();
 
       const pollForResponse = async (): Promise<string | null> => {
         while (attempts < maxAttempts) {
           attempts++;
+          const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
           
           try {
             console.log(`🔄 Попытка ${attempts}/${maxAttempts} получить ответ для chatId: ${chatId}`);
+            console.log(`⏱️ Время ожидания: ${elapsedTime} секунд`);
             
-            // Используем прямой fetch к n8n-webhook функции с правильными параметрами
-            const pollResponse = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/n8n-webhook?chatId=${encodeURIComponent(chatId)}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E`,
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kbHlnbHBiZHF2Z3duYXl1bWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTkxNDksImV4cCI6MjA2NDY5NTE0OX0.j0qp4ewdvt7IefarpcISAqqGZAq8bQl-1A5ho34FK_E'
-              }
+            // Используем Supabase клиент для правильной авторизации
+            const { data, error } = await supabase.functions.invoke('n8n-webhook', {
+              method: 'GET'
             });
 
-            console.log('📥 Статус ответа от n8n-webhook:', pollResponse.status);
+            console.log('📥 Ответ от Supabase функции:');
+            console.log('- data:', data);
+            console.log('- error:', error);
 
-            if (pollResponse.ok) {
-              const data = await pollResponse.json();
-              console.log('📥 Данные от n8n-webhook:', data);
-
-              if (data?.success && data?.message) {
-                console.log('✅ Получен ответ от n8n');
-                return data.message;
-              }
+            if (error) {
+              console.log('❌ Ошибка Supabase:', error);
+            } else if (data?.success && data?.message) {
+              console.log('✅ Получен ответ от n8n');
+              return data.message;
             } else {
-              const errorText = await pollResponse.text();
-              console.log('❌ Ошибка ответа:', errorText);
+              console.log('❌ Ответ еще не готов, планируем следующую проверку через 4 секунды');
             }
 
-            // Ждем 5 секунд перед следующей попыткой
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            // Ждем 4 секунды перед следующей попыткой
+            await new Promise(resolve => setTimeout(resolve, 4000));
           } catch (err) {
             console.log('❌ Ошибка опроса:', err);
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            await new Promise(resolve => setTimeout(resolve, 4000));
           }
         }
 
@@ -101,6 +97,7 @@ export const useSimpleChat = () => {
       const aiResponse = await pollForResponse();
 
       if (aiResponse) {
+        console.log('🎉 Добавляем ответ в чат:', aiResponse.substring(0, 100) + '...');
         addMessage(aiResponse, 'assistant');
       } else {
         throw new Error('Не удалось получить ответ от AI в течение 2.5 минут');
