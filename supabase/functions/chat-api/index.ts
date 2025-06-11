@@ -66,6 +66,22 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
+      
+      // Проверяем если это webhook от n8n (без action)
+      if (!action && chatId && message) {
+        console.log('🔄 Webhook от n8n - сохранение ответа для chatId:', chatId);
+        console.log('📝 Сообщение от AI:', message);
+        
+        messageStore.set(chatId, message);
+        console.log('✅ Ответ от n8n сохранен');
+        
+        return new Response(JSON.stringify({ 
+          success: true, 
+          message: 'Ответ от n8n сохранен' 
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
     }
     
     if (req.method === 'GET') {
