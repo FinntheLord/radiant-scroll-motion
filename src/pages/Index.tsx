@@ -10,14 +10,17 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { NewChatButton } from "../components/NewChatButton";
+import ChatSidebar from "../components/ChatSidebar";
+import { ChatProvider, useChat } from "../contexts/ChatContext";
 import { Language } from "../lib/translations";
 
 interface IndexProps {
   lang: Language;
 }
 
-const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
+const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
+  const { isSidebarChatOpen, closeSidebarChat } = useChat();
+  
   useEffect(() => {
     try {
       const title = lang === 'en' 
@@ -43,7 +46,11 @@ const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
         <CasesSection className="bg-white text-gray-900" lang={lang} />
         <ContactsSection className="bg-gray-900 text-white" lang={lang} />
         
-        <NewChatButton lang={lang} />
+        <ChatSidebar 
+          isOpen={isSidebarChatOpen} 
+          onClose={closeSidebarChat}
+          lang={lang}
+        />
       </div>
     );
   } catch (error) {
@@ -56,6 +63,14 @@ const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
   }
 });
 
-Index.displayName = 'Index';
+IndexContent.displayName = 'IndexContent';
+
+const Index: React.FC<IndexProps> = ({ lang }) => {
+  return (
+    <ChatProvider>
+      <IndexContent lang={lang} />
+    </ChatProvider>
+  );
+};
 
 export default Index;
