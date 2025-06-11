@@ -58,19 +58,23 @@ export const useNewChat = () => {
         
         await new Promise(resolve => setTimeout(resolve, 4000)); // Ждем 4 секунды
         
-        const { data: responseData, error: responseError } = await supabase.functions.invoke('chat-api', {
-          body: {
-            action: 'get',
-            chatId: chatId
+        // Делаем GET запрос
+        const response = await fetch(`https://mdlyglpbdqvgwnayumhh.supabase.co/functions/v1/chat-api?chatId=${chatId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${supabase.supabaseKey}`,
+            'apikey': supabase.supabaseKey,
+            'Content-Type': 'application/json'
           }
         });
 
-        console.log('📥 Ответ от API:', responseData);
-
-        if (responseError) {
-          console.log('❌ Ошибка при получении:', responseError);
+        if (!response.ok) {
+          console.log('❌ Ошибка GET запроса:', response.status);
           continue;
         }
+
+        const responseData = await response.json();
+        console.log('📥 Ответ от API:', responseData);
 
         if (responseData?.success && responseData?.message) {
           console.log('🎉 Получен ответ AI!');

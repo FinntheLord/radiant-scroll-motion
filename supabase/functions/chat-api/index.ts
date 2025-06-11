@@ -51,22 +51,6 @@ serve(async (req) => {
         });
       }
       
-      if (action === 'store') {
-        // N8N отправляет ответ AI
-        console.log('💾 Сохранение ответа AI для chatId:', chatId);
-        console.log('📝 Сообщение:', message);
-        
-        messageStore.set(chatId, message);
-        console.log('✅ Сообщение сохранено');
-        
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: 'Ответ сохранен' 
-        }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      
       // Проверяем если это webhook от n8n (без action)
       if (!action && chatId && message) {
         console.log('🔄 Webhook от n8n - сохранение ответа для chatId:', chatId);
