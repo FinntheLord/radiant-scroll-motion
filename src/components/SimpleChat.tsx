@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
 import { ChatMessageList } from '@/components/ui/chat-message-list';
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui/chat-bubble';
-import { useSimpleChat } from '@/hooks/useSimpleChat';
+import { useNewChat } from '@/hooks/useNewChat';
 import { Language } from '@/lib/translations';
 
 interface SimpleChatProps {
@@ -14,36 +14,26 @@ interface SimpleChatProps {
   lang: Language;
 }
 
-// Функция для генерации уникального ID чата
-const generateChatId = () => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-
 const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) => {
-  const { messages, isLoading, error, sendMessage, addMessage, clearError } = useSimpleChat();
+  const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
   const [inputMessage, setInputMessage] = useState('');
-  const [chatId] = useState(() => generateChatId());
 
   // Добавляем приветственное сообщение при открытии чата
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      const welcomeMessage = lang === 'en' 
-        ? 'Hello! Chat functionality is being rebuilt. This is a temporary message.'
-        : 'Привіт! Функціонал чату переробляється. Це тимчасове повідомлення.';
-      
-      addMessage(welcomeMessage, 'assistant');
+      // Сообщение добавится автоматически через realtime подписку
+      console.log('Чат открыт, chatId:', chatId);
     }
-  }, [isOpen, messages.length, addMessage, lang]);
+  }, [isOpen, messages.length, chatId]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 
     const messageContent = inputMessage.trim();
-    
-    // Добавляем сообщение пользователя
-    addMessage(messageContent, 'user');
     setInputMessage('');
     
-    // Отправляем на n8n
-    await sendMessage(messageContent, chatId);
+    // Отправляем сообщение
+    await sendMessage(messageContent);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -94,7 +84,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
                 AI-Помічник Connexi
               </h2>
               <p className="text-sm text-white/60">
-                {lang === 'en' ? 'Chat is being rebuilt' : 'Чат переробляється'}
+                {lang === 'en' ? 'New chat system' : 'Нова система чату'}
               </p>
               <p className="text-xs text-white/40">
                 Chat ID: {chatId.substring(0, 12)}...
@@ -103,7 +93,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
           </div>
           
           <div className="flex items-center gap-3">
-            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'}`} />
+            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
             <Button
               variant="ghost"
               size="icon"
@@ -174,7 +164,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
             <div className="flex gap-2">
               <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors">
                 <ChatInput
-                  placeholder={lang === 'en' ? 'Chat is being rebuilt...' : 'Чат переробляється...'}
+                  placeholder={lang === 'en' ? 'Type your message...' : 'Введіть ваше повідомлення...'}
                   value={inputMessage}
                   onChange={handleInputChange}
                   onSend={handleSendMessage}

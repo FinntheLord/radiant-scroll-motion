@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,9 +14,9 @@ serve(async (req) => {
   }
 
   try {
-    const { message, chatId } = await req.json()
+    const { message, chatId, userId } = await req.json()
     
-    console.log('Отправка сообщения в n8n:', { message, chatId })
+    console.log('Получен ответ от n8n:', { message, chatId, userId })
 
     if (!message || !chatId) {
       return new Response(
@@ -27,22 +28,24 @@ serve(async (req) => {
       )
     }
 
-    // Отправляем POST запрос на n8n webhook
-    const n8nResponse = await fetch('https://n8n.srv838454.hstgr.cloud/webhook/84ac1eaf-efe6-4517-bc28-5b239286b274', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: message,
-        chatId: chatId
-      })
-    })
+    // Инициализируем Supabase клиент
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-    if (!n8nResponse.ok) {
-      console.error('Ошибка отправки в n8n:', n8nResponse.status, n8nResponse.statusText)
+    // Сохраняем ответ ассистента в таблицу chat_messages
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .insert({
+        chat_id: chatId,
+        message: message,
+        role: 'assistant'
+      })
+
+    if (error) {
+      console.error('Ошибка сохранения в БД:', error)
       return new Response(
-        JSON.stringify({ error: 'Ошибка отправки в n8n' }),
+        JSON.stringify({ error: 'Ошибка сохранения сообщения' }),
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -50,10 +53,10 @@ serve(async (req) => {
       )
     }
 
-    console.log('Сообщение успешно отправлено в n8n')
+    console.log('Ответ ассистента сохранен в БД:', data)
     
     return new Response(
-      JSON.stringify({ success: true, message: 'Сообщение отправлено в n8n' }),
+      JSON.stringify({ success: true, message: 'Ответ получен и сохранен' }),
       { 
         status: 200, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -61,7 +64,7 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Ошибка в send-to-n8n function:', error)
+    console.error('Ошибка в receive-n8n-response function:', error)
     return new Response(
       JSON.stringify({ error: 'Внутренняя ошибка сервера' }),
       { 
