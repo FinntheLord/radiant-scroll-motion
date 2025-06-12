@@ -22,8 +22,9 @@ export const useNewChat = () => {
     setIsLoading(true);
     setError(null);
 
-    try {
-      console.log('Отправка сообщения1:', { message, chatId });
+    try 
+    {
+      console.log('Отправка сообщения:', { message, chatId });
       
       // Отправляем сообщение через новую edge function
       const { error: functionError } = await supabase.functions.invoke('chat-handler', {
@@ -36,11 +37,15 @@ export const useNewChat = () => {
 
       console.log('Сообщение отправлено успешно');
 
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.error('Ошибка отправки сообщения:', err);
       const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
       setError(errorMessage);
-    } finally {
+    } 
+    finally 
+    {
       setIsLoading(false);
     }
   }, [chatId]);
