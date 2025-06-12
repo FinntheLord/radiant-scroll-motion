@@ -9,7 +9,9 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export const useNewChat = () => {
+export const useNewChat = () => 
+{
+  
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +19,7 @@ export const useNewChat = () => {
 
   // Генерируем уникальный chatId
   const [chatId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
-
+  alert('useEffect started for chatId: ' + chatId);
   const sendMessage = useCallback(async (message: string) => {
     setIsLoading(true);
     setError(null);
@@ -47,7 +49,7 @@ export const useNewChat = () => {
 
   // Подписка на realtime обновления
   useEffect(() => {
-    alert('useEffect started for chatId: ' + chatId);
+    
     console.log('Настройка realtime подписки для chatId:', chatId);
     
     if (channelRef.current) {
