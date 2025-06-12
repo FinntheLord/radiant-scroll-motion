@@ -18,13 +18,12 @@ export const useNewChat = () => {
   // Генерируем уникальный chatId
   const [chatId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
 
-  alert('useEffect started for chatId: ' + chatId);
   const sendMessage = useCallback(async (message: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('Отправка сообщения:', { message, chatId });
+      console.log('Отправка сообщения1:', { message, chatId });
       
       // Отправляем сообщение через новую edge function
       const { error: functionError } = await supabase.functions.invoke('chat-handler', {
