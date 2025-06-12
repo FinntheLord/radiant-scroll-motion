@@ -65,7 +65,9 @@ export const useNewChat = () => {
           filter: `chat_id=eq.${chatId}`
         },
         (payload) => {
-          console.log('Новое сообщение получено:', payload.new);
+          console.log('Новое сообщение получено через Realtime:', payload);
+          console.log('Данные сообщения:', payload.new);
+          
           const newMessage: ChatMessage = {
             id: payload.new.id,
             content: payload.new.message,
@@ -73,20 +75,58 @@ export const useNewChat = () => {
             timestamp: new Date(payload.new.created_at)
           };
           
+          console.log('Преобразованное сообщение:', newMessage);
+          
           setMessages(prev => {
             // Проверяем, нет ли уже такого сообщения
             const exists = prev.some(msg => msg.id === newMessage.id);
-            if (exists) return prev;
+            if (exists) {
+              console.log('Сообщение уже существует, пропускаем');
+              return prev;
+            }
             
-            return [...prev, newMessage];
+            console.log('Добавляем новое сообщение в состояние');
+            const updated = [...prev, newMessage];
+            console.log('Обновленный список сообщений:', updated);
+            return updated;
           });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Статус подписки Realtime:', status);
+      });
 
     channelRef.current = channel;
 
+    // Проверяем существующие сообщения при первом подключении
+    const loadExistingMessages = async () => {
+      console.log('Загружаем существующие сообщения для chatId:', chatId);
+      const { data: existingMessages, error: loadError } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('chat_id', chatId)
+        .order('created_at', { ascending: true });
+
+      if (loadError) {
+        console.error('Ошибка загрузки существующих сообщений:', loadError);
+      } else {
+        console.log('Загружены существующие сообщения:', existingMessages);
+        if (existingMessages && existingMessages.length > 0) {
+          const formattedMessages = existingMessages.map(msg => ({
+            id: msg.id,
+            content: msg.message,
+            role: msg.role as 'user' | 'assistant',
+            timestamp: new Date(msg.created_at)
+          }));
+          setMessages(formattedMessages);
+        }
+      }
+    };
+
+    loadExistingMessages();
+
     return () => {
+      console.log('Очищаем Realtime подписку');
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;

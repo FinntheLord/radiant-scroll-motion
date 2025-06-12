@@ -18,11 +18,17 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
   const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
   const [inputMessage, setInputMessage] = useState('');
 
+  // Логируем изменения сообщений
+  useEffect(() => {
+    console.log('Сообщения в SimpleChat обновились:', messages);
+    console.log('Количество сообщений:', messages.length);
+  }, [messages]);
+
   // Добавляем приветственное сообщение при открытии чата
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      // Сообщение добавится автоматически через realtime подписку
       console.log('Чат открыт, chatId:', chatId);
+      console.log('Ожидаем сообщения...');
     }
   }, [isOpen, messages.length, chatId]);
 
@@ -30,6 +36,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
     if (!inputMessage.trim() || isLoading) return;
 
     const messageContent = inputMessage.trim();
+    console.log('Отправляем сообщение из компонента:', messageContent);
     setInputMessage('');
     
     // Отправляем сообщение
@@ -46,6 +53,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputMessage(e.target.value);
   };
+
+  console.log('Рендер SimpleChat. Сообщений:', messages.length, 'isLoading:', isLoading);
 
   return (
     <>
@@ -87,7 +96,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
                 {lang === 'en' ? 'New chat system' : 'Нова система чату'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 12)}...
+                Chat ID: {chatId.substring(0, 12)}... (сообщений: {messages.length})
               </p>
             </div>
           </div>
@@ -110,6 +119,11 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
           {/* Messages */}
           <div className="flex-1 overflow-hidden">
             <ChatMessageList smooth>
+              {messages.length === 0 && (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  <p>Начните диалог, отправив сообщение...</p>
+                </div>
+              )}
               {messages.map((message) => (
                 <ChatBubble
                   key={message.id}
