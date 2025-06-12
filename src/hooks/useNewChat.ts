@@ -47,6 +47,7 @@ export const useNewChat = () => {
 
   // Подписка на realtime обновления
   useEffect(() => {
+    alert('useEffect started for chatId: ' + chatId);
     console.log('Настройка realtime подписки для chatId:', chatId);
     
     if (channelRef.current) {
