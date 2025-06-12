@@ -54,8 +54,10 @@ export const useNewChat = () => {
       return;
     }
 
+    // Создаем канал с уникальным именем для каждого чата
+    const channelName = `chat-messages-${chatId}`;
     const channel = supabase
-      .channel('new-chat-messages')
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -65,8 +67,13 @@ export const useNewChat = () => {
           filter: `chat_id=eq.${chatId}`
         },
         (payload) => {
-          console.log('Новое сообщение получено через Realtime:', payload);
-          console.log('Данные сообщения:', payload.new);
+          console.log('🔥 Новое сообщение получено через Realtime:', payload);
+          console.log('📄 Данные сообщения:', payload.new);
+          
+          if (!payload.new) {
+            console.error('❌ Payload.new отсутствует');
+            return;
+          }
           
           const newMessage: ChatMessage = {
             id: payload.new.id,
@@ -75,58 +82,79 @@ export const useNewChat = () => {
             timestamp: new Date(payload.new.created_at)
           };
           
-          console.log('Преобразованное сообщение:', newMessage);
+          console.log('✅ Преобразованное сообщение:', newMessage);
           
           setMessages(prev => {
             // Проверяем, нет ли уже такого сообщения
             const exists = prev.some(msg => msg.id === newMessage.id);
             if (exists) {
-              console.log('Сообщение уже существует, пропускаем');
+              console.log('⚠️ Сообщение уже существует, пропускаем');
               return prev;
             }
             
-            console.log('Добавляем новое сообщение в состояние');
-            const updated = [...prev, newMessage];
-            console.log('Обновленный список сообщений:', updated);
+            console.log('➕ Добавляем новое сообщение в состояние');
+            const updated = [...prev, newMessage].sort((a, b) => 
+              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+            );
+            console.log('📋 Обновленный список сообщений:', updated);
             return updated;
           });
         }
       )
       .subscribe((status) => {
-        console.log('Статус подписки Realtime:', status);
+        console.log('🔗 Статус подписки Realtime:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Realtime подписка активна');
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('❌ Ошибка канала Realtime');
+        } else if (status === 'TIMED_OUT') {
+          console.error('⏰ Таймаут подписки Realtime');
+        } else if (status === 'CLOSED') {
+          console.log('🔒 Realtime подписка закрыта');
+        }
       });
 
     channelRef.current = channel;
 
-    // Проверяем существующие сообщения при первом подключении
+    // Загружаем существующие сообщения при первом подключении
     const loadExistingMessages = async () => {
-      console.log('Загружаем существующие сообщения для chatId:', chatId);
-      const { data: existingMessages, error: loadError } = await supabase
-        .from('chat_messages')
-        .select('*')
-        .eq('chat_id', chatId)
-        .order('created_at', { ascending: true });
+      console.log('📥 Загружаем существующие сообщения для chatId:', chatId);
+      
+      try {
+        const { data: existingMessages, error: loadError } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('chat_id', chatId)
+          .order('created_at', { ascending: true });
 
-      if (loadError) {
-        console.error('Ошибка загрузки существующих сообщений:', loadError);
-      } else {
-        console.log('Загружены существующие сообщения:', existingMessages);
-        if (existingMessages && existingMessages.length > 0) {
-          const formattedMessages = existingMessages.map(msg => ({
-            id: msg.id,
-            content: msg.message,
-            role: msg.role as 'user' | 'assistant',
-            timestamp: new Date(msg.created_at)
-          }));
-          setMessages(formattedMessages);
+        if (loadError) {
+          console.error('❌ Ошибка загрузки существующих сообщений:', loadError);
+        } else {
+          console.log('📋 Загружены существующие сообщения:', existingMessages);
+          if (existingMessages && existingMessages.length > 0) {
+            const formattedMessages = existingMessages.map(msg => ({
+              id: msg.id,
+              content: msg.message,
+              role: msg.role as 'user' | 'assistant',
+              timestamp: new Date(msg.created_at)
+            }));
+            console.log('✅ Отформатированные сообщения:', formattedMessages);
+            setMessages(formattedMessages);
+          } else {
+            console.log('📭 Существующих сообщений не найдено');
+          }
         }
+      } catch (error) {
+        console.error('💥 Исключение при загрузке сообщений:', error);
       }
     };
 
-    loadExistingMessages();
+    // Небольшая задержка перед загрузкой существующих сообщений
+    const timer = setTimeout(loadExistingMessages, 500);
 
     return () => {
-      console.log('Очищаем Realtime подписку');
+      console.log('🧹 Очищаем Realtime подписку');
+      clearTimeout(timer);
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;

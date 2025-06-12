@@ -20,15 +20,16 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
 
   // Логируем изменения сообщений
   useEffect(() => {
-    console.log('Сообщения в SimpleChat обновились:', messages);
-    console.log('Количество сообщений:', messages.length);
+    console.log('🔄 Сообщения в SimpleChat обновились:', messages);
+    console.log('📊 Количество сообщений:', messages.length);
+    console.log('📝 Последнее сообщение:', messages[messages.length - 1]);
   }, [messages]);
 
   // Добавляем приветственное сообщение при открытии чата
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      console.log('Чат открыт, chatId:', chatId);
-      console.log('Ожидаем сообщения...');
+      console.log('🚀 Чат открыт, chatId:', chatId);
+      console.log('⏳ Ожидаем сообщения...');
     }
   }, [isOpen, messages.length, chatId]);
 
@@ -36,7 +37,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
     if (!inputMessage.trim() || isLoading) return;
 
     const messageContent = inputMessage.trim();
-    console.log('Отправляем сообщение из компонента:', messageContent);
+    console.log('📤 Отправляем сообщение из компонента:', messageContent);
     setInputMessage('');
     
     // Отправляем сообщение
@@ -54,7 +55,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
     setInputMessage(e.target.value);
   };
 
-  console.log('Рендер SimpleChat. Сообщений:', messages.length, 'isLoading:', isLoading);
+  console.log('🎨 Рендер SimpleChat. Сообщений:', messages.length, 'isLoading:', isLoading);
 
   return (
     <>
@@ -93,16 +94,22 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
                 AI-Помічник Connexi
               </h2>
               <p className="text-sm text-white/60">
-                {lang === 'en' ? 'New chat system' : 'Нова система чату'}
+                {lang === 'en' ? 'Realtime Chat System' : 'Система чату в реальному часі'}
               </p>
               <p className="text-xs text-white/40">
-                Chat ID: {chatId.substring(0, 12)}... (сообщений: {messages.length})
+                Chat ID: {chatId.substring(0, 16)}... | Сообщений: {messages.length}
               </p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
-            <div className={`w-3 h-3 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+            <div className={`w-3 h-3 rounded-full ${
+              isLoading ? 'bg-yellow-500 animate-pulse' : 
+              messages.length > 0 ? 'bg-green-500' : 'bg-blue-500'
+            }`} title={
+              isLoading ? 'Отправка...' : 
+              messages.length > 0 ? 'Активен' : 'Ожидание'
+            } />
             <Button
               variant="ghost"
               size="icon"
@@ -121,7 +128,13 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
             <ChatMessageList smooth>
               {messages.length === 0 && (
                 <div className="flex items-center justify-center h-full text-gray-400">
-                  <p>Начните диалог, отправив сообщение...</p>
+                  <div className="text-center">
+                    <p className="text-lg mb-2">👋 Начните диалог</p>
+                    <p className="text-sm">Отправьте сообщение, чтобы начать...</p>
+                    <p className="text-xs mt-2 opacity-50">
+                      Realtime подключение активно
+                    </p>
+                  </div>
                 </div>
               )}
               {messages.map((message) => (
