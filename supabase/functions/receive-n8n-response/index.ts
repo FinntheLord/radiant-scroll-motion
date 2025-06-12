@@ -41,6 +41,7 @@ serve(async (req) => {
         message: message,
         role: 'assistant'
       })
+      .select()
 
     if (error) {
       console.error('Ошибка сохранения в БД:', error)
@@ -54,9 +55,34 @@ serve(async (req) => {
     }
 
     console.log('Ответ ассистента сохранен в БД:', data)
+
+    // Принудительно отправляем Realtime уведомление через канал
+    if (data && data.length > 0) {
+      const newMessage = data[0]
+      console.log('Отправляем Realtime уведомление для сообщения:', newMessage.id)
+      
+      // Создаем канал для отправки уведомления
+      const channelName = `chat-messages-${chatId}`
+      const channel = supabase.channel(channelName)
+      
+      // Отправляем уведомление напрямую через канал
+      await channel.send({
+        type: 'broadcast',
+        event: 'new_message',
+        payload: {
+          id: newMessage.id,
+          chat_id: newMessage.chat_id,
+          message: newMessage.message,
+          role: newMessage.role,
+          created_at: newMessage.created_at
+        }
+      })
+      
+      console.log('Realtime уведомление отправлено через канал:', channelName)
+    }
     
     return new Response(
-      JSON.stringify({ success: true, message: 'Ответ получен и сохранен' }),
+      JSON.stringify({ success: true, message: 'Ответ получен и сохранен', data }),
       { 
         status: 200, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }

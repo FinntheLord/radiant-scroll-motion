@@ -101,6 +101,43 @@ export const useNewChat = () => {
           });
         }
       )
+      .on(
+        'broadcast',
+        { event: 'new_message' },
+        (payload) => {
+          console.log('📡 Получено broadcast сообщение:', payload);
+          
+          if (!payload.payload) {
+            console.error('❌ Broadcast payload отсутствует');
+            return;
+          }
+          
+          const broadcastMessage: ChatMessage = {
+            id: payload.payload.id,
+            content: payload.payload.message,
+            role: payload.payload.role as 'user' | 'assistant',
+            timestamp: new Date(payload.payload.created_at)
+          };
+          
+          console.log('✅ Broadcast сообщение преобразовано:', broadcastMessage);
+          
+          setMessages(prev => {
+            // Проверяем, нет ли уже такого сообщения
+            const exists = prev.some(msg => msg.id === broadcastMessage.id);
+            if (exists) {
+              console.log('⚠️ Broadcast сообщение уже существует, пропускаем');
+              return prev;
+            }
+            
+            console.log('➕ Добавляем broadcast сообщение в состояние');
+            const updated = [...prev, broadcastMessage].sort((a, b) => 
+              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+            );
+            console.log('📋 Обновленный список сообщений (broadcast):', updated);
+            return updated;
+          });
+        }
+      )
       .subscribe((status) => {
         console.log('🔗 Статус подписки Realtime:', status);
         if (status === 'SUBSCRIBED') {
