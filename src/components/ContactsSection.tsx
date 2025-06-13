@@ -1,8 +1,8 @@
 
 import React from "react";
+import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Mail, Phone } from "lucide-react";
-import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ContactsSectionProps {
@@ -11,11 +11,11 @@ interface ContactsSectionProps {
 }
 
 const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang }) => {
-  const { openChat } = useSimpleChatContext();
+  const { openSidebarChat } = useChat();
 
   return (
-    <section id="contacts" className={`py-12 md:py-20 ${className}`}>
-      <div className="container mx-auto px-4">
+    <section id="contacts" className={`py-20 bg-black text-white relative overflow-hidden ${className}`}>
+      <div className="container mx-auto px-4 relative z-10">
         {/* Section title */}
         <div className="mb-20 text-left">
           <div className="text-orange-500 text-xl font-semibold mb-6 reveal-on-scroll tracking-wide">
@@ -104,12 +104,11 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             {/* CTA Button */}
             <div className="text-center lg:text-left">
               <Button 
-                onClick={openChat}
-                size="lg"
-                className="contact-button text-lg px-8 py-4 h-auto"
+                className="contact-button px-12 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg mb-12 shadow-2xl"
+                onClick={openSidebarChat}
               >
+                <MessageCircle className="mr-3 h-6 w-6" />
                 {getTranslation('consultation', lang)}
-                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
 
@@ -145,11 +144,11 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             </div>
           </div>
         </div>
-
-        {/* Background decorative elements */}
-        <div className="floating-element w-96 h-96 top-20 -left-48 opacity-10"></div>
-        <div className="floating-element w-80 h-80 bottom-10 -right-40 opacity-10"></div>
       </div>
+      
+      {/* Background decorative elements */}
+      <div className="floating-element w-96 h-96 top-20 -left-48 opacity-10"></div>
+      <div className="floating-element w-80 h-80 bottom-10 -right-40 opacity-10"></div>
     </section>
   );
 };

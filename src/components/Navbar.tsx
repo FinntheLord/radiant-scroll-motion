@@ -1,8 +1,9 @@
 
-import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
+import { useNavigate } from "react-router-dom";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface NavbarProps {
@@ -10,111 +11,194 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ lang }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { openChat } = useSimpleChatContext();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openSidebarChat } = useChat();
+  const navigate = useNavigate();
+
+  const switchLanguage = useCallback(() => {
+    const newLang = lang === 'uk' ? 'en' : 'uk';
+    const newPath = newLang === 'en' ? '/en' : '/';
+    navigate(newPath);
+  }, [lang, navigate]);
+
+  const closeMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  const handleMobileNavClick = useCallback((href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    closeMobileMenu();
+  }, [closeMobileMenu]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      const isScrolled = window.scrollY > 20;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-  const navItems = [
-    { href: "#about", labelKey: "about" as const },
-    { href: "#assistant", labelKey: "assistant" as const },
-    { href: "#services", labelKey: "services" as const },
-    { href: "#cases", labelKey: "cases" as const },
-  ];
+  }, [scrolled]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-800' : 'bg-transparent'
-    }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <div className="text-2xl md:text-3xl font-bold">
-            <span className="text-white">connexi</span>
-            <span className="text-connexi-orange">.ai</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="text-gray-300 hover:text-white transition-colors duration-200 text-lg font-medium"
-              >
-                {getTranslation(item.labelKey, lang)}
-              </a>
-            ))}
-            
-            <Button 
-              onClick={openChat}
-              className="contact-button ml-4"
-            >
-              {getTranslation('consultation', lang)}
-            </Button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:bg-gray-800"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className={`md:hidden transition-all duration-300 ease-in-out ${
-          isOpen 
-            ? 'max-h-96 opacity-100 visible' 
-            : 'max-h-0 opacity-0 invisible overflow-hidden'
-        }`}>
-          <div className="py-4 space-y-3 bg-gray-900/95 backdrop-blur-md rounded-lg mt-2 border border-gray-800">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block px-6 py-3 text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200 text-lg font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                {getTranslation(item.labelKey, lang)}
-              </a>
-            ))}
-            
-            <div className="px-6 py-3">
-              <Button 
-                onClick={() => {
-                  openChat();
-                  setIsOpen(false);
-                }}
-                className="contact-button w-full"
-              >
-                {getTranslation('consultation', lang)}
-              </Button>
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/70 backdrop-blur-sm shadow-md py-3"
+          : "bg-transparent py-5"
+      }`}
+    >
+      <div className="container mx-auto px-4 flex justify-between items-center">
+        <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
+          <img 
+            src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
+            alt="connexi.ai logo" 
+            className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
+          />
+          <div className="flex flex-col">
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+              connexi
+            </div>
+            <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
+              Linking Ideas to Solutions
             </div>
           </div>
+        </a>
+        
+        <nav className="hidden md:flex items-center space-x-8">
+          <a href="#about" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('about', lang)}
+          </a>
+          <a href="#assistant" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('assistant', lang)}
+          </a>
+          <a href="#services" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('services', lang)}
+          </a>
+          <a href="#partners" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('partners', lang)}
+          </a>
+          <a href="#cases" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('cases', lang)}
+          </a>
+          <a href="#contacts" className="text-gray-700 hover:text-black transition-colors">
+            {getTranslation('contacts', lang)}
+          </a>
+          
+          <Button 
+            variant="ghost"
+            size="sm"
+            onClick={switchLanguage}
+            className="text-gray-700 hover:text-black transition-colors flex items-center gap-2"
+          >
+            <Globe className="h-4 w-4" />
+            {lang === 'uk' ? 'EN' : 'УК'}
+          </Button>
+          
+          <Button 
+            className="contact-button"
+            size="sm"
+            onClick={openSidebarChat}
+          >
+            {getTranslation('consultation', lang)}
+            <MessageCircle className="ml-2 h-4 w-4" />
+          </Button>
+        </nav>
+        
+        {/* Mobile menu button */}
+        <div className="md:hidden flex items-center space-x-2">
+          <Button 
+            variant="ghost"
+            size="sm"
+            onClick={switchLanguage}
+            className="text-gray-700 hover:text-black transition-colors"
+          >
+            <Globe className="h-4 w-4" />
+          </Button>
+          <Button 
+            className="contact-button"
+            size="sm"
+            onClick={openSidebarChat}
+          >
+            <MessageCircle className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-gray-700"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
       </div>
-    </nav>
+
+      {/* Mobile menu dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-200">
+          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <button 
+              onClick={() => handleMobileNavClick('#about')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('about', lang)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#assistant')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('assistant', lang)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#services')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('services', lang)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#partners')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('partners', lang)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#cases')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('cases', lang)}
+            </button>
+            <button 
+              onClick={() => handleMobileNavClick('#contacts')}
+              className="text-gray-700 hover:text-black transition-colors text-left"
+            >
+              {getTranslation('contacts', lang)}
+            </button>
+            <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+              <span className="text-gray-600 text-sm">Language:</span>
+              <Button 
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  switchLanguage();
+                  closeMobileMenu();
+                }}
+                className="text-connexi-orange hover:text-connexi-pink transition-colors"
+              >
+                {lang === 'uk' ? 'English' : 'Українська'}
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 };
 
