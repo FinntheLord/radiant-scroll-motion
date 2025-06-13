@@ -2,7 +2,7 @@
 import React from "react";
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useChat } from "../contexts/ChatContext";
+import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ContactsSectionProps {
@@ -11,7 +11,7 @@ interface ContactsSectionProps {
 }
 
 const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useSimpleChatContext();
 
   return (
     <section id="contacts" className={`py-20 bg-black text-white relative overflow-hidden ${className}`}>
@@ -105,7 +105,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             <div className="text-center lg:text-left">
               <Button 
                 className="contact-button px-12 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg mb-12 shadow-2xl"
-                onClick={openSidebarChat}
+                onClick={openChat}
               >
                 <MessageCircle className="mr-3 h-6 w-6" />
                 {getTranslation('consultation', lang)}
