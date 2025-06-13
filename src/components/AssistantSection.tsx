@@ -4,6 +4,7 @@ import { Language, getTranslation } from "../lib/translations";
 import AssistantDescription from "./AssistantDescription";
 import { Button } from "@/components/ui/button";
 import ChatSidebar from "./ChatSidebar";
+import { useChat } from "../contexts/ChatContext";
 
 interface AssistantSectionProps {
   className?: string;
@@ -12,9 +13,10 @@ interface AssistantSectionProps {
 
 const AssistantSection: React.FC<AssistantSectionProps> = ({ className = "", lang }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { openSidebarChat } = useChat();
 
   const handleOpenChat = () => {
-    setIsChatOpen(true);
+    openSidebarChat();
   };
 
   return (
