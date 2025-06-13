@@ -104,7 +104,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
             >
               {message.sender === "ai" && (
                 <ChatBubbleAvatar
-                  src="/lovable-uploads/assistant-chat-icon.webp"
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/public/Media/ezgif-8981affd404761.webp"
                   fallback="AI"
                 />
               )}
@@ -119,7 +119,7 @@ const AssistantChat: React.FC<AssistantChatProps> = ({ lang }) => {
           {isLoading && (
             <ChatBubble variant="received">
               <ChatBubbleAvatar
-                src="/lovable-uploads/assistant-chat-icon.webp"
+                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/public/Media/ezgif-8981affd404761.webp"
                 fallback="AI"
               />
               <ChatBubbleMessage isLoading />
