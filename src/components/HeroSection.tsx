@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
@@ -48,7 +49,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
               size="lg"
               className="contact-button text-lg px-8 py-4 h-auto"
             >
-              {getTranslation('startConsultation', lang)}
+              {getTranslation('consultation', lang)}
             </Button>
             
             <Button 

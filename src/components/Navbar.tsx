@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,8 +31,8 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   }, []);
 
   const navItems = [
-    { href: "#about", labelKey: "aboutUs" as const },
-    { href: "#assistant", labelKey: "aiAssistant" as const },
+    { href: "#about", labelKey: "about" as const },
+    { href: "#assistant", labelKey: "assistant" as const },
     { href: "#services", labelKey: "services" as const },
     { href: "#cases", labelKey: "cases" as const },
   ];

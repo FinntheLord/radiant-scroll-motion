@@ -1,6 +1,8 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { MovingBorder } from "@/components/ui/moving-border";
 import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 

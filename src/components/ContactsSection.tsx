@@ -1,6 +1,7 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Mail, Phone } from "lucide-react";
 import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
@@ -107,7 +108,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                 size="lg"
                 className="contact-button text-lg px-8 py-4 h-auto"
               >
-                {getTranslation('startConsultation', lang)}
+                {getTranslation('consultation', lang)}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -44,7 +45,7 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
             size="lg"
             className="contact-button text-lg px-8 py-4 h-auto"
           >
-            {getTranslation('getConsultation', lang)}
+            {getTranslation('consultation', lang)}
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
