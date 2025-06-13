@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import DisplayCards from "@/components/ui/display-cards";
-import { useChat } from "../contexts/ChatContext";
+import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface HeroSectionProps {
@@ -10,7 +10,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useSimpleChatContext();
 
   useEffect(() => {
     // Mouse parallax effect
@@ -233,7 +233,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold"
-                    onClick={openSidebarChat}
+                    onClick={openChat}
                   >
                     {getTranslation('ourServices', lang)}
                   </Button>
