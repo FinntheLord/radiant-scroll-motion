@@ -1,12 +1,21 @@
+
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
 import { ChatMessageList } from '@/components/ui/chat-message-list';
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui/chat-bubble';
-import { useNewChat } from '@/hooks/useNewChat';
 import { useSimpleChatContext } from '@/contexts/SimpleChatContext';
+import { useChatApi } from '@/hooks/useChatApi';
 import { Language } from '@/lib/translations';
+import { supabase } from '@/integrations/supabase/client';
+
+interface ChatMessage {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+}
 
 interface SimpleChatProps {
   lang: Language;
@@ -14,33 +23,114 @@ interface SimpleChatProps {
 
 const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   const { isChatOpen, closeChat } = useSimpleChatContext();
-  const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
+  const { sendMessage, isLoading, error, clearError } = useChatApi();
   const [inputMessage, setInputMessage] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [chatId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
+
+  // Подписка на realtime обновления сообщений
+  useEffect(() => {
+    if (!isChatOpen) return;
+
+    console.log('🔌 Устанавливаем realtime подписку для chatId:', chatId);
+    
+    const channel = supabase
+      .channel('chat-messages-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `chat_id=eq.${chatId}`
+        },
+        (payload) => {
+          console.log('📨 Получено новое сообщение через realtime:', payload.new);
+          const newMessage: ChatMessage = {
+            id: payload.new.id,
+            content: payload.new.message,
+            role: payload.new.role as 'user' | 'assistant',
+            timestamp: new Date(payload.new.created_at)
+          };
+          
+          setMessages(prev => {
+            // Проверяем, нет ли уже такого сообщения
+            const exists = prev.some(msg => msg.id === newMessage.id);
+            if (exists) {
+              console.log('⚠️ Сообщение уже существует, пропускаем');
+              return prev;
+            }
+            
+            console.log('✅ Добавляем новое сообщение в UI');
+            return [...prev, newMessage];
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log('🔌 Отключаем realtime подписку');
+      supabase.removeChannel(channel);
+    };
+  }, [isChatOpen, chatId]);
+
+  // Загружаем существующие сообщения при открытии чата
+  useEffect(() => {
+    if (!isChatOpen) return;
+
+    const loadExistingMessages = async () => {
+      console.log('📋 Загружаем существующие сообщения для chatId:', chatId);
+      
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('chat_id', chatId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('❌ Ошибка загрузки сообщений:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        console.log('📋 Загружено сообщений:', data.length);
+        const existingMessages: ChatMessage[] = data.map(msg => ({
+          id: msg.id,
+          content: msg.message,
+          role: msg.role as 'user' | 'assistant',
+          timestamp: new Date(msg.created_at)
+        }));
+        setMessages(existingMessages);
+      } else {
+        console.log('📋 Нет существующих сообщений');
+      }
+    };
+
+    loadExistingMessages();
+  }, [isChatOpen, chatId]);
 
   // Логируем изменения сообщений
   useEffect(() => {
     console.log('🔄 Сообщения в SimpleChat обновились:', messages);
     console.log('📊 Количество сообщений:', messages.length);
-    console.log('📝 Последнее сообщение:', messages[messages.length - 1]);
-  }, [messages]);
-
-  // Добавляем приветственное сообщение при открытии чата
-  useEffect(() => {
-    if (isChatOpen && messages.length === 0) {
-      console.log('🚀 Чат открыт, chatId:', chatId);
-      console.log('⏳ Ожидаем сообщения...');
+    if (messages.length > 0) {
+      console.log('📝 Последнее сообщение:', messages[messages.length - 1]);
     }
-  }, [isChatOpen, messages.length, chatId]);
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 
     const messageContent = inputMessage.trim();
-    console.log('📤 Отправляем сообщение из компонента:', messageContent);
+    console.log('📤 Отправляем сообщение:', messageContent);
     setInputMessage('');
     
-    // Отправляем сообщение
-    await sendMessage(messageContent);
+    try {
+      await sendMessage(messageContent, chatId);
+      console.log('✅ Сообщение отправлено успешно');
+    } catch (error) {
+      console.error('❌ Ошибка отправки сообщения:', error);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
