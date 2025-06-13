@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,15 +5,15 @@ import { ChatInput } from '@/components/ui/chat-input';
 import { ChatMessageList } from '@/components/ui/chat-message-list';
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui/chat-bubble';
 import { useNewChat } from '@/hooks/useNewChat';
+import { useSimpleChatContext } from '@/contexts/SimpleChatContext';
 import { Language } from '@/lib/translations';
 
 interface SimpleChatProps {
-  isOpen: boolean;
-  onClose: () => void;
   lang: Language;
 }
 
-const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) => {
+const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
+  const { isChatOpen, closeChat } = useSimpleChatContext();
   const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
   const [inputMessage, setInputMessage] = useState('');
 
@@ -27,11 +26,11 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
 
   // Добавляем приветственное сообщение при открытии чата
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isChatOpen && messages.length === 0) {
       console.log('🚀 Чат открыт, chatId:', chatId);
       console.log('⏳ Ожидаем сообщения...');
     }
-  }, [isOpen, messages.length, chatId]);
+  }, [isChatOpen, messages.length, chatId]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -62,14 +61,14 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
       {/* Overlay */}
       <div 
         className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-all duration-500 ease-in-out ${
-          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
-        onClick={onClose}
+        onClick={closeChat}
       />
       
       {/* Sidebar */}
       <div className={`fixed right-0 top-0 h-full w-full md:w-[600px] lg:w-[700px] bg-gray-900 border-l border-gray-800 z-50 transform transition-all duration-700 ease-in-out ${
-        isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+        isChatOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}>
         {/* Decorative circles - только на десктопе */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
@@ -113,7 +112,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ isOpen, onClose, lang }) =
             <Button
               variant="ghost"
               size="icon"
-              onClick={onClose}
+              onClick={closeChat}
               className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
             >
               <X className="h-5 w-5" />
