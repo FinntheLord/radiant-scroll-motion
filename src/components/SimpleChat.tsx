@@ -123,6 +123,17 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 
     const messageContent = inputMessage.trim();
     console.log('📤 Отправляем сообщение:', messageContent);
+    
+    // Создаем локальное сообщение пользователя
+    const userMessage: ChatMessage = {
+      id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+      content: messageContent,
+      role: 'user',
+      timestamp: new Date()
+    };
+
+    // Добавляем пользовательское сообщение в UI немедленно
+    setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     
     try {
@@ -130,6 +141,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
       console.log('✅ Сообщение отправлено успешно');
     } catch (error) {
       console.error('❌ Ошибка отправки сообщения:', error);
+      // Удаляем временное сообщение в случае ошибки
+      setMessages(prev => prev.filter(msg => msg.id !== userMessage.id));
     }
   };
 
