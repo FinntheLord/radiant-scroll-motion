@@ -59,7 +59,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     },
     {
       icon: <Sparkles className="size-4 text-white" />,
-      title: "ПРОГНОЗУВАННЯ",
+      title: "АСИСТЕНТИ",
       description: "Передбачення трендів бізнесу",
       date: "ML-моделі",
       iconClassName: "bg-gradient-to-br from-connexi-pink to-connexi-purple",
@@ -68,7 +68,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     },
     {
       icon: <Sparkles className="size-4 text-white" />,
-      title: "АНАЛІЗ ДАНИХ",
+      title: "ЧАТ-БОТИ",
       description: "Виявлення слабких сторін",
       date: "AI-рішення",
       iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
