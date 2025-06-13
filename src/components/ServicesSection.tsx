@@ -1,7 +1,7 @@
 import React from "react";
-import { MovingBorder } from "@/components/ui/moving-border";
 import { Button } from "@/components/ui/button";
-import { useChat } from "../contexts/ChatContext";
+import { ArrowRight } from "lucide-react";
+import { useSimpleChatContext } from "@/contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ServicesSectionProps {
@@ -10,7 +10,7 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useSimpleChatContext();
   
   const services = [
     {
@@ -31,8 +31,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
   ];
 
   return (
-    <section id="services" className={`min-h-screen relative py-20 ${className}`}>
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="services" className={`py-12 md:py-20 ${className}`}>
+      <div className="container mx-auto px-4">
         <div className="text-orange-500 text-xl mb-6 reveal-on-scroll">{getTranslation('servicesSubtitle', lang)}</div>
         
         <div className="max-w-6xl mx-auto">
@@ -71,10 +71,11 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
 
           <div className="text-center mt-16">
             <Button 
-              className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg"
-              onClick={openSidebarChat}
+              onClick={openChat}
+              className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
             >
-              {lang === 'en' ? 'Our Services' : 'Наші послуги'}
+              {getTranslation('ourServices', lang)}
+              <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
           </div>
         </div>
