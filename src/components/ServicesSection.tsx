@@ -1,8 +1,7 @@
-
 import React from "react";
 import { MovingBorder } from "@/components/ui/moving-border";
 import { Button } from "@/components/ui/button";
-import { useSimpleChatContext } from "../contexts/SimpleChatContext";
+import { useChat } from "../contexts/ChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ServicesSectionProps {
@@ -11,7 +10,7 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang }) => {
-  const { openChat } = useSimpleChatContext();
+  const { openSidebarChat } = useChat();
   
   const services = [
     {
@@ -73,7 +72,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang 
           <div className="text-center mt-16">
             <Button 
               className="contact-button px-10 py-6 rounded-full transition-all pulse-on-hover font-semibold text-lg"
-              onClick={openChat}
+              onClick={openSidebarChat}
             >
               {lang === 'en' ? 'Our Services' : 'Наші послуги'}
             </Button>

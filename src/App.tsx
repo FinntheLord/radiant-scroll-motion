@@ -38,15 +38,8 @@ const App = () => {
   } catch (error) {
     console.error('Error in App component:', error);
     return (
-      <div style={{ padding: '20px', color: 'red', fontFamily: 'Arial, sans-serif' }}>
-        <h1>Application Error</h1>
-        <p>Error loading application. Check console for details.</p>
-        <pre>{error.message}</pre>
-        <div style={{ marginTop: '20px' }}>
-          <button onClick={() => window.location.reload()}>
-            Reload Page
-          </button>
-        </div>
+      <div style={{ padding: '20px', color: 'red' }}>
+        Error loading application. Check console for details.
       </div>
     );
   }

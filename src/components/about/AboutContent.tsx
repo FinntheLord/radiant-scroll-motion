@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Language } from "../../lib/translations";
-import { useSimpleChatContext } from "../../contexts/SimpleChatContext";
+import { useChat } from "../../contexts/ChatContext";
 
 interface AboutContentProps {
   lang: Language;
@@ -10,10 +10,10 @@ interface AboutContentProps {
 }
 
 const AboutContent: React.FC<AboutContentProps> = ({ lang, className }) => {
-  const { openChat } = useSimpleChatContext();
+  const { openSidebarChat } = useChat();
 
   const handleContactClick = () => {
-    openChat();
+    openSidebarChat();
   };
 
   return (

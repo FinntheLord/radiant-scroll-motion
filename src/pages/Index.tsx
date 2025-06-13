@@ -10,8 +10,10 @@ import PartnersSection from "../components/PartnersSection";
 import CasesSection from "../components/CasesSection";
 import ContactsSection from "../components/ContactsSection";
 import ScrollAnimation from "../components/ScrollAnimation";
+import ChatSidebar from "../components/ChatSidebar";
 import { SimpleChatButton } from "../components/SimpleChatButton";
 import { SimpleChat } from "../components/SimpleChat";
+import { ChatProvider, useChat } from "../contexts/ChatContext";
 import { SimpleChatProvider } from "../contexts/SimpleChatContext";
 import { Language } from "../lib/translations";
 
@@ -19,21 +21,19 @@ interface IndexProps {
   lang: Language;
 }
 
-const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
+const IndexContent: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
+  const { isSidebarChatOpen, closeSidebarChat } = useChat();
+  
   useEffect(() => {
-    console.log('Index component mounted with lang:', lang);
     try {
       const title = lang === 'en' 
         ? "connexi.ai | AI solutions for business in Ukraine"
         : "connexi.ai | AI-рішення для бізнесу в Україні";
       document.title = title;
-      console.log('Page title set to:', title);
     } catch (error) {
       console.error('Error setting page title:', error);
     }
   }, [lang]);
-
-  console.log('Index component rendering...');
 
   try {
     return (
@@ -50,6 +50,12 @@ const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
           <CasesSection className="bg-white text-gray-900" lang={lang} />
           <ContactsSection className="bg-gray-900 text-white" lang={lang} />
           
+          <ChatSidebar 
+            isOpen={isSidebarChatOpen} 
+            onClose={closeSidebarChat}
+            lang={lang}
+          />
+          
           <SimpleChatButton lang={lang} />
           <SimpleChat lang={lang} />
         </div>
@@ -60,12 +66,19 @@ const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
     return (
       <div style={{ padding: '20px', color: 'red' }}>
         Error loading page. Check console for details.
-        <div>Error: {error.message}</div>
       </div>
     );
   }
 });
 
-Index.displayName = 'Index';
+IndexContent.displayName = 'IndexContent';
+
+const Index: React.FC<IndexProps> = ({ lang }) => {
+  return (
+    <ChatProvider>
+      <IndexContent lang={lang} />
+    </ChatProvider>
+  );
+};
 
 export default Index;
