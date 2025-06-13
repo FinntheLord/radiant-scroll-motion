@@ -70,7 +70,7 @@ const VideoBackgroundSection: React.FC<VideoBackgroundSectionProps> = ({ lang })
                 </Button>
                 
                 <img
-                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/public/Media/ezgif-8981affd404761.webp"
+                  src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/public/media-bucket-test/ezgif-8981affd404761.webp"
                   alt="AI Animation"
                   className="h-[60px] w-auto rounded-lg opacity-80 hover:opacity-100 transition-opacity"
                   loading="lazy"
