@@ -21,15 +21,19 @@ interface IndexProps {
 
 const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
   useEffect(() => {
+    console.log('Index component mounted with lang:', lang);
     try {
       const title = lang === 'en' 
         ? "connexi.ai | AI solutions for business in Ukraine"
         : "connexi.ai | AI-рішення для бізнесу в Україні";
       document.title = title;
+      console.log('Page title set to:', title);
     } catch (error) {
       console.error('Error setting page title:', error);
     }
   }, [lang]);
+
+  console.log('Index component rendering...');
 
   try {
     return (
@@ -56,6 +60,7 @@ const Index: React.FC<IndexProps> = memo(({ lang = 'uk' }) => {
     return (
       <div style={{ padding: '20px', color: 'red' }}>
         Error loading page. Check console for details.
+        <div>Error: {error.message}</div>
       </div>
     );
   }

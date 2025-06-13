@@ -23,4 +23,19 @@ try {
   console.log('React app successfully mounted');
 } catch (error) {
   console.error('Error mounting React app:', error);
+  
+  // Fallback rendering without StrictMode
+  try {
+    ReactDOM.createRoot(root).render(<App />);
+    console.log('React app mounted without StrictMode');
+  } catch (fallbackError) {
+    console.error('Fallback rendering also failed:', fallbackError);
+    root.innerHTML = `
+      <div style="padding: 20px; color: red; font-family: Arial, sans-serif;">
+        <h1>Application Error</h1>
+        <p>Failed to load the application. Check console for details.</p>
+        <pre>${error.message}</pre>
+      </div>
+    `;
+  }
 }
