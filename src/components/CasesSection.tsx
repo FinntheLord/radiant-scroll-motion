@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useChat } from "../contexts/SimpleChatContext";
+import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface CasesSectionProps {
@@ -12,7 +11,7 @@ interface CasesSectionProps {
 }
 
 const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => {
-  const { openChat } = useChat();
+  const { openChat } = useSimpleChatContext();
 
   const caseStudies = [
     {
@@ -144,7 +143,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                     
                     <div className="mt-4">
                       <Button 
-                        onClick={openSidebarChat}
+                        onClick={openChat}
                         className="bg-transparent hover:bg-transparent text-connexi-orange border-none shadow-none p-0 hover:text-white transition-colors"
                       >
                         {getTranslation('readMore', lang)}
@@ -160,7 +159,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
         
         <div className="flex justify-center mt-8 md:mt-12 reveal-on-scroll">
           <Button 
-            onClick={openSidebarChat}
+            onClick={openChat}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
             {getTranslation('allCases', lang)}

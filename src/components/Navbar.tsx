@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useChat } from "../contexts/SimpleChatContext";
+import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface NavbarProps {
@@ -13,7 +13,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { openChat } = useChat();
+  const { openChat } = useSimpleChatContext();
   const navigate = useNavigate();
 
   const switchLanguage = useCallback(() => {
@@ -106,7 +106,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           <Button 
             className="contact-button"
             size="sm"
-            onClick={openSidebarChat}
+            onClick={openChat}
           >
             {getTranslation('consultation', lang)}
             <MessageCircle className="ml-2 h-4 w-4" />
@@ -126,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
           <Button 
             className="contact-button"
             size="sm"
-            onClick={openSidebarChat}
+            onClick={openChat}
           >
             <MessageCircle className="h-4 w-4" />
           </Button>
