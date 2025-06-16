@@ -21,14 +21,12 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   useEffect(() => {
     console.log('🔄 Сообщения в SimpleChat обновились:', messages);
     console.log('📊 Количество сообщений:', messages.length);
-    console.log('📝 Последнее сообщение:', messages[messages.length - 1]);
   }, [messages]);
 
   // Добавляем приветственное сообщение при открытии чата
   useEffect(() => {
     if (isChatOpen && messages.length === 0) {
       console.log('🚀 Чат открыт, chatId:', chatId);
-      console.log('⏳ Ожидаем сообщения...');
     }
   }, [isChatOpen, messages.length, chatId]);
 
