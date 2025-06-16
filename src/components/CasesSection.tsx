@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useChat } from "../contexts/ChatContext";
+import { useChat } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface CasesSectionProps {
@@ -12,7 +12,7 @@ interface CasesSectionProps {
 }
 
 const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useChat();
 
   const caseStudies = [
     {

@@ -1,7 +1,7 @@
 import React from "react";
 import { MovingBorder } from "@/components/ui/moving-border";
 import { Button } from "@/components/ui/button";
-import { useChat } from "../contexts/ChatContext";
+import { useChat } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface ServicesSectionProps {
@@ -10,7 +10,7 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ className = "", lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useChat();
   
   const services = [
     {

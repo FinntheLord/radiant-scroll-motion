@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import DisplayCards from "@/components/ui/display-cards";
-import { useChat } from "../contexts/ChatContext";
+import { useChat } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface HeroSectionProps {
@@ -10,7 +10,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
-  const { openSidebarChat } = useChat();
+  const { openChat } = useChat();
 
   useEffect(() => {
     // Mouse parallax effect
