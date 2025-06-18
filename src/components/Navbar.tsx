@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
+import { TrafficLight } from "./TrafficLight";
 
 interface NavbarProps {
   lang: Language;
@@ -13,6 +13,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ lang }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isTrafficLightActive, setIsTrafficLightActive] = useState(false);
   const { openChat } = useSimpleChatContext();
   const navigate = useNavigate();
 
@@ -33,6 +34,11 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
     }
     closeMobileMenu();
   }, [closeMobileMenu]);
+
+  const handleTrafficLightClick = useCallback(() => {
+    setIsTrafficLightActive(true);
+    setTimeout(() => setIsTrafficLightActive(false), 3000);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,21 +63,30 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
-          <img 
-            src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
-            alt="connexi.ai logo" 
-            className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
-          />
-          <div className="flex flex-col">
-            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-              connexi
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleTrafficLightClick}
+            className="cursor-pointer hover:scale-110 transition-transform duration-200"
+            title="Активировать светофор"
+          >
+            <TrafficLight isActive={isTrafficLightActive} />
+          </button>
+          <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
+              alt="connexi.ai logo" 
+              className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
+            />
+            <div className="flex flex-col">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
+                connexi
+              </div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
+                Linking Ideas to Solutions
+              </div>
             </div>
-            <div className="text-xs sm:text-sm md:text-base text-gray-600 italic">
-              Linking Ideas to Solutions
-            </div>
-          </div>
-        </a>
+          </a>
+        </div>
         
         <nav className="hidden md:flex items-center space-x-8">
           <a href="#about" className="text-gray-700 hover:text-black transition-colors">
