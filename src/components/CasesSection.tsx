@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -17,12 +18,12 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
     {
       id: "001",
       titleKey: 'case1Title' as const,
+      customTitle: "Розробка чат-бота для B2B бізнесу",
       tags: [
-        getTranslation('customerSupport', lang),
-        getTranslation('chatbot', lang),
-        getTranslation('automation', lang),
-        getTranslation('retail', lang),
-        getTranslation('aiAnalytics', lang)
+        "ЧАТ-БОТ",
+        "АВТОМАТИЗАЦІЯ",
+        "В2В",
+        "AI АНАЛІТИКА"
       ]
     },
     {
@@ -138,7 +139,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                   
                   <div className="p-4 md:p-6 lg:p-10 md:w-2/3 flex flex-col justify-between">
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                      {getTranslation(caseStudy.titleKey, lang)}
+                      {caseStudy.customTitle || getTranslation(caseStudy.titleKey, lang)}
                     </h4>
                     
                     <div className="mt-4">
