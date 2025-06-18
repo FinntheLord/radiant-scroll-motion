@@ -69,7 +69,7 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     {
       icon: <Sparkles className="size-4 text-white" />,
       title: "ЧАТ-БОТИ",
-      description: "Виявлення слабких сторін",
+      description: "Підтримка продажів",
       date: "AI-рішення",
       iconClassName: "bg-gradient-to-br from-connexi-orange to-connexi-pink",
       titleClassName: "text-connexi-orange font-bold drop-shadow-lg",
