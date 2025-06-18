@@ -79,10 +79,10 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                   {lang === 'en' ? 'Phone' : 'Телефон'}
                 </h4>
                 <a 
-                  href="tel:+380672002675" 
+                  href="tel:+380999191191" 
                   className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300 leading-snug"
                 >
-                  +38 (067) 200-26-75
+                  +38(099)91-91-191
                 </a>
               </div>
             </div>
@@ -131,7 +131,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                 </a>
                 
                 <a 
-                  href="https://wa.me/380672002675" 
+                  href="https://wa.me/380999191191" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-green-500/25"
