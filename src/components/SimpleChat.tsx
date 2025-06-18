@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -80,7 +81,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 md:h-10 md:w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
-                src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
+                src="/lovable-uploads/0602a23b-6fed-48fc-9ed3-ca7c446252a0.png" 
                 alt="AI Assistant"
                 className="h-8 w-8 md:h-10 md:w-10 object-contain"
                 loading="lazy"
@@ -141,7 +142,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
                 >
                   {message.role === 'assistant' && (
                     <ChatBubbleAvatar 
-                      src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                      src="/lovable-uploads/0602a23b-6fed-48fc-9ed3-ca7c446252a0.png"
                       fallback="AI"
                       className="border-none outline-none"
                     />
@@ -160,7 +161,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
               {isLoading && (
                 <ChatBubble variant="received">
                   <ChatBubbleAvatar 
-                    src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8"
+                    src="/lovable-uploads/0602a23b-6fed-48fc-9ed3-ca7c446252a0.png"
                     fallback="AI"
                     className="border-none outline-none"
                   />
