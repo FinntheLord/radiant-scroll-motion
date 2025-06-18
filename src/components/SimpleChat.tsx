@@ -57,13 +57,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
     await sendMessage(messageContent);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputMessage(e.target.value);
     // Активируем индикатор печати при вводе текста
@@ -217,7 +210,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
                   value={inputMessage}
                   onChange={handleInputChange}
                   onSend={handleSendMessage}
-                  onKeyDown={handleKeyPress}
                   disabled={isLoading}
                   autoFocus={isChatOpen}
                   className="text-white placeholder:text-gray-400 px-3 py-3 md:px-4 text-sm md:text-base"
