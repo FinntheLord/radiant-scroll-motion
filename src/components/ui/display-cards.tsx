@@ -51,8 +51,8 @@ export default function DisplayCards({ cards }: DisplayCardsProps) {
     {
       icon: <Sparkles className="size-4 text-white" />,
       title: "АВТОМАТИЗАЦІЯ",
-      description: "Автоматизація бізнес-процесів",
-      date: "AI-рішення",
+      description: "Оптимізація бізнес-процесів",
+      date: "AI-системи",
       iconClassName: "bg-gradient-to-br from-connexi-purple to-connexi-blue",
       titleClassName: "text-connexi-purple font-bold drop-shadow-lg",
       className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[0%] hover:before:opacity-0 before:transition-opacity before:duration:700 hover:grayscale-0 before:left-0 before:top-0",
