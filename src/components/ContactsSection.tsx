@@ -65,10 +65,10 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                   {lang === 'en' ? 'Email' : 'Електронна пошта'}
                 </h4>
                 <a 
-                  href="mailto:info@connexi.ai" 
+                  href="mailto:info@connexi.io" 
                   className="text-white/80 hover:text-orange-500 transition-colors text-lg ml-8 block group-hover:translate-x-2 transform duration-300 leading-snug"
                 >
-                  info@connexi.ai
+                  info@connexi.io
                 </a>
               </div>
 
