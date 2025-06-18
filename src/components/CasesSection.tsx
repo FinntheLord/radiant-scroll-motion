@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -29,11 +28,12 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
     {
       id: "002",
       titleKey: 'case2Title' as const,
-      customTitle: "Розробка Асистента продажів для компанії інтернет-маркетингу",
+      customTitle: "Розробка Асистента продаж для інтернет-магазину",
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
-        "В2В",
+        "E-COMMERCE",
+        "ПРОДАЖІ",
         "AI АНАЛІТИКА"
       ]
     },
