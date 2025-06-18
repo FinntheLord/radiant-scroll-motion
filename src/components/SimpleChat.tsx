@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
 import { ChatMessageList } from '@/components/ui/chat-message-list';
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui/chat-bubble';
+import { TrafficLight } from '@/components/TrafficLight';
 import { useNewChat } from '@/hooks/useNewChat';
 import { useSimpleChatContext } from '@/contexts/SimpleChatContext';
 import { Language } from '@/lib/translations';
@@ -17,6 +17,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   const { isChatOpen, closeChat } = useSimpleChatContext();
   const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
   const [inputMessage, setInputMessage] = useState('');
+  const [isTrafficLightActive, setIsTrafficLightActive] = useState(false);
 
   // Логируем изменения сообщений
   useEffect(() => {
@@ -30,6 +31,13 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
       console.log('🚀 Чат открыт, chatId:', chatId);
     }
   }, [isChatOpen, messages.length, chatId]);
+
+  const handleTrafficLightClick = () => {
+    setIsTrafficLightActive(true);
+    setTimeout(() => {
+      setIsTrafficLightActive(false);
+    }, 3000);
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -101,6 +109,11 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
           </div>
           
           <div className="flex items-center gap-3">
+            <TrafficLight 
+              isActive={isTrafficLightActive}
+              className="cursor-pointer"
+              onClick={handleTrafficLightClick}
+            />
             <div className={`w-3 h-3 rounded-full ${
               isLoading ? 'bg-yellow-500 animate-pulse' : 
               messages.length > 0 ? 'bg-green-500' : 'bg-blue-500'

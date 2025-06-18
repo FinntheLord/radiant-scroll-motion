@@ -5,11 +5,17 @@ import { cn } from '@/lib/utils';
 interface TrafficLightProps {
   isActive: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
-export const TrafficLight: React.FC<TrafficLightProps> = ({ isActive, className }) => {
+export const TrafficLight: React.FC<TrafficLightProps> = ({ isActive, className, onClick }) => {
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div 
+      className={cn("flex items-center gap-1", className)} 
+      onClick={onClick}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+    >
       <div className="flex items-center gap-0.5">
         <div 
           className={cn(
