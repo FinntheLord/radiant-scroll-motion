@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -76,24 +77,24 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10">
+        <div className="flex items-center justify-between p-3 md:p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
+            <div className="h-8 w-8 md:h-10 md:w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
                 src="https://mdlyglpbdqvgwnayumhh.supabase.co/storage/v1/object/sign/mediabucket/ezgif-8981affd404761.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84NDEzZTkzNS1mMTAyLTQxMjAtODkzMy0yNWI5OGNjY2Q1NDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJtZWRpYWJ1Y2tldC9lemdpZi04OTgxYWZmZDQwNDc2MS53ZWJwIiwiaWF0IjoxNzQ5MTE5NTgyLCJleHAiOjE3NDk3MjQzODJ9.c2y2iiXwEVJKJi9VUtm9MPShj2l1nRQK516-rgSniD8" 
                 alt="AI Assistant"
-                className="h-10 w-10 object-contain"
+                className="h-8 w-8 md:h-10 md:w-10 object-contain"
                 loading="lazy"
               />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-white">
+              <h2 className="text-base md:text-lg font-semibold text-white">
                 AI-Помічник Connexi
               </h2>
-              <p className="text-sm text-white/60">
+              <p className="text-xs md:text-sm text-white/60">
                 {lang === 'en' ? 'Realtime Chat System' : 'Система чату в реальному часі'}
               </p>
-              <p className="text-xs text-white/40">
+              <p className="text-xs text-white/40 hidden md:block">
                 Chat ID: {chatId.substring(0, 16)}... | Сообщений: {messages.length}
               </p>
             </div>
@@ -111,15 +112,15 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
               variant="ghost"
               size="icon"
               onClick={closeChat}
-              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200"
+              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200 h-8 w-8 md:h-10 md:w-10"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
           </div>
         </div>
 
         {/* Chat Content */}
-        <div className="h-[calc(100vh-80px)] md:h-[calc(100%-80px)] flex flex-col relative z-10">
+        <div className="h-[calc(100vh-60px)] md:h-[calc(100%-80px)] flex flex-col relative z-10">
           {/* Messages */}
           <div className="flex-1 overflow-hidden">
             <ChatMessageList smooth>
@@ -170,8 +171,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
             </ChatMessageList>
           </div>
 
-          {/* Input */}
-          <div className="p-4 border-t border-gray-800">
+          {/* Input - Mobile optimized */}
+          <div className="p-2 md:p-4 border-t border-gray-800 bg-gray-900">
             {error && (
               <div className="mb-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm">
                 {error}
@@ -186,7 +187,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
               </div>
             )}
             <div className="flex gap-2">
-              <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors">
+              <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors min-h-[48px]">
                 <ChatInput
                   placeholder={lang === 'en' ? 'Type your message...' : 'Введіть ваше повідомлення...'}
                   value={inputMessage}
@@ -194,14 +195,14 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
                   onSend={handleSendMessage}
                   onKeyDown={handleKeyPress}
                   disabled={isLoading}
-                  className="text-white placeholder:text-gray-400"
+                  className="text-white placeholder:text-gray-400 px-3 py-3 md:px-4 text-sm md:text-base"
                 />
               </div>
               <Button
                 onClick={handleSendMessage}
                 disabled={isLoading || !inputMessage.trim()}
                 size="icon"
-                className="contact-button h-12 w-12 rounded-lg"
+                className="contact-button h-12 w-12 rounded-lg shrink-0"
               >
                 <Send className="h-4 w-4" />
               </Button>
