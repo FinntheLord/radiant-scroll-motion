@@ -4,10 +4,20 @@ import { cn } from "@/lib/utils";
 
 interface ChatInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   onSend?: () => void;
+  autoFocus?: boolean;
 }
 
 const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
-  ({ className, onSend, onKeyDown, ...props }, ref) => {
+  ({ className, onSend, onKeyDown, autoFocus = false, ...props }, ref) => {
+    const internalRef = React.useRef<HTMLTextAreaElement>(null);
+    const textareaRef = ref || internalRef;
+
+    React.useEffect(() => {
+      if (autoFocus && textareaRef && 'current' in textareaRef && textareaRef.current) {
+        textareaRef.current.focus();
+      }
+    }, [autoFocus, textareaRef]);
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -38,7 +48,7 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
     return (
       <textarea
         autoComplete="off"
-        ref={ref}
+        ref={textareaRef}
         name="message"
         onInput={handleInput}
         onKeyDown={handleKeyDown}

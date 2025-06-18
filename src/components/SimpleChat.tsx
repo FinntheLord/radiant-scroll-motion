@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, memo } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -195,6 +194,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
                   onSend={handleSendMessage}
                   onKeyDown={handleKeyPress}
                   disabled={isLoading}
+                  autoFocus={isChatOpen}
                   className="text-white placeholder:text-gray-400 px-3 py-3 md:px-4 text-sm md:text-base"
                 />
               </div>
