@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -46,6 +45,46 @@ export function ChatBubbleMessage({
   className,
   children,
 }: ChatBubbleMessageProps) {
+  // Helper function to format text content
+  const formatContent = (content: any) => {
+    if (typeof content !== 'string') return content;
+    
+    // Split content into paragraphs and format
+    return content.split('\n').map((line, index) => {
+      if (line.trim() === '') {
+        return <br key={index} />;
+      }
+      
+      // Check if line starts with a number (like "1.", "2.", etc.)
+      const isNumberedItem = /^\d+\./.test(line.trim());
+      const isBulletItem = line.trim().startsWith('- ') || line.trim().startsWith('• ');
+      
+      if (isNumberedItem || isBulletItem) {
+        return (
+          <div key={index} className="mb-2 pl-2">
+            {line.trim()}
+          </div>
+        );
+      }
+      
+      // Check if it's a heading (starts with **text**)
+      const headingMatch = line.match(/^\*\*(.*?)\*\*/);
+      if (headingMatch) {
+        return (
+          <div key={index} className="font-semibold mb-2 mt-3">
+            {headingMatch[1]}
+          </div>
+        );
+      }
+      
+      return (
+        <div key={index} className="mb-2">
+          {line.trim()}
+        </div>
+      );
+    });
+  };
+
   return (
     <div
       className={cn(
@@ -61,8 +100,8 @@ export function ChatBubbleMessage({
           <MessageLoading />
         </div>
       ) : (
-        <div className="whitespace-pre-wrap text-sm leading-relaxed">
-          {children}
+        <div className="text-sm leading-relaxed">
+          {formatContent(children)}
         </div>
       )}
     </div>
