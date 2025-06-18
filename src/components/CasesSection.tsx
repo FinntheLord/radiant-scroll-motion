@@ -29,12 +29,12 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
     {
       id: "002",
       titleKey: 'case2Title' as const,
+      customTitle: "Розробка Асистента продажів для компанії інтернет-маркетингу",
       tags: [
-        getTranslation('forecasting', lang),
-        getTranslation('logistics', lang),
-        getTranslation('dataAnalysis', lang),
-        getTranslation('optimization', lang),
-        getTranslation('automation', lang)
+        "АСИСТЕНТ",
+        "АВТОМАТИЗАЦІЯ",
+        "В2В",
+        "AI АНАЛІТИКА"
       ]
     },
     {
