@@ -7,6 +7,7 @@ import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from '@/components/ui
 import { TrafficLight } from '@/components/TrafficLight';
 import { useNewChat } from '@/hooks/useNewChat';
 import { useSimpleChatContext } from '@/contexts/SimpleChatContext';
+import { useTypingActivity } from '@/hooks/useTypingActivity';
 import { Language } from '@/lib/translations';
 
 interface SimpleChatProps {
@@ -18,6 +19,12 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   const { messages, isLoading, error, sendMessage, clearError, chatId } = useNewChat();
   const [inputMessage, setInputMessage] = useState('');
   const [isTrafficLightActive, setIsTrafficLightActive] = useState(false);
+  const { isTyping, startTyping } = useTypingActivity(2000);
+
+  // Активируем светофор при печати
+  useEffect(() => {
+    setIsTrafficLightActive(isTyping);
+  }, [isTyping]);
 
   // Логируем изменения сообщений
   useEffect(() => {
@@ -59,6 +66,10 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputMessage(e.target.value);
+    // Активируем индикатор печати при вводе текста
+    if (e.target.value.trim()) {
+      startTyping();
+    }
   };
 
   console.log('🎨 Рендер SimpleChat. Сообщений:', messages.length, 'isLoading:', isLoading);
