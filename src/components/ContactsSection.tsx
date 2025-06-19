@@ -31,7 +31,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <img 
-                  src="/lovable-uploads/66443985-bfd2-4915-aaf7-5845c3b283ef.png" 
+                  src="/lovable-uploads/90d43a15-0546-4090-b01c-02f21a566125.png" 
                   alt="Connexi Logo"
                   className="h-12 w-auto object-contain"
                 />
