@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useRef } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/ui/chat-input';
@@ -20,6 +20,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTrafficLightActive, setIsTrafficLightActive] = useState(false);
   const { isTyping, startTyping } = useTypingActivity(2000);
+  const inputRef = useRef<HTMLTextAreaElement>(null); // Ссылка на input для фокуса
 
   // Активируем светофор при печати
   useEffect(() => {
@@ -55,6 +56,10 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
     
     // Отправляем сообщение
     await sendMessage(messageContent);
+    
+    if (isChatOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -206,6 +211,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
             <div className="flex gap-2">
               <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors min-h-[48px]">
                 <ChatInput
+                  ref={inputRef} // Привязываем ссылку к input
                   placeholder={lang === 'en' ? 'Type your message...' : 'Введіть ваше повідомлення...'}
                   value={inputMessage}
                   onChange={handleInputChange}
