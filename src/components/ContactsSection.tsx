@@ -26,7 +26,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
         {/* Main content grid */}
         <div className="grid lg:grid-cols-2 gap-20 items-start">
           {/* Left column - Company info */}
-          <div className="space-y-16 reveal-on-scroll">
+          <div className="space-y-16 reveal-on-scroll h-full flex flex-col">
             {/* Company branding */}
             <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -46,7 +46,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             </div>
 
             {/* Contact information */}
-            <div className="space-y-8">
+            <div className="space-y-8 flex-grow">
               {/* Address */}
               <div className="group">
                 <h4 className="text-xl font-semibold text-white mb-3 flex items-center gap-3">
@@ -89,7 +89,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
           </div>
 
           {/* Right column - CTA Section */}
-          <div className="space-y-12 reveal-on-scroll">
+          <div className="space-y-12 reveal-on-scroll h-full flex flex-col justify-start">
             {/* Main heading */}
             <div className="text-center lg:text-left">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
@@ -113,7 +113,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             </div>
 
             {/* Social Media Section */}
-            <div className="space-y-6">
+            <div className="space-y-6 mt-auto">
               <h4 className="text-xl font-semibold text-white text-center lg:text-left">
                 {lang === 'en' ? 'Connect with us' : 'Зв\'яжіться з нами'}
               </h4>
