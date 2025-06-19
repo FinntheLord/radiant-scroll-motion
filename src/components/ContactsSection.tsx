@@ -31,11 +31,11 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <img 
-                  src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
+                  src="/lovable-uploads/66443985-bfd2-4915-aaf7-5845c3b283ef.png" 
                   alt="Connexi Logo"
                   className="h-12 w-auto object-contain"
                 />
-                <h3 className="text-3xl font-bold connexi-gradient-text">connexi</h3>
+                <h3 className="text-3xl font-bold text-white">connexi</h3>
               </div>
               <p className="text-white/70 text-lg leading-relaxed">
                 {lang === 'en' 
