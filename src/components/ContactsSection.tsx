@@ -1,3 +1,4 @@
+
 import React from "react";
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ const ContactsSection: React.FC<ContactsSectionProps> = ({ className = "", lang 
                   alt="Connexi Logo"
                   className="h-12 w-auto object-contain"
                 />
+                <h3 className="text-3xl font-bold text-white">connexi</h3>
               </div>
               <p className="text-white/70 text-lg leading-relaxed">
                 {lang === 'en' 
