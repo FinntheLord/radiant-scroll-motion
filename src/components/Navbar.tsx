@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import { MessageCircle, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -59,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang }) => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <a href={lang === 'en' ? '/en' : '/'} className="flex items-center space-x-3">
           <img 
-            src="/lovable-uploads/2bd77270-2df2-4fef-a803-e2e908fb71d9.png" 
+            src="/lovable-uploads/f2300c53-5778-4a55-925b-831069852a60.png" 
             alt="connexi.ai logo" 
             className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
           />
