@@ -1,5 +1,4 @@
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import {
@@ -8,7 +7,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import ContactPopup from "./ContactPopup";
+import { useSimpleChatContext } from "../contexts/SimpleChatContext";
 import { Language, getTranslation } from "../lib/translations";
 
 interface PartnersSectionProps {
@@ -35,7 +34,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
     slidesToScroll: 1,
     skipSnaps: false
   });
-  const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
+  const { openChat } = useSimpleChatContext();
   const carouselContainerRef = useRef<HTMLDivElement>(null);
   
   // Fixed auto scroll with proper ref handling
@@ -132,7 +131,7 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex justify-center reveal-on-scroll">
           <Button 
-            onClick={() => setIsContactPopupOpen(true)}
+            onClick={openChat}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
             {getTranslation('ourCases', lang)}
@@ -144,13 +143,6 @@ const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang 
       {/* Background elements with better mobile optimization */}
       <div className="floating-element w-32 h-32 md:w-64 md:h-64 lg:w-96 lg:h-96 top-20 -left-16 md:-left-32 lg:-left-48 opacity-10 md:opacity-20"></div>
       <div className="floating-element w-24 h-24 md:w-48 md:h-48 lg:w-80 lg:h-80 bottom-10 -right-12 md:-right-24 lg:-right-40 opacity-10 md:opacity-20"></div>
-      
-      <ContactPopup 
-        isOpen={isContactPopupOpen}
-        onClose={() => setIsContactPopupOpen(false)}
-        title={getTranslation('viewCases', lang)}
-        lang={lang}
-      />
     </section>
   );
 };
