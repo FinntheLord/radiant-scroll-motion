@@ -150,6 +150,7 @@ export const useNewChat = () => {
           console.log('✅ Realtime подписка активна');
         } else if (status === 'CHANNEL_ERROR') {
           console.error('❌ Ошибка канала Realtime');
+          console.error(status);
         } else if (status === 'TIMED_OUT') {
           console.error('⏰ Таймаут подписки Realtime');
         } else if (status === 'CLOSED') {
