@@ -3,7 +3,6 @@
 @import './animations.css';
 @import './components.css';
 @import './utilities.css';
-@import './mobile-chat.css';
 
 @tailwind base;
 @tailwind components;

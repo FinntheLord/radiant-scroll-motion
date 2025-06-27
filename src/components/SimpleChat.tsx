@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, memo, useRef } from 'react';
 import { X, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { TrafficLight } from '@/components/TrafficLight';
 import { useNewChat } from '@/hooks/useNewChat';
 import { useSimpleChatContext } from '@/contexts/SimpleChatContext';
 import { useTypingActivity } from '@/hooks/useTypingActivity';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { Language } from '@/lib/translations';
 
 interface SimpleChatProps {
@@ -22,8 +20,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTrafficLightActive, setIsTrafficLightActive] = useState(false);
   const { isTyping, startTyping } = useTypingActivity(2000);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const isMobile = useIsMobile();
+  const inputRef = useRef<HTMLTextAreaElement>(null); // Ссылка на input для фокуса
 
   // Активируем светофор при печати
   useEffect(() => {
@@ -43,15 +40,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
     }
   }, [isChatOpen, messages.length, chatId]);
 
-  // Фокус на инпут при открытии чата (только на десктопе)
-  useEffect(() => {
-    if (isChatOpen && !isMobile && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 300); // Задержка для завершения анимации
-    }
-  }, [isChatOpen, isMobile]);
-
   const handleTrafficLightClick = () => {
     setIsTrafficLightActive(true);
     setTimeout(() => {
@@ -69,11 +57,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
     // Отправляем сообщение
     await sendMessage(messageContent);
     
-    // Возвращаем фокус на инпут только на десктопе
-    if (isChatOpen && !isMobile && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+    if (isChatOpen && inputRef.current) {
+      inputRef.current.focus();
     }
   };
 
@@ -97,8 +82,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
         onClick={closeChat}
       />
       
-      {/* Chat Container - Полноэкранный на мобильных */}
-      <div className={`fixed inset-0 md:right-0 md:top-0 md:left-auto md:h-full md:w-[600px] lg:w-[700px] bg-gray-900 md:border-l border-gray-800 z-50 transform transition-all duration-700 ease-in-out ${
+      {/* Sidebar */}
+      <div className={`fixed right-0 top-0 h-full w-full md:w-[600px] lg:w-[700px] bg-gray-900 border-l border-gray-800 z-50 transform transition-all duration-700 ease-in-out ${
         isChatOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       }`}>
         {/* Decorative circles - только на десктопе */}
@@ -108,40 +93,36 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
           <div className="absolute top-72 right-16 w-16 h-16 rounded-full bg-gradient-to-br from-connexi-orange/25 to-connexi-pink/25 blur-md animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
-        {/* Header - Мобильно-адаптивный */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10 safe-area-top">
+        {/* Header */}
+        <div className="flex items-center justify-between p-3 md:p-4 border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm relative z-10">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full overflow-hidden flex items-center justify-center">
+            <div className="h-8 w-8 md:h-10 md:w-10 rounded-full overflow-hidden flex items-center justify-center">
               <img 
                 src="/lovable-uploads/0602a23b-6fed-48fc-9ed3-ca7c446252a0.png" 
                 alt="AI Assistant"
-                className="h-10 w-10 object-contain"
+                className="h-8 w-8 md:h-10 md:w-10 object-contain"
                 loading="lazy"
               />
             </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-lg font-semibold text-white truncate">
+            <div>
+              <h2 className="text-base md:text-lg font-semibold text-white">
                 AI-Помічник Connexi
               </h2>
-              <p className="text-sm text-white/60 truncate">
+              <p className="text-xs md:text-sm text-white/60">
                 {lang === 'en' ? 'Realtime Chat System' : 'Система чату в реальному часі'}
               </p>
-              {!isMobile && (
-                <p className="text-xs text-white/40 truncate">
-                  Chat ID: {chatId.substring(0, 16)}... | Сообщений: {messages.length}
-                </p>
-              )}
+              <p className="text-xs text-white/40 hidden md:block">
+                Chat ID: {chatId.substring(0, 16)}... | Сообщений: {messages.length}
+              </p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
-            {!isMobile && (
-              <TrafficLight 
-                isActive={isTrafficLightActive}
-                className="cursor-pointer"
-                onClick={handleTrafficLightClick}
-              />
-            )}
+            <TrafficLight 
+              isActive={isTrafficLightActive}
+              className="cursor-pointer"
+              onClick={handleTrafficLightClick}
+            />
             <div className={`w-3 h-3 rounded-full ${
               isLoading ? 'bg-yellow-500 animate-pulse' : 
               messages.length > 0 ? 'bg-green-500' : 'bg-blue-500'
@@ -153,20 +134,20 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
               variant="ghost"
               size="icon"
               onClick={closeChat}
-              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200 h-10 w-10"
+              className="text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200 h-8 w-8 md:h-10 md:w-10"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
           </div>
         </div>
 
-        {/* Chat Content - Улучшенная мобильная версия */}
-        <div className="h-[calc(100vh-80px)] md:h-[calc(100%-80px)] flex flex-col relative z-10">
-          {/* Messages - Правильная высота для скролла */}
-          <div className="flex-1 min-h-0 overflow-hidden">
+        {/* Chat Content */}
+        <div className="h-[calc(100vh-60px)] md:h-[calc(100%-80px)] flex flex-col relative z-10">
+          {/* Messages */}
+          <div className="flex-1 overflow-hidden">
             <ChatMessageList smooth>
               {messages.length === 0 && (
-                <div className="flex items-center justify-center h-full text-gray-400 px-4">
+                <div className="flex items-center justify-center h-full text-gray-400">
                   <div className="text-center">
                     <p className="text-lg mb-2">👋 Начните диалог</p>
                     <p className="text-sm">Отправьте сообщение, чтобы начать...</p>
@@ -212,10 +193,10 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
             </ChatMessageList>
           </div>
 
-          {/* Input - Мобильная оптимизация */}
-          <div className="p-4 border-t border-gray-800 bg-gray-900 safe-area-bottom">
+          {/* Input - Mobile optimized */}
+          <div className="p-2 md:p-4 border-t border-gray-800 bg-gray-900">
             {error && (
-              <div className="mb-3 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-sm">
+              <div className="mb-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm">
                 {error}
                 <Button 
                   variant="ghost" 
@@ -227,26 +208,26 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
                 </Button>
               </div>
             )}
-            <div className="flex gap-3 items-end">
-              <div className="flex-1 bg-gray-800 rounded-2xl border border-gray-700 focus-within:border-connexi-orange transition-colors">
+            <div className="flex gap-2">
+              <div className="flex-1 bg-gray-800 rounded-lg border border-gray-700 focus-within:border-connexi-orange transition-colors min-h-[48px]">
                 <ChatInput
-                  ref={inputRef}
+                  ref={inputRef} // Привязываем ссылку к input
                   placeholder={lang === 'en' ? 'Type your message...' : 'Введіть ваше повідомлення...'}
                   value={inputMessage}
                   onChange={handleInputChange}
                   onSend={handleSendMessage}
                   disabled={isLoading}
-                  autoFocus={!isMobile && isChatOpen}
-                  className="text-white placeholder:text-gray-400 px-4 py-3 text-base resize-none"
+                  autoFocus={isChatOpen}
+                  className="text-white placeholder:text-gray-400 px-3 py-3 md:px-4 text-sm md:text-base"
                 />
               </div>
               <Button
                 onClick={handleSendMessage}
                 disabled={isLoading || !inputMessage.trim()}
                 size="icon"
-                className="contact-button h-12 w-12 rounded-full shrink-0"
+                className="contact-button h-12 w-12 rounded-lg shrink-0"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>

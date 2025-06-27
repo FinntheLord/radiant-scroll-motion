@@ -1,6 +1,5 @@
 
 import * as React from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 interface ChatInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -12,13 +11,12 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
   ({ className, onSend, onKeyDown, autoFocus = false, ...props }, ref) => {
     const internalRef = React.useRef<HTMLTextAreaElement>(null);
     const textareaRef = ref || internalRef;
-    const isMobile = useIsMobile();
 
     React.useEffect(() => {
-      if (autoFocus && !isMobile && textareaRef && 'current' in textareaRef && textareaRef.current) {
+      if (autoFocus && textareaRef && 'current' in textareaRef && textareaRef.current) {
         textareaRef.current.focus();
       }
-    }, [autoFocus, isMobile, textareaRef]);
+    }, [autoFocus, textareaRef]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -31,13 +29,11 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
     const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
       const target = e.target as HTMLTextAreaElement;
       target.style.height = 'auto';
+      // Limit max height on mobile for better UX
+      const maxHeight = window.innerWidth < 768 ? 100 : 120;
+      target.style.height = `${Math.min(target.scrollHeight, maxHeight)}px`;
       
-      // Адаптивная максимальная высота
-      const maxHeight = isMobile ? 120 : 150;
-      const newHeight = Math.min(target.scrollHeight, maxHeight);
-      target.style.height = `${newHeight}px`;
-      
-      // Обработка onChange
+      // Правильная обработка onChange
       const changeEvent = {
         ...e,
         target: target,
@@ -57,28 +53,12 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         className={cn(
-          "min-h-[48px] w-full resize-none border-0 bg-transparent focus:outline-none focus:ring-0",
-          // Мобильная оптимизация
-          isMobile ? "px-3 py-3 text-base max-h-[120px]" : "px-4 py-3 text-base max-h-[150px]",
-          "text-gray-100 placeholder:text-gray-400",
-          // Улучшенная мобильная типографика
-          "leading-relaxed",
-          // Отключаем зум на iOS
-          isMobile && "text-[16px]",
-          // Сенсорная оптимизация
+          "min-h-[44px] max-h-[100px] md:max-h-[120px] w-full resize-none border-0 bg-transparent px-3 py-3 md:px-4 text-sm md:text-base text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-0",
+          // Mobile safe area handling
           "touch-manipulation",
           className,
         )}
         rows={1}
-        style={{
-          // Отключаем ресайз на мобильных
-          resize: isMobile ? 'none' : 'vertical',
-          // Улучшенная производительность на мобильных
-          ...(isMobile && {
-            WebkitAppearance: 'none',
-            WebkitTapHighlightColor: 'transparent'
-          })
-        }}
         {...props}
       />
     );

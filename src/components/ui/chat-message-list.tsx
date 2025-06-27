@@ -3,7 +3,6 @@ import * as React from "react";
 import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAutoScroll } from "@/hooks/use-auto-scroll";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 interface ChatMessageListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -12,7 +11,6 @@ interface ChatMessageListProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
   ({ className, children, smooth = false, ...props }, _ref) => {
-    const isMobile = useIsMobile();
     const {
       scrollRef,
       isAtBottom,
@@ -28,38 +26,26 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
       <div className="relative w-full h-full">
         <div
           className={cn(
-            "flex flex-col w-full h-full overflow-y-auto overflow-x-hidden",
-            // Улучшенный скролл для мобильных
-            isMobile ? "px-4 py-4" : "px-4 py-6",
-            // Кастомный скроллбар на десктопе
-            "scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-500",
-            // Smooth scrolling для мобильных
-            isMobile && "scroll-smooth",
+            "flex flex-col w-full h-full px-4 py-6",
+            // Desktop scroll functionality
+            "md:overflow-y-auto md:overflow-x-hidden",
+            "md:scrollbar-thin md:scrollbar-thumb-gray-600 md:scrollbar-track-transparent",
+            // Mobile - no scroll, fixed height
+            "overflow-hidden",
             className
           )}
           ref={scrollRef}
           onWheel={disableAutoScroll}
-          onTouchStart={disableAutoScroll}
           style={{
-            WebkitOverflowScrolling: 'touch',
-            scrollBehavior: smooth ? 'smooth' : 'auto',
-            // Улучшенная производительность скролла на мобильных
-            ...(isMobile && {
-              overscrollBehavior: 'contain',
-              scrollSnapType: 'y proximity'
-            })
+            WebkitOverflowScrolling: smooth ? 'touch' : 'auto',
+            scrollBehavior: smooth ? 'smooth' : 'auto'
           }}
           {...props}
         >
-          <div className={cn(
-            "flex flex-col min-h-full",
-            isMobile ? "space-y-3" : "space-y-4"
-          )}>
-            {children}
-          </div>
+          <div className="flex flex-col space-y-4 min-h-full">{children}</div>
         </div>
 
-        {/* Кнопка скролла вниз - адаптивная */}
+        {/* Hide scroll-to-bottom button on mobile */}
         {!isAtBottom && (
           <Button
             onClick={() => {
@@ -67,13 +53,10 @@ const ChatMessageList = React.forwardRef<HTMLDivElement, ChatMessageListProps>(
             }}
             size="icon"
             variant="outline"
-            className={cn(
-              "absolute bottom-4 left-1/2 transform -translate-x-1/2 rounded-full bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 shadow-lg z-10",
-              isMobile ? "h-10 w-10" : "h-12 w-12"
-            )}
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 rounded-full bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 shadow-lg z-10 hidden md:flex"
             aria-label="Scroll to bottom"
           >
-            <ArrowDown className={cn(isMobile ? "h-4 w-4" : "h-5 w-5")} />
+            <ArrowDown className="h-4 w-4" />
           </Button>
         )}
       </div>
