@@ -21,6 +21,7 @@ export function ChatBubble({
 }: ChatBubbleProps) {
   return (
     <div
+      data-chat-bubble
       className={cn(
         "flex items-start gap-3 mb-6",
         variant === "sent" && "flex-row-reverse",
@@ -45,20 +46,30 @@ export function ChatBubbleMessage({
   className,
   children,
 }: ChatBubbleMessageProps) {
+  // Mobile detection
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+  }, []);
+
   // Helper function to format text content
   const formatContent = (content: any) => {
     if (typeof content !== 'string') return content;
-    
+
     // Split content into paragraphs and format
     return content.split('\n').map((line, index) => {
       if (line.trim() === '') {
         return <br key={index} />;
       }
-      
+
       // Check if line starts with a number (like "1.", "2.", etc.)
       const isNumberedItem = /^\d+\./.test(line.trim());
       const isBulletItem = line.trim().startsWith('- ') || line.trim().startsWith('• ');
-      
+
       if (isNumberedItem || isBulletItem) {
         return (
           <div key={index} className="mb-2 pl-2">
@@ -66,7 +77,7 @@ export function ChatBubbleMessage({
           </div>
         );
       }
-      
+
       // Check if it's a heading (starts with **text**)
       const headingMatch = line.match(/^\*\*(.*?)\*\*/);
       if (headingMatch) {
@@ -76,7 +87,7 @@ export function ChatBubbleMessage({
           </div>
         );
       }
-      
+
       return (
         <div key={index} className="mb-2">
           {line.trim()}
@@ -88,19 +99,43 @@ export function ChatBubbleMessage({
   return (
     <div
       className={cn(
-        "rounded-2xl px-4 py-3 max-w-[80%] break-words",
-        variant === "sent" 
-          ? "bg-blue-600 text-white ml-auto" 
+        "rounded-2xl px-4 py-3",
+        // Dynamic max-width based on device type
+        isMobile ? "max-w-[85%]" : "max-w-[80%]",
+        // Enhanced mobile optimizations
+        isMobile && "chat-bubble-mobile",
+        variant === "sent"
+          ? "bg-blue-600 text-white ml-auto"
           : "bg-gray-700 text-gray-100",
         className
       )}
+      style={{
+        // Ensure no overflow scroll on individual messages
+        overflow: 'visible',
+        maxHeight: 'none',
+        wordWrap: 'break-word',
+        overflowWrap: 'break-word',
+      }}
     >
       {isLoading ? (
         <div className="flex items-center space-x-2">
           <MessageLoading />
         </div>
       ) : (
-        <div className="text-sm leading-relaxed">
+        <div
+          className={cn(
+            "text-sm leading-relaxed",
+            "chat-bubble-message-content"
+          )}
+          style={{
+            // Force proper text wrapping without scroll
+            overflow: 'visible',
+            maxHeight: 'none',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
           {formatContent(children)}
         </div>
       )}
