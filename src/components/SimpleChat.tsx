@@ -356,8 +356,7 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 								{connectionStatus.text}
 							</span>
 
-							{/* Manual reconnect button */}
-							{(connectionState.status === 'disconnected' ||
+							{/* Manual reconnect button {(connectionState.status === 'disconnected' ||
 								connectionState.status === 'error') && (
 								<Button
 									variant='ghost'
@@ -368,7 +367,8 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 								>
 									🔄
 								</Button>
-							)}
+							)} */}
+							
 						</div>
 
 						<Button
