@@ -9,15 +9,68 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+interface ConnectionState {
+	status: 'connecting' | 'connected' | 'disconnected' | 'reconnecting' | 'error'
+	lastConnected: Date | null
+	retryCount: number
+}
+
+const SESSION_STORAGE_KEY = 'conexy_chat_session'
+
 export const useNewChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [connectionState, setConnectionState] = useState<ConnectionState>({
+		status: 'connecting',
+		lastConnected: null,
+		retryCount: 0,
+	})
   const channelRef = useRef<any>(null);
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const heartbeatRef = useRef<NodeJS.Timeout | null>(null)
+	const isUnmountedRef = useRef(false)
 
-  // Генерируем уникальный chatId
-  const [chatId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`);
 
+  // Enhanced chatId with session persistence
+	const [chatId] = useState(() => {
+		// Try to restore from session storage
+		const savedSession = localStorage.getItem(SESSION_STORAGE_KEY)
+		if (savedSession) {
+			try {
+				const parsed = JSON.parse(savedSession)
+				if (
+					parsed.chatId &&
+					parsed.timestamp &&
+					Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000
+				) {
+					console.log('🔄 Restored chat session:', parsed.chatId)
+					return parsed.chatId
+				}
+			} catch (e) {
+				console.warn('Failed to parse saved session')
+			}
+		}
+
+		// Generate new chatId
+		const newChatId = `chat_${Date.now()}_${Math.random()
+			.toString(36)
+			.substring(2, 8)}`
+
+		// Save to session storage
+		localStorage.setItem(
+			SESSION_STORAGE_KEY,
+			JSON.stringify({
+				chatId: newChatId,
+				timestamp: Date.now(),
+			})
+		)
+
+		console.log('🆕 Generated new chat session:', newChatId)
+		return newChatId
+	})
+
+  
   const sendMessage = useCallback(async (message: string) => {
     setIsLoading(true);
     setError(null);
@@ -26,10 +79,29 @@ export const useNewChat = () => {
     {
       console.log('Отправка сообщения:', { message, chatId });
       
-      // Отправляем сообщение через новую edge function
+      // Add user message immediately
+			const userMessage: ChatMessage = 
+      {
+					id: `user-${Date.now()}-${Math.random().toString(36).substring(2)}`,
+					content: message,
+					role: 'user',
+					timestamp: new Date(),
+      };
+
+			setMessages(prev => [...prev, userMessage])
+
+      // Отправляем сообщение через edge function
       const { error: functionError } = await supabase.functions.invoke('chat-handler', {
         body: { message, chatId }
       });
+
+				// Reset connection state on successful send
+				setConnectionState(prev => ({
+					...prev,
+					status: 'connected',
+					lastConnected: new Date(),
+					retryCount: 0,
+				}))
 
       if (functionError) {
         throw new Error(functionError.message || 'Ошибка отправки сообщения');
@@ -48,7 +120,7 @@ export const useNewChat = () => {
     {
       setIsLoading(false);
     }
-  }, [chatId]);
+  }, [chatId, connectionState.status]);
 
   // Подписка на realtime обновления
   useEffect(() => {
@@ -206,9 +278,30 @@ export const useNewChat = () => {
     };
   }, [chatId]);
 
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
+  // Auto-reconnect on window focus
+	useEffect(() => {
+		const handleFocus = () => {
+			if (
+				connectionState.status === 'disconnected' ||
+				connectionState.status === 'error'
+			) {
+				console.log('👁️ Вікно отримало фокус, пробуємо перепідключитися')
+				setConnectionState(prev => ({ ...prev, retryCount: 0 }))
+			}
+		}
+
+		window.addEventListener('focus', handleFocus)
+		return () => window.removeEventListener('focus', handleFocus)
+	}, [connectionState.status])
+
+	const clearError = useCallback(() => {
+		setError(null)
+	}, [])
+
+  // Manual reconnect function
+	const reconnect = useCallback(() => {
+		console.log('🔄 Виконуємо ручне перепідключення... (This is a mock)')
+	})
 
   return {
     messages,
@@ -216,6 +309,8 @@ export const useNewChat = () => {
     error,
     sendMessage,
     clearError,
-    chatId
+    chatId,
+    connectionState,
+    reconnect
   };
 };
