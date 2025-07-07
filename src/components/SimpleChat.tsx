@@ -45,7 +45,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 
 	// Логируем изменения сообщений
 	useEffect(() => {
-		console.log('🔄 Сообщения в SimpleChat обновились:', messages)
 		console.log('📊 Количество сообщений:', messages.length)
 	}, [messages])
 
@@ -260,17 +259,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 
 	const connectionStatus = getConnectionStatus()
 
-	console.log(
-		'🎨 Рендер SimpleChat. Сообщений:',
-		messages.length,
-		'isLoading:',
-		isLoading,
-		'isMobile:',
-		isMobile,
-		'isIOS:',
-		isIOS
-	)
-
 	return (
 		<>
 			{/* Overlay */}
@@ -324,17 +312,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 								<h2 className='text-base md:text-lg font-semibold text-white'>
 									AI-Помічник Connexi
 								</h2>
-								<span className='px-2 py-0.5 text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full'>
-									DEMO
-								</span>
-							</div>
-							<p className='text-xs md:text-sm text-white/60'>
-								{lang === 'en' ? 'Demo Chat System' : 'Демо система чату'}
-							</p>
-							<div className='flex items-center gap-2 text-xs text-white/40 hidden md:block'>
-								<span>Chat ID: {chatId.substring(0, 16)}...</span>
-								<span>•</span>
-								<span>Повідомлень: {messages.length}</span>
 							</div>
 						</div>
 					</div>
@@ -345,31 +322,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 							className='cursor-pointer'
 							onClick={handleTrafficLightClick}
 						/>
-
-						{/* Enhanced connection status */}
-						<div className='flex items-center gap-2'>
-							<div
-								className={`w-3 h-3 rounded-full ${connectionStatus.color}`}
-								title={connectionStatus.text}
-							/>
-							<span className='text-xs text-white/60 hidden md:inline'>
-								{connectionStatus.text}
-							</span>
-
-							{/* Manual reconnect button {(connectionState.status === 'disconnected' ||
-								connectionState.status === 'error') && (
-								<Button
-									variant='ghost'
-									size='sm'
-									onClick={reconnect}
-									className='text-xs text-white/70 hover:text-white hover:bg-gray-800 transition-all duration-200 px-2 py-1 h-auto'
-									title='Перепідключитися'
-								>
-									🔄
-								</Button>
-							)} */}
-							
-						</div>
 
 						<Button
 							variant='ghost'
@@ -389,42 +341,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 						height: isIOS ? '-webkit-fill-available' : 'calc(100vh - 100px)',
 					}}
 				>
-					{/* Connection status banner */}
-					{(connectionState.status === 'disconnected' ||
-						connectionState.status === 'error' ||
-						connectionState.status === 'reconnecting') && (
-						<div
-							className={`px-4 py-2 text-center text-sm border-b border-gray-800 flex-shrink-0 ${
-								connectionState.status === 'error'
-									? 'bg-red-500/20 text-red-200 border-red-500/30'
-									: connectionState.status === 'reconnecting'
-									? 'bg-yellow-500/20 text-yellow-200 border-yellow-500/30'
-									: 'bg-gray-500/20 text-gray-200 border-gray-500/30'
-							}`}
-						>
-							<div className='flex items-center justify-center gap-2'>
-								<span>{connectionStatus.icon}</span>
-								<span>
-									{connectionState.status === 'disconnected' &&
-										"З'єднання втрачено"}
-									{connectionState.status === 'error' && "Помилка з'єднання"}
-									{connectionState.status === 'reconnecting' &&
-										`Перепідключення... (спроба ${connectionState.retryCount})`}
-								</span>
-								{(connectionState.status === 'disconnected' ||
-									connectionState.status === 'error') && (
-									<Button
-										variant='ghost'
-										size='sm'
-										onClick={reconnect}
-										className='text-xs underline hover:no-underline px-1 py-0 h-auto'
-									>
-										Перепідключитися
-									</Button>
-								)}
-							</div>
-						</div>
-					)}
 
 					{/* Messages */}
 					<div
@@ -442,12 +358,6 @@ const SimpleChat: React.FC<SimpleChatProps> = memo(({ lang }) => {
 										<p className='text-xs mt-2 opacity-70'>
 											Нажмите здесь для ввода сообщения
 										</p>
-										<div className='flex items-center justify-center gap-2 text-xs mt-2 opacity-50'>
-											<span
-												className={`w-2 h-2 rounded-full ${connectionStatus.color}`}
-											></span>
-											<span>{connectionStatus.text}</span>
-										</div>
 									</div>
 								</div>
 							)}
