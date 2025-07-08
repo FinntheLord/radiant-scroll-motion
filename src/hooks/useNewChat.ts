@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -127,7 +126,7 @@ export const useNewChat = () => {
     }
   }, [chatId, connectionState.status]);
 
-  // 1. Вынесите подписку в отдельную функцию
+  // Подписка на канал Realtime
   const subscribeToChannel = useCallback((chatId: string) => {
   if (channelRef.current) {
     console.log('Канал уже существует, пропускаем');
@@ -219,13 +218,9 @@ export const useNewChat = () => {
       console.log('🔗 Статус подписки Realtime:', status);
         if (status === 'SUBSCRIBED') {
           console.log('✅ Realtime подписка активна');
-        } else if (status === 'CHANNEL_ERROR') {
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
           console.error('❌ Ошибка канала Realtime');
-          console.error(status);
-        } else if (status === 'TIMED_OUT') {
-          console.error('⏰ Таймаут подписки Realtime');
-        } else if (status === 'CLOSED') {
-          console.log('🔒 Realtime подписка закрыта');
+          scheduleReconnect();
         }
     });
 
@@ -266,18 +261,7 @@ export const useNewChat = () => {
   setTimeout(loadExistingMessages, 500);
   }, [chatId]);
 
-  // Подписка на realtime обновления
-  useEffect(() => {
-    return () => {
-      console.log('🧹 Очищаем Realtime подписку');
-      if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
-        channelRef.current = null;
-      }
-    };
-  }, []);
-
-  // Enhanced connection establishment (simplified for demo)
+  // Enhanced connection establishment
 	const establishConnection = useCallback(
 		async (isReconnect = false) => {
 			if (isUnmountedRef.current) return
@@ -400,10 +384,15 @@ export const useNewChat = () => {
 		})
 	}, [establishConnection])
 
-  // Cleanup effect
+  useEffect(() => {
+  establishConnection(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
+  // Cleanup effect (объединённый)
 	useEffect(() => {
 		return () => {
-			console.log('🧹 Очищення ресурсів чату')
+			console.log('🧹 Очищення ресурсів чату и realtime подписки')
 			isUnmountedRef.current = true
 
 			if (retryTimeoutRef.current) {
@@ -412,6 +401,11 @@ export const useNewChat = () => {
 
 			if (heartbeatRef.current) {
 				clearInterval(heartbeatRef.current)
+			}
+
+			if (channelRef.current) {
+				supabase.removeChannel(channelRef.current)
+				channelRef.current = null
 			}
 		}
 	}, [])
@@ -425,6 +419,7 @@ export const useNewChat = () => {
 			) {
 				console.log('👁️ Вікно отримало фокус, пробуємо перепідключитися')
 				setConnectionState(prev => ({ ...prev, retryCount: 0 }))
+        establishConnection(true)
 			}
 		}
 
@@ -438,7 +433,7 @@ export const useNewChat = () => {
 
   // Manual reconnect function
 	const reconnect = useCallback(() => {
-		console.log('🔄 Виконуємо ручне перепідключення... (This is a mock)')
+		console.log('🔄 Виконуємо ручне перепідключення...')
     setConnectionState(prev => ({ ...prev, retryCount: 0 }))
 		establishConnection(true)
 	}, [establishConnection])
