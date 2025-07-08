@@ -15,7 +15,10 @@ interface ConnectionState {
 	retryCount: number
 }
 
+const MAX_RETRY_ATTEMPTS = 5
+const RETRY_DELAY_BASE = 1000 // 1 second base delay
 const SESSION_STORAGE_KEY = 'conexy_chat_session'
+const HEARTBEAT_INTERVAL = 30000 // 30 seconds
 
 export const useNewChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -32,6 +35,7 @@ export const useNewChat = () => {
 	const isUnmountedRef = useRef(false)
 
 
+  // Step 1: generate a unique chatId
   // Enhanced chatId with session persistence
 	const [chatId] = useState(() => {
 		// Try to restore from session storage
@@ -70,7 +74,8 @@ export const useNewChat = () => {
 		return newChatId
 	})
 
-  
+  // Step 2: Send a message to the chat and to Supabase Edge Function
+  // Send message to chat and to Supabase Edge Function
   const sendMessage = useCallback(async (message: string) => {
     setIsLoading(true);
     setError(null);
@@ -79,7 +84,7 @@ export const useNewChat = () => {
     {
       console.log('Отправка сообщения:', { message, chatId });
       
-      // Add user message immediately
+      // Add user message immediately to chat
 			const userMessage: ChatMessage = 
       {
 					id: `user-${Date.now()}-${Math.random().toString(36).substring(2)}`,
@@ -90,7 +95,7 @@ export const useNewChat = () => {
 
 			setMessages(prev => [...prev, userMessage])
 
-      // Отправляем сообщение через edge function
+      // Отправляем сообщение через edge function2
       const { error: functionError } = await supabase.functions.invoke('chat-handler', {
         body: { message, chatId }
       });
@@ -122,31 +127,25 @@ export const useNewChat = () => {
     }
   }, [chatId, connectionState.status]);
 
-  // Подписка на realtime обновления
-  useEffect(() => {
-    
-    console.log('Настройка realtime подписки для chatId:', chatId);
-    
-    if (channelRef.current) {
-      console.log('Канал уже существует, пропускаем');
-      return;
-    }
+  // 1. Вынесите подписку в отдельную функцию
+  const subscribeToChannel = useCallback((chatId: string) => {
+  if (channelRef.current) {
+    console.log('Канал уже существует, пропускаем');
+    return;
+  }
 
-    // Создаем канал с уникальным именем для каждого чата
-    const channelName = `chat-messages-${chatId}`;
-    const channel = supabase
-      .channel(channelName)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
-          filter: `chat_id=eq.${chatId}`
-        },
-        (payload) => {
-          console.log('🔥 Новое сообщение получено через Realtime:', payload);
-          console.log('📄 Данные сообщения:', payload.new);
+  const channelName = `chat-messages-${chatId}`;
+  const channel = supabase.channel(channelName)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'chat_messages',
+        filter: `chat_id=eq.${chatId}`
+      },
+      (payload) => {
+        console.log('🔥 Новое сообщение получено через Realtime:', payload);
           
           if (!payload.new) {
             console.error('❌ Payload.new отсутствует');
@@ -177,13 +176,13 @@ export const useNewChat = () => {
             console.log('📋 Обновленный список сообщений:', updated);
             return updated;
           });
-        }
-      )
-      .on(
-        'broadcast',
-        { event: 'new_message' },
-        (payload) => {
-          console.log('📡 Получено broadcast сообщение:', payload);
+      }
+    )
+    .on(
+      'broadcast',
+      { event: 'new_message' },
+      (payload) => {
+        console.log('📡 Получено broadcast сообщение:', payload);
           
           if (!payload.payload) {
             console.error('❌ Broadcast payload отсутствует');
@@ -214,10 +213,10 @@ export const useNewChat = () => {
             console.log('📋 Обновленный список сообщений (broadcast):', updated);
             return updated;
           });
-        }
-      )
-      .subscribe((status) => {
-        console.log('🔗 Статус подписки Realtime:', status);
+      }
+    )
+    .subscribe((status) => {
+      console.log('🔗 Статус подписки Realtime:', status);
         if (status === 'SUBSCRIBED') {
           console.log('✅ Realtime подписка активна');
         } else if (status === 'CHANNEL_ERROR') {
@@ -228,13 +227,13 @@ export const useNewChat = () => {
         } else if (status === 'CLOSED') {
           console.log('🔒 Realtime подписка закрыта');
         }
-      });
+    });
 
-    channelRef.current = channel;
+  channelRef.current = channel;
 
-    // Загружаем существующие сообщения при первом подключении
-    const loadExistingMessages = async () => {
-      console.log('📥 Загружаем существующие сообщения для chatId:', chatId);
+  // Загрузка существующих сообщений
+  const loadExistingMessages = async () => {
+    console.log('📥 Загружаем существующие сообщения для chatId:', chatId);
       
       try {
         const { data: existingMessages, error: loadError } = await supabase
@@ -263,20 +262,159 @@ export const useNewChat = () => {
       } catch (error) {
         console.error('💥 Исключение при загрузке сообщений:', error);
       }
-    };
+  };
+  setTimeout(loadExistingMessages, 500);
+  }, [chatId]);
 
-    // Небольшая задержка перед загрузкой существующих сообщений
-    const timer = setTimeout(loadExistingMessages, 500);
-
+  // Подписка на realtime обновления
+  useEffect(() => {
     return () => {
       console.log('🧹 Очищаем Realtime подписку');
-      clearTimeout(timer);
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;
       }
     };
-  }, [chatId]);
+  }, []);
+
+  // Enhanced connection establishment (simplified for demo)
+	const establishConnection = useCallback(
+		async (isReconnect = false) => {
+			if (isUnmountedRef.current) return
+
+			console.log(
+				`🔗 ${
+					isReconnect ? 'Переподключение' : 'Подключение'
+				} демо чату для chatId:`,
+				chatId
+			)
+
+      // UI trick: show loading state
+			// Update connection state for UI
+			setConnectionState(prev => ({
+				...prev,
+				status: isReconnect ? 'reconnecting' : 'connecting',
+			}))
+
+			try {
+        // UI trick: show loading state
+				// Simulate connection delay
+				await new Promise(resolve => setTimeout(resolve, 1000))
+
+        // UI trick: show loading state
+				// Set connected state for UI
+				setConnectionState({
+					status: 'connected',
+					lastConnected: new Date(),
+					retryCount: 0,
+				})
+
+				console.log('✅ Демо чат підключено')
+
+				// Start heartbeat
+				startHeartbeat()
+
+        // Подписка на канал после успешного подключения
+        subscribeToChannel(chatId);
+
+				// Add welcome message for new chats
+				if (!isReconnect && messages.length === 0) {
+					setTimeout(() => {
+						const welcomeMessage: ChatMessage = {
+							id: `welcome-${Date.now()}`,
+							content:
+								'Привіт! Я AI-асистент Connexi. Готовий відповісти на ваші питання про наші послуги. Як справи?',
+							role: 'assistant',
+							timestamp: new Date(),
+						}
+						setMessages([welcomeMessage])
+					}, 500)
+				}
+			} catch (error) {
+				console.error("💥 Помилка встановлення з'єднання:", error)
+				setConnectionState(prev => ({ ...prev, status: 'error' }))
+				scheduleReconnect()
+			}
+		}, [chatId, messages.length, subscribeToChannel]
+	);
+
+  // Heartbeat to detect connection issues
+	const startHeartbeat = useCallback(() => {
+		if (heartbeatRef.current) {
+			clearInterval(heartbeatRef.current)
+		}
+
+		heartbeatRef.current = setInterval(() => {
+			if (isUnmountedRef.current) return
+
+			const now = new Date()
+			setConnectionState(prev => {
+				if (
+					prev.lastConnected &&
+					now.getTime() - prev.lastConnected.getTime() > HEARTBEAT_INTERVAL * 2
+				) {
+					console.warn('⚠️ Heartbeat timeout detected, reconnecting...')
+					scheduleReconnect()
+					return { ...prev, status: 'disconnected' }
+				}
+				return prev
+			})
+		}, HEARTBEAT_INTERVAL)
+	}, [])
+
+  // Schedule reconnection with exponential backoff
+	const scheduleReconnect = useCallback(() => {
+		if (isUnmountedRef.current) return
+
+		setConnectionState(prev => {
+			if (prev.retryCount >= MAX_RETRY_ATTEMPTS) {
+				console.error(
+					'🚫 Максимальна кількість спроб перепідключення досягнута'
+				)
+				setError("Не вдалося відновити з'єднання. Перезавантажте сторінку.")
+				return { ...prev, status: 'error' }
+			}
+
+			const delay = RETRY_DELAY_BASE * Math.pow(2, prev.retryCount)
+			console.log(
+				`🔄 Плануємо перепідключення через ${delay}ms (спроба ${
+					prev.retryCount + 1
+				})`
+			)
+
+			if (retryTimeoutRef.current) {
+				clearTimeout(retryTimeoutRef.current)
+			}
+
+			retryTimeoutRef.current = setTimeout(() => {
+				if (!isUnmountedRef.current) {
+					establishConnection(true)
+				}
+			}, delay)
+
+			return {
+				...prev,
+				retryCount: prev.retryCount + 1,
+				status: 'reconnecting',
+			}
+		})
+	}, [establishConnection])
+
+  // Cleanup effect
+	useEffect(() => {
+		return () => {
+			console.log('🧹 Очищення ресурсів чату')
+			isUnmountedRef.current = true
+
+			if (retryTimeoutRef.current) {
+				clearTimeout(retryTimeoutRef.current)
+			}
+
+			if (heartbeatRef.current) {
+				clearInterval(heartbeatRef.current)
+			}
+		}
+	}, [])
 
   // Auto-reconnect on window focus
 	useEffect(() => {
@@ -292,7 +430,7 @@ export const useNewChat = () => {
 
 		window.addEventListener('focus', handleFocus)
 		return () => window.removeEventListener('focus', handleFocus)
-	}, [connectionState.status])
+	}, [connectionState.status, establishConnection])
 
 	const clearError = useCallback(() => {
 		setError(null)
@@ -301,7 +439,9 @@ export const useNewChat = () => {
   // Manual reconnect function
 	const reconnect = useCallback(() => {
 		console.log('🔄 Виконуємо ручне перепідключення... (This is a mock)')
-	})
+    setConnectionState(prev => ({ ...prev, retryCount: 0 }))
+		establishConnection(true)
+	}, [establishConnection])
 
   return {
     messages,
