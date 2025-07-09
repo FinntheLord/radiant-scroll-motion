@@ -145,11 +145,12 @@ export const useNewChat = () => {
       },
       (payload) => {
         console.log('🔥 Новое сообщение получено через Realtime:', payload);
-          
-          if (!payload.new) {
-            console.error('❌ Payload.new отсутствует');
-            return;
-          }
+        if (!payload.new)
+        {
+          console.error('❌ Payload.new отсутствует');
+          return;
+        }
+        
           
           const newMessage: ChatMessage = {
             id: payload.new.id,
@@ -159,7 +160,7 @@ export const useNewChat = () => {
           };
           
           console.log('✅ Преобразованное сообщение:', newMessage);
-          
+          if (newMessage.role === 'user') console.log('✅ user is true');
           setMessages(prev => {
             // Проверяем, нет ли уже такого сообщения
             const exists = prev.some(msg => msg.id === newMessage.id);
