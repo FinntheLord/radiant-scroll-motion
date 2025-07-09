@@ -180,15 +180,27 @@ export const useNewChat = () => {
     )
     .subscribe((status) => {
       console.log('🔗 Статус подписки Realtime:', status);
-        if (status === 'SUBSCRIBED') {
+        if (status === 'SUBSCRIBED') 
+        {
           console.log('✅ Realtime подписка активна');
-        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        } 
+        else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED')
+        {
           console.error('❌ Ошибка канала Realtime');
+          
           scheduleReconnect();
         }
     });
 
   channelRef.current = channel;
+  // UI trick: show loading state
+  // Set connected state for UI
+  setConnectionState({
+    status: 'connected',
+    lastConnected: new Date(),
+    retryCount: 0,
+  })
+  console.log('✅ чат підключено')
 
   // Загрузка существующих сообщений
   const loadExistingMessages = async () => {
@@ -233,7 +245,7 @@ export const useNewChat = () => {
 			console.log(
 				`🔗 ${
 					isReconnect ? 'Переподключение' : 'Подключение'
-				} демо чату для chatId:`,
+				} чату для chatId:`,
 				chatId
 			)
 
@@ -245,21 +257,7 @@ export const useNewChat = () => {
 			}))
 
 			try {
-        // UI trick: show loading state
-				// Simulate connection delay
-				await new Promise(resolve => setTimeout(resolve, 1000))
-
-        // UI trick: show loading state
-				// Set connected state for UI
-				setConnectionState({
-					status: 'connected',
-					lastConnected: new Date(),
-					retryCount: 0,
-				})
-
-				console.log('✅ Демо чат підключено')
-
-				// Start heartbeat
+        // Start heartbeat
 				startHeartbeat()
 
         // Подписка на канал после успешного подключения
@@ -271,7 +269,7 @@ export const useNewChat = () => {
 						const welcomeMessage: ChatMessage = {
 							id: `welcome-${Date.now()}`,
 							content:
-								'Привіт! Я AI-асистент Connexi. Готовий відповісти на ваші питання про наші послуги. Як справи?',
+								'Привіт! Я AI-асистент Connexi. Готовий відповісти на ваші питання про наші послуги.',
 							role: 'assistant',
 							timestamp: new Date(),
 						}
@@ -313,6 +311,10 @@ export const useNewChat = () => {
   // Schedule reconnection with exponential backoff
 	const scheduleReconnect = useCallback(() => {
 		if (isUnmountedRef.current) return
+    if (channelRef.current) {
+            supabase.removeChannel(channelRef.current);
+            channelRef.current = null;
+          }
 
 		setConnectionState(prev => {
 			if (prev.retryCount >= MAX_RETRY_ATTEMPTS) {
@@ -353,7 +355,7 @@ export const useNewChat = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
-  // Cleanup effect (объединённый)
+  // Cleanup effect
 	useEffect(() => {
 		return () => {
 			console.log('🧹 Очищення ресурсів чату и realtime подписки')
