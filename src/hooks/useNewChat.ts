@@ -128,7 +128,7 @@ export const useNewChat = () => {
 
   // Подписка на канал Realtime
   const subscribeToChannel = useCallback((chatId: string) => {
-  if (channelRef.current) {
+  if (channelRef.current || setConnectionState.status === 'error') {
     console.log('Канал уже существует, пропускаем');
     return;
   }
@@ -180,14 +180,8 @@ export const useNewChat = () => {
     )
     .subscribe((status) => {
       console.log('🔗 Статус подписки Realtime:', status);
-        if (status === 'SUBSCRIBED') 
-        {
-          console.log('✅ Realtime подписка активна');
-        } 
-        else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED')
-        {
-          console.error('❌ Ошибка канала Realtime');
-          
+      if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED')
+      {
           scheduleReconnect();
         }
     });
