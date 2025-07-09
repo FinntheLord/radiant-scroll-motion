@@ -15,7 +15,7 @@ interface ConnectionState {
 }
 
 const MAX_RETRY_ATTEMPTS = 5
-const RETRY_DELAY_BASE = 1000 // 1 second base delay
+const RETRY_DELAY_BASE = 10000 // 1 second base delay
 const SESSION_STORAGE_KEY = 'conexy_chat_session'
 const HEARTBEAT_INTERVAL = 30000 // 30 seconds
 
