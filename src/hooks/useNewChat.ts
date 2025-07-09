@@ -195,6 +195,7 @@ export const useNewChat = () => {
     retryCount: 0,
   })
   console.log('✅ чат підключено')
+  setError(null);
 
   // Загрузка существующих сообщений
   const loadExistingMessages = async () => {
@@ -315,7 +316,7 @@ export const useNewChat = () => {
 				console.error(
 					'🚫 Максимальна кількість спроб перепідключення досягнута'
 				)
-				setError("Не вдалося відновити з'єднання. Перезавантажте сторінку.")
+				setError("Помилка з'єднання.")
 				return { ...prev, status: 'error' }
 			}
 
