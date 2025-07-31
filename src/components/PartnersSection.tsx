@@ -17,13 +17,13 @@ interface PartnersSectionProps {
 
 const partners = [
   { name: "OpenAI", id: 1 },
-  { name: "Google Cloud", id: 2 },
-  { name: "Microsoft Azure", id: 3 },
-  { name: "Hugging Face", id: 4 },
-  { name: "Amazon AWS", id: 5 },
-  { name: "Anthropic", id: 6 },
-  { name: "TensorFlow", id: 7 },
-  { name: "PyTorch", id: 8 },
+  { name: ".Net Framework", id: 2 },
+  { name: "Node. js", id: 3 },
+  { name: "Supabase", id: 4 },
+  { name: "Google DeepMind", id: 5 },
+  { name: "PostgreSQL", id: 6 },
+  { name: "Python", id: 7 },
+  { name: "TypeScript", id: 8 },
 ];
 
 const PartnersSection: React.FC<PartnersSectionProps> = ({ className = "", lang }) => {
