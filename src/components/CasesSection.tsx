@@ -16,6 +16,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
 
   const caseStudies = [
     {
+      id: 1,
       title: "Розробка чат-бота для B2B бізнесу",
       titleKey: 'case1Title' as const,
       shortTitle: "OM24: Чат-бот замість розширення штату",
@@ -28,6 +29,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       ]
     },
     {
+      id: 2,
       title: "Розробка Асистента продажів для компанії інтернет-маркетингу",
       titleKey: 'case2Title' as const,
       shortTitle: "Improvemed: Один чат-бот — два рішення",
@@ -40,6 +42,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       ]
     },
     {
+      id: 3,
       title: "Розробка Ассистента продаж для інтернет-магазину",
       titleKey: 'case3Title' as const,
       shortTitle: "Аналітика в один клік",
@@ -107,7 +110,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
         <div className="space-y-6 md:space-y-8 reveal-on-scroll">
           {caseStudies.map((caseStudy) => (
             <Card 
-              key={caseStudy.title}
+              key={caseStudy.id}
               className={`case-card-white overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
                 className?.includes('text-white') 
                   ? 'text-white bg-transparent' 
@@ -136,7 +139,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                           </span>
                         ))}
                       </div>
-                      <h3 className={`text-2xl md:text-3xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>#{caseStudy.id}</h3>
+                      <h3 className={`text-2xl md:text-3xl font-bold mb-4 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>#{caseStudy.title}</h3>
                       <div className="border-t border-connexi-orange w-12 my-4"></div>
                     </div>
                   </div>
@@ -145,7 +148,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
                       {caseStudy.shortTitle || getTranslation(caseStudy.titleKey, lang)}
                     </h4>
-                    <p>${caseStudy.ShortDescription}</p>
+                    <p>{caseStudy.ShortDescription}</p>
                     
                     <div className="mt-4">
                       <Button 
