@@ -16,9 +16,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
 
   const caseStudies = [
     {
-      id: "001",
+      title: "Розробка чат-бота для B2B бізнесу",
       titleKey: 'case1Title' as const,
-      customTitle: "Розробка чат-бота для B2B бізнесу",
+      shortTitle: "OM24: Чат-бот замість розширення штату",
+      ShortDescription: "Компанія OM24 зіткнулася з перевантаженням менеджерів однотипними запитами клієнтів. Ми впровадили AI чат-бота з функціями sales-менеджера, який автоматизував відповіді на типові питання, прискорив обслуговування та підвищив якість консультацій — без додаткових витрат на найм персоналу",
       tags: [
         "ЧАТ-БОТ",
         "АВТОМАТИЗАЦІЯ",
@@ -27,9 +28,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       ]
     },
     {
-      id: "002",
+      title: "Розробка Асистента продажів для компанії інтернет-маркетингу",
       titleKey: 'case2Title' as const,
-      customTitle: "Розробка Асистента продажів для компанії інтернет-маркетингу",
+      shortTitle: "Improvemed: Один чат-бот — два рішення",
+      ShortDescription: "Для Improvemed ми розробили чат-бота з двома модулями: консультації з питань сертифікації медичних товарів та автоматичні нагадування про події та семінари. Єдине рішення об’єднало всі канали комунікації, прискорило відповіді клієнтам та підвищило ефективність лідогенерації.",
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -38,9 +40,10 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       ]
     },
     {
-      id: "003",
+      title: "Розробка Ассистента продаж для інтернет-магазину",
       titleKey: 'case3Title' as const,
-      customTitle: "Розробка Ассистента продаж для інтернет-магазину",
+      shortTitle: "Аналітика в один клік",
+      ShortDescription: "AI чат-бот, який у режимі реального часу формує будь-які звіти за голосовою чи текстовою командою. Візуалізації, текстові зведення та голосові резюме — тепер управлінська аналітика доступна будь-де і будь-коли.",
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -104,7 +107,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
         <div className="space-y-6 md:space-y-8 reveal-on-scroll">
           {caseStudies.map((caseStudy) => (
             <Card 
-              key={caseStudy.id}
+              key={caseStudy.title}
               className={`case-card-white overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
                 className?.includes('text-white') 
                   ? 'text-white bg-transparent' 
@@ -140,8 +143,9 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                   
                   <div className="p-4 md:p-6 lg:p-10 md:w-2/3 flex flex-col justify-between">
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
-                      {caseStudy.customTitle || getTranslation(caseStudy.titleKey, lang)}
+                      {caseStudy.shortTitle || getTranslation(caseStudy.titleKey, lang)}
                     </h4>
+                    <p>${caseStudy.ShortDescription}</p>
                     
                     <div className="mt-4">
                       <Button 
