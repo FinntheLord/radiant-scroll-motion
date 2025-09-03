@@ -11,20 +11,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { Language, getTranslation } from "../lib/translations";
+import { Language, TranslationKey, getTranslation } from "../lib/translations";
 
-interface ContactPopupProps {
+interface CasesPopupProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   lang: Language;
+  content: TranslationKey;
 }
 
-const ContactPopup: React.FC<ContactPopupProps> = ({ 
+const ContactPopup: React.FC<CasesPopupProps> = ({ 
   isOpen, 
   onClose, 
   title,
-  lang
+  lang,
+  content
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -69,7 +71,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md p-0 overflow-hidden border-0 shadow-2xl">
+      <DialogContent className="max-w-5xl p-0 overflow-hidden border-0 shadow-2xl">
         <DialogHeader className="p-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white">
           <DialogTitle className="flex items-center justify-between text-lg">
             <div className="flex items-center gap-3">
@@ -87,7 +89,8 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
         <div className="p-6 bg-white">
           <form onSubmit={handleSubmit} className="space-y-4 ">
             
-            <div className="w-120 h-10 border-2 rounded opacity-90"><p>Залиште заявку на консультацію</p></div>
+            <div className="w-100 h-20 border-2 rounded opacity-90"><p>{getTranslation(content, lang)}</p></div>
+            <div  className="w-50 h-50 border-2 p-2">
             <div>
                           <Input
                             type="text"
@@ -126,7 +129,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({
                   {getTranslation('contactSend', lang)}
                 </div>
               )}
-            </Button>
+            </Button></div>
           </form>
         </div>
       </DialogContent>

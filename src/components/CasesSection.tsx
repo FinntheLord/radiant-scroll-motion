@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSimpleChatContext } from "../contexts/SimpleChatContext";
-import { Language, getTranslation } from "../lib/translations";
+import { Language, TranslationKey, getTranslation } from "../lib/translations";
 import ContactPopup from "./CasesPopup";
 
 interface CasesSectionProps {
@@ -23,6 +23,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case1Title' as const,
       shortTitle: "OM24: Чат-бот замість розширення штату",
       ShortDescription: "Компанія OM24 зіткнулася з перевантаженням менеджерів однотипними запитами клієнтів. Ми впровадили AI чат-бота з функціями sales-менеджера, який автоматизував відповіді на типові питання, прискорив обслуговування та підвищив якість консультацій — без додаткових витрат на найм персоналу",
+      fullDescription: "case1Description",
       tags: [
         "ЧАТ-БОТ",
         "АВТОМАТИЗАЦІЯ",
@@ -36,6 +37,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case2Title' as const,
       shortTitle: "Improvemed: Один чат-бот — два рішення",
       ShortDescription: "Для Improvemed ми розробили чат-бота з двома модулями: консультації з питань сертифікації медичних товарів та автоматичні нагадування про події та семінари. Єдине рішення об’єднало всі канали комунікації, прискорило відповіді клієнтам та підвищило ефективність лідогенерації.",
+      fullDescription: "case2Description",
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -49,6 +51,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case3Title' as const,
       shortTitle: "Аналітика в один клік",
       ShortDescription: "AI чат-бот, який у режимі реального часу формує будь-які звіти за голосовою чи текстовою командою. Візуалізації, текстові зведення та голосові резюме — тепер управлінська аналітика доступна будь-де і будь-коли.",
+      fullDescription: "case3Description",
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -145,13 +148,19 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                       <div className="border-t border-connexi-orange w-12 my-4"></div>
                     </div>
                   </div>
+                  <ContactPopup
+        isOpen={isPopupOpen}
+        onClose={() => setPopupOpen(false)}
+        lang={lang}
+        title="Связаться по кейсу"
+        content={caseStudy.fullDescription}
+      />
                   
                   <div className="p-4 md:p-6 lg:p-10 md:w-2/3 flex flex-col justify-between">
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
                       {caseStudy.shortTitle || getTranslation(caseStudy.titleKey, lang)}
                     </h4>
                     <p>{caseStudy.ShortDescription}</p>
-                    
                     <div className="mt-4">
                       <Button 
                         onClick={() => setPopupOpen(true)}
@@ -173,12 +182,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
             onClick={openChat}
             className="contact-button flex items-center gap-2 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg rounded-full"
           >
-            <ContactPopup
-        isOpen={isPopupOpen}
-        onClose={() => setPopupOpen(false)}
-        lang={lang}
-        title="Связаться по кейсу"
-      />
+            
             {getTranslation('allCases', lang)}
             <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
