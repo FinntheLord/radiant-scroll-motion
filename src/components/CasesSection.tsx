@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,6 +14,8 @@ interface CasesSectionProps {
 const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => {
   const { openChat } = useSimpleChatContext();
   const [isPopupOpen, setPopupOpen] = useState(false);
+  // Состояние для отслеживания открытой карточки
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
 
   const caseStudies = [
     {
@@ -23,7 +24,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case1Title' as const,
       shortTitle: "OM24: Чат-бот замість розширення штату",
       ShortDescription: "Компанія OM24 зіткнулася з перевантаженням менеджерів однотипними запитами клієнтів. Ми впровадили AI чат-бота з функціями sales-менеджера, який автоматизував відповіді на типові питання, прискорив обслуговування та підвищив якість консультацій — без додаткових витрат на найм персоналу",
-      fullDescription: "case1Description",
+      fullDescription: getTranslation("case1Description", lang),
       tags: [
         "ЧАТ-БОТ",
         "АВТОМАТИЗАЦІЯ",
@@ -37,7 +38,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case2Title' as const,
       shortTitle: "Improvemed: Один чат-бот — два рішення",
       ShortDescription: "Для Improvemed ми розробили чат-бота з двома модулями: консультації з питань сертифікації медичних товарів та автоматичні нагадування про події та семінари. Єдине рішення об’єднало всі канали комунікації, прискорило відповіді клієнтам та підвищило ефективність лідогенерації.",
-      fullDescription: "case2Description",
+      fullDescription: getTranslation("case2Description", lang),
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -51,7 +52,7 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
       titleKey: 'case3Title' as const,
       shortTitle: "Аналітика в один клік",
       ShortDescription: "AI чат-бот, який у режимі реального часу формує будь-які звіти за голосовою чи текстовою командою. Візуалізації, текстові зведення та голосові резюме — тепер управлінська аналітика доступна будь-де і будь-коли.",
-      fullDescription: "case3Description",
+      fullDescription: getTranslation("case3Description", lang),
       tags: [
         "АСИСТЕНТ",
         "АВТОМАТИЗАЦІЯ",
@@ -69,6 +70,8 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
     { nameKey: 'agriculture' as const, id: 4 },
     { nameKey: 'itTech' as const, id: 5 },
   ];
+
+  
 
   return (
     <section id="cases" className={`py-12 md:py-20 overflow-hidden ${className}`}>
@@ -114,15 +117,26 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
         
         <div className="space-y-6 md:space-y-8 reveal-on-scroll">
           {caseStudies.map((caseStudy) => (
-            <Card 
+            <Card
               key={caseStudy.id}
-              className={`case-card-white overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0 ${
+              className={`case-card-white overflow-hidden hover:scale-[1.01] transition-all duration-300 border-0  ${
                 className?.includes('text-white') 
                   ? 'text-white bg-transparent' 
                   : 'text-gray-900 bg-transparent'
-              }`}
+              } ${expandedCardId === caseStudy.id ? "max-h-[2000px]" : "max-h-[400px]"}`}
+              style={{
+                boxSizing: "border-box",
+              }}
             >
-              <CardContent className="p-0">
+              <CardContent
+                className={`p-0 transition-all duration-500 ${
+                  expandedCardId === caseStudy.id ? "max-h-[2000px]" : "max-h-[350px]"
+                }`}
+                style={{
+                  overflow: "hidden",
+                  boxSizing: "border-box",
+                }}
+              >
                 <div className="flex flex-col md:flex-row">
                   <div className={`p-4 md:p-6 lg:p-10 md:w-1/3 border-b md:border-b-0 md:border-r ${
                     className?.includes('text-white') 
@@ -148,25 +162,27 @@ const CasesSection: React.FC<CasesSectionProps> = ({ className = "", lang }) => 
                       <div className="border-t border-connexi-orange w-12 my-4"></div>
                     </div>
                   </div>
-                  <ContactPopup
-        isOpen={isPopupOpen}
-        onClose={() => setPopupOpen(false)}
-        lang={lang}
-        title="Связаться по кейсу"
-        content={caseStudy.fullDescription}
-      />
-                  
                   <div className="p-4 md:p-6 lg:p-10 md:w-2/3 flex flex-col justify-between">
                     <h4 className={`text-lg md:text-xl font-bold mb-4 md:mb-6 ${className?.includes('text-white') ? 'text-white' : 'text-gray-900'}`}>
                       {caseStudy.shortTitle || getTranslation(caseStudy.titleKey, lang)}
                     </h4>
                     <p>{caseStudy.ShortDescription}</p>
+                    {/* Дополнительный текст, который появляется при раскрытии */}
+                    {expandedCardId === caseStudy.id && (
+                      <div className="mt-4 text-base transition-all duration-500" dangerouslySetInnerHTML={{ __html: caseStudy.fullDescription.replace(/\r?\n/g, '<br />') }}>
+                      </div>
+                    )}
                     <div className="mt-4">
-                      <Button 
-                        onClick={() => setPopupOpen(true)}
+                      <Button
+                        onClick={() =>
+                          setExpandedCardId(
+                            expandedCardId === caseStudy.id ? null : caseStudy.id
+                          )
+                        }
                         className="bg-transparent hover:bg-transparent text-connexi-orange border-none shadow-none p-0 hover:text-white transition-colors"
+                        name="read-more-button"
                       >
-                        {getTranslation('readMore', lang)}
+                        {expandedCardId === caseStudy.id ? getTranslation('collapse', lang) : getTranslation('readMore', lang)}
                         <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
