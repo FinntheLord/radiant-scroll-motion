@@ -128,7 +128,7 @@ export const useNewChat = () => {
 
   // Подписка на канал Realtime
   const subscribeToChannel = useCallback((chatId: string) => {
-  if (channelRef.current || setConnectionState.status === 'error') {
+  if (channelRef.current || connectionState.status === 'error') {
     console.log('Канал уже существует, пропускаем');
     return;
   }

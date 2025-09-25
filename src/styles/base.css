@@ -55,9 +55,13 @@
     html, body {
       -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
-      /* Prevent pull-to-refresh */
-      overscroll-behavior: none;
-      overflow: hidden;
+      /* Prevent pull-to-refresh only for body */
+      overscroll-behavior-y: none;
+      /* Allow vertical scrolling */
+      overflow-y: auto;
+      overflow-x: hidden;
+      /* Fix iOS scroll momentum */
+      -webkit-overflow-scrolling: touch;
     }
 
     /* iOS safe area variables */
@@ -78,10 +82,13 @@
     .chat-container {
       height: 100vh !important;
       height: -webkit-fill-available !important;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       position: fixed;
       /* Fix for iOS Safari bottom bar */
       padding-bottom: env(safe-area-inset-bottom);
+      /* Enable smooth scrolling */
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Input area safe spacing */
